@@ -1,4 +1,4 @@
 OhHa-tetris-JM
 ==============
 
--test1
+Repositorio Ohjelmoinnin harjoitustyö -kurssia varten. Harjoitustyön aiheena Tetris-peli.
