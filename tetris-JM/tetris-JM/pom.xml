@@ -39,8 +39,9 @@
                 <configuration>
                     <instrumentation>
                         <includes>
-                            <include>tetris.tetrisjm.logiikka/*.class</include>
-                            <include>tetris.tetrisjm.ohjaus/*.class</include>
+                            <include>tetris.pelilogiikka/*.class</include>
+                            <include>tetris.objects/*.class</include>
+                            <include>tetris.tetrisjm/*.class</include>
                         </includes>
                     </instrumentation>
                 </configuration>
@@ -52,12 +53,14 @@
                 <version>0.30</version>
                 <configuration>
                     <targetClasses>
-                        <param>tetris.tetrisjm.logiikka*</param>
-                        <param>tetris.tetrisjm.ohjaus*</param>
+                        <include>tetris.pelilogiikka/*.class</include>
+                        <include>tetris.objects/*.class</include>
+                        <include>tetris.tetrisjm/*.class</include>
                     </targetClasses>
                     <targetTests>
-                        <param>tetris.tetrisjm.logiikka*</param>
-                        <param>tetris.tetrisjm.ohjaus*</param>
+                        <include>tetris.pelilogiikka/*.class</include>
+                        <include>tetris.objects/*.class</include>
+                        <include>tetris.tetrisjm/*.class</include>
                     </targetTests>
                 </configuration>
             </plugin>
