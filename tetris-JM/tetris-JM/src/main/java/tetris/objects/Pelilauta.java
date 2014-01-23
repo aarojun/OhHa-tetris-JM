@@ -7,28 +7,29 @@ public class Pelilauta {
     private int[][] alueMatriisi;
     private int leveys;
     private int korkeus;
+    private ArrayList<Palikka> palikat;
 
     public Pelilauta(int leveys, int korkeus) {
         this.leveys = leveys;
         this.korkeus = korkeus;
-        this.alueMatriisi = null;
-        generoiAlueMatriisi();
-    }
-
-    private void generoiAlueMatriisi() {
-        for (int i = 0; i < leveys; i++) {
-            for (int j = 0; i < korkeus; i++) {
-                this.alueMatriisi[i][j] = 0;
-            }
-        }
+        this.palikat = new ArrayList<>();
+        this.alueMatriisi = new int[leveys][korkeus];
     }
 
     public int[][] getAlueMatriisi() {
         return this.alueMatriisi;
     }
+    
+    public ArrayList<Palikka> getPalikat() {
+        return this.palikat;
+    }
 
     public void asetaPiste(int x, int y) {
         this.alueMatriisi[x][y] = 1;
+    }
+    
+    public void poistaPiste(int x, int y) {
+        this.alueMatriisi[x][y] = 0;
     }
 
     public boolean tarkistaPiste(int x, int y) {
@@ -40,8 +41,8 @@ public class Pelilauta {
         return false;
     }
 
-    public int[] taydetRivit() {
-        int[] taydetRivit = new int[]{};
+    public ArrayList<Integer> taydetRivit() {
+        ArrayList<Integer> taydetRivit = new ArrayList<>();
         int k = 0;
         for (int j = 0; j < korkeus; j++) {
             boolean taysi = true;
@@ -52,7 +53,7 @@ public class Pelilauta {
                 }
             }
             if (taysi) {
-                taydetRivit[k] = j;
+                taydetRivit.add(k, j);
                 k++;
             }
         }

@@ -53,14 +53,14 @@
                 <version>0.30</version>
                 <configuration>
                     <targetClasses>
-                        <include>tetris.pelilogiikka/*.class</include>
-                        <include>tetris.objects/*.class</include>
-                        <include>tetris.tetrisjm/*.class</include>
+                        <include>tetris.pelilogiikka*</include>
+                        <include>tetris.objects*</include>
+                        <include>tetris.tetrisjm*</include>
                     </targetClasses>
                     <targetTests>
-                        <include>tetris.pelilogiikka/*.class</include>
-                        <include>tetris.objects/*.class</include>
-                        <include>tetris.tetrisjm/*.class</include>
+                        <include>tetris.pelilogiikka*</include>
+                        <include>tetris.objects*</include>
+                        <include>tetris.tetrisjm*</include>
                     </targetTests>
                 </configuration>
             </plugin>

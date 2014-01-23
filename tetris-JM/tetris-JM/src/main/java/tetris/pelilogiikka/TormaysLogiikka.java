@@ -1,5 +1,6 @@
 package tetris.pelilogiikka;
 
+import java.util.ArrayList;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
@@ -7,21 +8,21 @@ import tetris.objects.Pelilauta;
 public class TormaysLogiikka {
 
     private Pelilauta pelilauta;
+    private PoistoOperaatiot poistot;
 
-    public TormaysLogiikka(Pelilauta pelilauta) {
+    public TormaysLogiikka(Pelilauta pelilauta, PoistoOperaatiot poistot) {
         this.pelilauta = pelilauta;
+        this.poistot = poistot;
     }
 
     public boolean onkoPalikkaVasten(Palikka palikka, int xSiirtyma, int ySiirtyma) {
         int x = palikka.getXpos();
         int y = palikka.getYpos();
-        int[][] muoto = palikka.getMuoto();
-        int i = 0;
-        while (muoto[i] != null) {
-            if (pelilauta.tarkistaPiste(x + muoto[i][0] + xSiirtyma, y + muoto[i][1] + ySiirtyma)) {
+        ArrayList<int[]> muoto = palikka.getMuoto();
+        for (int i=0; i<muoto.size(); i++) {
+            if (pelilauta.tarkistaPiste(x + muoto.get(i)[0] + xSiirtyma, y + muoto.get(i)[1] + ySiirtyma)) {
                 return true;
             }
-            i++;
         }
         return false;
     }
@@ -43,17 +44,17 @@ public class TormaysLogiikka {
     }
 
     public void poistaPalikka(Palikka poistettava) {
-        // ei implementoitu
+        this.poistot.poistaPalikka(poistettava);
     }
 
     public void asetaPalikka(Palikka asetettava) {
-        int[][] pisteet = asetettava.getMuoto();
+        ArrayList<int[]> pisteet = asetettava.getMuoto();
         int x = asetettava.getXpos();
         int y = asetettava.getYpos();
-        
+
         int i = 0;
-        while (pisteet[i] != null) {
-            pelilauta.asetaPiste(x+pisteet[i][0], y+pisteet[i][1]);
+        while (pisteet.get(i) != null) {
+            pelilauta.asetaPiste(x + pisteet.get(i)[0], y + pisteet.get(i)[1]);
         }
     }
 
@@ -75,6 +76,7 @@ public class TormaysLogiikka {
             poistaPalikka(uusiPalikka);
             return false;
         }
+
     }
 
     private boolean kaannosOnnistuu(KaantyvaPalikka palikka) {

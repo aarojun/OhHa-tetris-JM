@@ -1,8 +1,10 @@
 package tetris.objects;
 
+import java.util.ArrayList;
+
 public class Palikka {
     private int vari;
-    private int[][] muoto;
+    private ArrayList<int[]> muoto;
     private int xPos;
     private int yPos;
 
@@ -11,37 +13,43 @@ public class Palikka {
         this.yPos = y;
         this.vari = vari;
         
-        this.muoto = null;
+        this.muoto = new ArrayList<>();
         setMuoto(pisteet);
         }
     
-    public Palikka(int[][] muoto, int x, int y, int vari) {
+    public Palikka(ArrayList<int[]> muoto, int x, int y, int vari) {
         this.xPos = x;
         this.yPos = y;
         this.vari = vari;
         
-        this.muoto = new int[4][4];
-        System.arraycopy(muoto, 0, this.muoto, 0, muoto.length );
+        this.muoto = new ArrayList<>(muoto);
         }
 
     public void setMuoto(int[] pisteet) {
-         this.muoto = null;
+         this.muoto.clear();
          for (int i = 0; i <= 6; i += 2) {
             int xKoord = pisteet[i];
             int yKoord = pisteet[i+1];
-            this.muoto[i] = new int[]{xKoord, yKoord};
+            this.muoto.add(new int[]{xKoord, yKoord});
     }
     }
          
-    public void setMuoto(int[][] muoto) {
-         this.muoto = new int[4][4];
-         System.arraycopy(muoto, 0, this.muoto, 0, muoto.length );
+    public void setMuoto(ArrayList<int[]> muoto) {
+         this.muoto = new ArrayList<>(muoto);
     }
 
 
     public void liiku(int x, int y) {
         this.xPos += x;
         this.yPos += y;
+    }
+    
+    public void setXpos(int x) {
+        this.xPos = x;
+    }
+    
+    public void setYpos(int y) {
+        this.yPos = y;
     }
     
     public int getXpos() {
@@ -52,7 +60,7 @@ public class Palikka {
         return this.yPos;
     }
     
-    public int[][] getMuoto() {
+    public ArrayList<int[]> getMuoto() {
         return this.muoto;
     }
     

@@ -21,7 +21,11 @@ public enum Tetromino {
     }
 
     public int[] getPisteet(int rotaatio) {
-        return this.rotaatioJaMuoto[rotaatio];
+        if (rotaatio < this.rotaatioJaMuoto.length) {
+            return this.rotaatioJaMuoto[rotaatio];
+        } else {
+            return null;
+        }
     }
 
     public int getVari() {

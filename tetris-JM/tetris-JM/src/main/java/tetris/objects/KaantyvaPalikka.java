@@ -7,19 +7,28 @@ public class KaantyvaPalikka extends Palikka {
     private int maxRotaatio;
     
     public KaantyvaPalikka(Tetromino tetromino, int x, int y, int rotaatio, int maxRotaatio) {
-        super(tetromino.getPisteet(0), tetromino.getVari(), x, y);
+        super(tetromino.getPisteet(rotaatio), x, y, tetromino.getVari());
+        this.tetromino = tetromino;
         this.rotaatio = rotaatio;
         this.maxRotaatio = maxRotaatio;
     }
+    
+    public KaantyvaPalikka(KaantyvaPalikka kopioitava) {
+        super(kopioitava.tetromino.getPisteet(kopioitava.getRotaatio()), kopioitava.getXpos(),kopioitava.getYpos(),kopioitava.tetromino.getVari());
+        this.tetromino = kopioitava.tetromino;
+        this.rotaatio = kopioitava.rotaatio;
+        this.maxRotaatio = kopioitava.maxRotaatio;
+    }
 
     public KaantyvaPalikka(Tetromino tetromino) {
-        super(tetromino.getPisteet(0), tetromino.getVari(), 0, 0);
+        super(tetromino.getPisteet(0), 0, 0, tetromino.getVari());
+        this.tetromino = tetromino;
         this.rotaatio = 0;
         int i = 0;
         while (tetromino.getPisteet(i) != null) {
             i++;
         }
-        this.maxRotaatio = i;
+        this.maxRotaatio = i-1;
     }
 
     public int[] vasenKaannos() {
