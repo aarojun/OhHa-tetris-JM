@@ -31,6 +31,24 @@ public class Pelilauta {
     public void poistaPiste(int x, int y) {
         this.alueMatriisi[x][y] = 0;
     }
+    
+    public void liitaPalikka(Palikka palikka) {
+        int x = palikka.getXpos();
+        int y = palikka.getYpos();
+        
+        for (int[] piste : palikka.getMuoto()) {
+            asetaPiste(x+piste[0],y+piste[1]);
+        }
+    }
+    
+    public void irrotaPalikka(Palikka palikka) {
+        int x = palikka.getXpos();
+        int y = palikka.getYpos();
+        
+        for (int[] piste : palikka.getMuoto()) {
+            poistaPiste(x+piste[0],y+piste[1]);
+        }
+    }
 
     public boolean tarkistaPiste(int x, int y) {
         if (x < 0 || y < 0 || y >= this.korkeus || x >= this.leveys) {

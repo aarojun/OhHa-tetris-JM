@@ -19,7 +19,7 @@ public class TormaysLogiikka {
         int x = palikka.getXpos();
         int y = palikka.getYpos();
         ArrayList<int[]> muoto = palikka.getMuoto();
-        for (int i=0; i<muoto.size(); i++) {
+        for (int i = 0; i < muoto.size(); i++) {
             if (pelilauta.tarkistaPiste(x + muoto.get(i)[0] + xSiirtyma, y + muoto.get(i)[1] + ySiirtyma)) {
                 return true;
             }
@@ -42,6 +42,38 @@ public class TormaysLogiikka {
     public boolean onkoPalikkaSeinanSisalla(Palikka palikka) {
         return onkoPalikkaVasten(palikka, 0, 0);
     }
+    
+    public boolean yritaPudottaaLiikutettavaaPalikkaa(Palikka palikka) {
+        if(!onkoPalikallaAlusta(palikka)) {
+            palikka.liiku(0, 1);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean pudotaPalikoitaYhdella() {
+        boolean pudonneita = false;
+        ArrayList<Palikka> putoavatPalikat = new ArrayList<>();
+        for (Palikka palikka : this.pelilauta.getPalikat()) {
+            if (!onkoPalikallaAlusta(palikka)) {
+                putoavatPalikat.add(palikka);
+                pudonneita = true;
+            }
+        }
+        for (Palikka palikka : putoavatPalikat) {
+            pelilauta.irrotaPalikka(palikka);
+            palikka.liiku(0, 1);
+            pelilauta.liitaPalikka(palikka);
+        }
+        return pudonneita;
+    }
+    
+    public void pudotaLiikutettavaPalikkaKokonaan(Palikka palikka) {
+        while(!onkoPalikallaAlusta(palikka)) {
+            palikka.liiku(0, 1);
+        }
+        pelilauta.liitaPalikka(palikka);
+    } 
 
     public void poistaPalikka(Palikka poistettava) {
         this.poistot.poistaPalikka(poistettava);
