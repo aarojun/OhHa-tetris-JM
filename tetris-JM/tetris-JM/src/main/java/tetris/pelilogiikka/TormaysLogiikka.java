@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
+import tetris.objects.Vari;
 
 public class TormaysLogiikka {
 
@@ -91,7 +92,7 @@ public class TormaysLogiikka {
     }
 
     public boolean kaannaPalikka(KaantyvaPalikka palikka, int suunta) { // 0 = vasen, 1 = oikea
-        if (palikka.getVari() == 2) {                                   // palikka on O-palikka eli ei voi kaantya
+        if (palikka.getVari() == Vari.YELLOW) {                                   // palikka on O-palikka eli ei voi kaantya
             return false;
         }
 

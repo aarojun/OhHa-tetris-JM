@@ -41,6 +41,11 @@ public class Pelilauta {
         }
     }
     
+    public void lisaaLiitettyPalikka(Palikka palikka) {
+        palikat.add(palikka);
+        liitaPalikka(palikka);
+    }
+    
     public void irrotaPalikka(Palikka palikka) {
         int x = palikka.getXpos();
         int y = palikka.getYpos();
@@ -51,7 +56,7 @@ public class Pelilauta {
     }
 
     public boolean tarkistaPiste(int x, int y) {
-        if (x < 0 || y < 0 || y >= this.korkeus || x >= this.leveys) {
+        if (x < 0 || y < 0 || y >= this.korkeus-1 || x >= this.leveys) { //virhe GUIssa, korkeus valiaikaisesti -1
             return true;
         } else if (this.alueMatriisi[x][y] == 1) {
             return true;

@@ -3,12 +3,12 @@ package tetris.objects;
 import java.util.ArrayList;
 
 public class Palikka {
-    private int vari;
+    private Vari vari;
     private ArrayList<int[]> muoto;
     private int xPos;
     private int yPos;
 
-    public Palikka(int[] pisteet, int x, int y, int vari) {
+    public Palikka(int[] pisteet, int x, int y, Vari vari) {
         this.xPos = x;
         this.yPos = y;
         this.vari = vari;
@@ -17,7 +17,7 @@ public class Palikka {
         setMuoto(pisteet);
         }
     
-    public Palikka(ArrayList<int[]> muoto, int x, int y, int vari) {
+    public Palikka(ArrayList<int[]> muoto, int x, int y, Vari vari) {
         this.xPos = x;
         this.yPos = y;
         this.vari = vari;
@@ -64,7 +64,7 @@ public class Palikka {
         return this.muoto;
     }
     
-    public int getVari() {
+    public Vari getVari() {
         return this.vari;
     }
 }

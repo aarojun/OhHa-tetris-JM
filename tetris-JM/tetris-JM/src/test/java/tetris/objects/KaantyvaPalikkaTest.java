@@ -80,4 +80,10 @@ public class KaantyvaPalikkaTest {
         KaantyvaPalikka palikka = new KaantyvaPalikka(Tetromino.Z);
         assertEquals(Tetromino.Z, palikka.getTetromino());
     }
+    
+    public void setPosToimii() {
+        KaantyvaPalikka palikka = new KaantyvaPalikka(Tetromino.L);
+        palikka.setXpos(6);
+        assertEquals(6,palikka.getXpos());
+    }
 }

@@ -3,6 +3,7 @@ package tetris.pelilogiikka;
 import java.util.ArrayList;
 import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
+import tetris.objects.Vari;
 
 public class PoistoOperaatiot {
 
@@ -150,13 +151,13 @@ public class PoistoOperaatiot {
 
         int x = palikka.getXpos() + piste[0];
         int y = palikka.getYpos() + piste[1];
-        int vari = palikka.getVari();
+        Vari vari = palikka.getVari();
 
         luoPistePalikka(x, y, vari);
         poistaPiste(palikka, irtonaisenIndeksi);
     }
 
-    public void luoPistePalikka(int x, int y, int vari) {
+    public void luoPistePalikka(int x, int y, Vari vari) {
         ArrayList<int[]> muoto = new ArrayList<>();
         muoto.add(new int[]{0, 0});
         Palikka pistePalikka = new Palikka(muoto, x, y, vari);

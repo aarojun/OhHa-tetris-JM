@@ -41,7 +41,7 @@ public class PalikkaTest {
     // public void hello() {}
     @Test
     public void palikkaAsettuuOikein() {
-        Palikka palikka = new Palikka(tyhjaList,3,6,1);
+        Palikka palikka = new Palikka(tyhjaList,3,6,Vari.RED);
         assertEquals(3, palikka.getXpos());
         assertEquals(6, palikka.getYpos());
     }
@@ -52,14 +52,14 @@ public class PalikkaTest {
         muoto.add(new int[]{1,0});
         muoto.add(new int[]{2,0});
         muoto.add(new int[]{2,1});
-        Palikka palikka = new Palikka(muoto,1,2,1);
+        Palikka palikka = new Palikka(muoto,1,2,Vari.RED);
         assertEquals(2, palikka.getMuoto().get(1)[0]);
         assertEquals(1, palikka.getMuoto().get(2)[1]);
     }
     
     @Test
     public void palikkaLiikkuuPositiivisiinSuuntiin() {
-        Palikka palikka = new Palikka(tyhjaList,1,2,1);
+        Palikka palikka = new Palikka(tyhjaList,1,2,Vari.RED);
         palikka.liiku(3, 1);
         assertEquals(4, palikka.getXpos());
         assertEquals(3, palikka.getYpos());
@@ -68,7 +68,7 @@ public class PalikkaTest {
     @Test
     public void palikkaLiikkuuNegatiivisiinSuuntiin() {
         int[][] muoto = new int[][]{{}};
-        Palikka palikka = new Palikka(tyhjaList,2,1,1);
+        Palikka palikka = new Palikka(tyhjaList,2,1,Vari.RED);
         palikka.liiku(-3, -6);
         assertEquals(-1, palikka.getXpos());
         assertEquals(-5, palikka.getYpos());
