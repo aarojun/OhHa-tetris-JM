@@ -57,29 +57,9 @@ public class PoistoOperaatiot {
         }
     }
 
-//    private void poistaRivi(int y) {
-//        this.pelilauta.nollaaRivi(y);
-//        for (Palikka palikka : palikat) {
-//            if (palikka.getYpos() <= y && palikka.getYpos() >= y - 4) {
-//
-//                ArrayList<int[]> muoto = palikka.getMuoto();
-//                ArrayList<Integer> poistettavatPisteet = new ArrayList<>();
-//                int k = 0;
-//                for (int i = muoto.size() - 1; i >= 0; i--) {
-//                    if (palikka.getYpos() + palikka.getMuoto().get(i)[1] == y) {
-//                        poistettavatPisteet.add(i);
-//                        k++;
-//                    }
-//                }
-//                if (k != 0) {
-//                    poistaPisteet(palikka, poistettavatPisteet);
-//                }
-//            }
-//        }
-//    }
-
     private void poistaPisteet(Palikka palikka, ArrayList<Integer> poistettavatPisteet) {
         ArrayList<int[]> muoto = palikka.getMuoto();
+        muoto.removeAll(poistettavatPisteet);
         for (int poistettava : poistettavatPisteet) {
             muoto.remove(poistettava);
         }
@@ -174,5 +154,10 @@ public class PoistoOperaatiot {
         muoto.add(new int[]{0, 0});
         Palikka pistePalikka = new Palikka(muoto, x, y, vari);
         palikat.add(pistePalikka);
+    }
+    
+    public void poistaKaikki() {
+        this.poistettavatPalikat.clear();
+        this.pelilauta.clear();
     }
 }

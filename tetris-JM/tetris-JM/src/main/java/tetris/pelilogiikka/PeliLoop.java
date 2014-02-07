@@ -1,8 +1,6 @@
 package tetris.pelilogiikka;
 
-import java.util.Timer;
 import java.util.TimerTask;
-import java.awt.EventQueue;
 import tetris.gui.Paivitettava;
 
 public class PeliLoop extends TimerTask {
@@ -32,22 +30,14 @@ public class PeliLoop extends TimerTask {
     @Override
     public void run() {
         if (!peli.onkoPaalla()) {
-            peli.resetoiAjastin();
         } else {
-            if (paused) {
-                toteutaOhjausPaused();
+            if (peli.getPaused()) {
+                peli.paivita();
             } else {
                 tarkistaAjastimet();
 
-                peli.paivitaFysiikka();
+                peli.paivita();
                 paivitaAikarajat();
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        gui.paivita();
-                    }
-                });
-                frame++;
             }
 
         }
@@ -78,7 +68,7 @@ public class PeliLoop extends TimerTask {
         } else {
             liukuFrame = 0;
             if (painovoimaFrame >= painovoimaPaivitys) {
-                peli.pudotaAlas();
+                peli.pudotaPalikkaa();
                 painovoimaFrame = 0;
             }
         }
@@ -91,19 +81,19 @@ public class PeliLoop extends TimerTask {
 
     private void paivitaAikarajat() {
         painovoimaPaivitys = peli.getAikayksikko();
-        liukuAika = peli.getAikayksikko() * 2;
+//        liukuAika = peli.getAikayksikko() * 2;
     }
 
     public void nollaaAjastimet() {
         this.liukuFrame = 0;
         this.painovoimaFrame = 0;
     }
-
-    private void toteutaOhjausPaused() {
-//            if (painike == esc) {
-//                peli.quit();
-//            } else if (painike == p) {
-//                paused = false;
-//            }
+    
+    public boolean getPaused() {
+        return this.paused;
+    }
+    
+    public int getFrame() {
+        return this.frame;
     }
 }

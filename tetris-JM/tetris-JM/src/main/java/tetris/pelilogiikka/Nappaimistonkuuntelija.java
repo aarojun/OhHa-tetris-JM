@@ -1,14 +1,17 @@
-package tetris.gui;
+package tetris.pelilogiikka;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import tetris.pelilogiikka.Peli;
 
 public class Nappaimistonkuuntelija implements KeyListener {
 
     private Peli peli;
 
     public Nappaimistonkuuntelija(Peli peli) {
+        this.peli = peli;
+    }
+    
+    public void setPeli(Peli peli) {
         this.peli = peli;
     }
 
@@ -19,28 +22,26 @@ public class Nappaimistonkuuntelija implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent ke) {
+        peli.setPaivitaOhjaus(true);
         if (ke.getKeyCode() == KeyEvent.VK_P) {
-            // paused = true;
-//            return;
+            peli.setPainike(Painike.P);
         } else if (ke.getKeyCode() == KeyEvent.VK_Z) {
-            peli.kaannaVasen();
+            peli.setPainike(Painike.Z);
         } else if (ke.getKeyCode() == KeyEvent.VK_X) {
-            peli.kaannaOikea();
+            peli.setPainike(Painike.X);
+        } else if (ke.getKeyCode() == KeyEvent.VK_Y) {
+            peli.setPainike(Painike.Y);
+        } else if (ke.getKeyCode() == KeyEvent.VK_N) {
+            peli.setPainike(Painike.N);
         }
         if (ke.getKeyCode() == KeyEvent.VK_DOWN) {
-            if (peli.liukuAikaPaalla()) {
-                peli.lukitsePalikka();
-            } else {
-                peli.pudotaAlas();
-            }
-            peli.nollaaAjastimet();
+            peli.setSuunta(Suunta.ALAS);
         } else if (ke.getKeyCode() == KeyEvent.VK_UP) {
-            peli.pudotaJaLukitsePalikka();
-            peli.nollaaAjastimet();
+            peli.setSuunta(Suunta.YLOS);
         } else if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            peli.liikutaVasen();
+            peli.setSuunta(Suunta.VASEN);
         } else if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            peli.liikutaOikea();
+            peli.setSuunta(Suunta.OIKEA);
         }
     }
 

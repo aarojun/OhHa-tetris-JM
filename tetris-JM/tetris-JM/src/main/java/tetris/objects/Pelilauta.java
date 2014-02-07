@@ -92,4 +92,9 @@ public class Pelilauta {
             this.alueMatriisi[i][y] = 0;
         }
     }
+    
+    public void clear() {
+        this.alueMatriisi = new int[leveys][korkeus];
+        this.palikat.clear();
+    }
 }

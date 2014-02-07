@@ -1,5 +1,6 @@
 package tetris.gui;
 
+import tetris.pelilogiikka.Nappaimistonkuuntelija;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -22,10 +23,11 @@ public class Kayttoliittyma implements Runnable {
     @Override
     public void run() {
         frame = new JFrame("TetrisJM");
-        int leveys = 10*sivunPituus+10;
+        int leveys = 15*sivunPituus+10;
         int korkeus = 20*sivunPituus+30;
         
         frame.setPreferredSize(new Dimension(leveys,korkeus));
+        frame.setLocation(500, 200);
         
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
@@ -36,10 +38,11 @@ public class Kayttoliittyma implements Runnable {
     }
     
     private void luoKomponentit(Container container) {
-        piirto = new Piirtoalusta(peli,sivunPituus);
+        Nappaimistonkuuntelija ohjaus = new Nappaimistonkuuntelija(peli);
+        piirto = new Piirtoalusta(peli,sivunPituus,ohjaus);
         container.add(piirto);
         
-        frame.addKeyListener(new Nappaimistonkuuntelija(peli));
+        frame.addKeyListener(ohjaus);
     }
     
     public JFrame getFrame() {

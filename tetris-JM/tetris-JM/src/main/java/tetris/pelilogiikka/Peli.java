@@ -1,8 +1,8 @@
 package tetris.pelilogiikka;
 
-import java.util.Timer;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 import tetris.gui.Paivitettava;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
@@ -10,15 +10,19 @@ import tetris.objects.Pelilauta;
 import tetris.objects.Tetromino;
 
 public class Peli {
-    
+
     private PeliLoop peliloop;
     private Timer ajastin;
+    private Kello kello;
     private Random random;
     private Pelilauta pelilauta;
     private ArrayList<KaantyvaPalikka> seuraavatPalikat;
     private ArrayList<Palikka> palikat;
     private ArrayList<Tetromino> palikkaHistoria;
     private KaantyvaPalikka nykyinenPalikka;
+    private KaantyvaPalikka varjoPalikka;
+    private Suunta suunta;
+    private Painike painike;
     private int aikayksikko;
     private int vaikeustaso;
     private int pisteet;
@@ -26,8 +30,10 @@ public class Peli {
     private PoistoOperaatiot poistot;
     private Paivitettava paivitettava;
     private boolean paalla;
+    private boolean paused;
     private boolean gameover;
     private boolean tarkistaRivit;
+    private boolean paivitaOhjaus;
     private boolean painovoimaPaalla;
     private boolean liukuAikaPaalla;
     private boolean palikallaVasenSeina;
@@ -48,16 +54,20 @@ public class Peli {
 
         this.poistot = new PoistoOperaatiot(pelilauta);
         this.tormayslogiikka = new TormaysLogiikka(pelilauta, poistot);
-        
+
         this.random = new Random();
+        this.kello = new Kello();
 
         alustaPalikkaHistoria();
         luoPalikat();
         asetaSeuraavat();
         this.nykyinenPalikka = seuraavatPalikat.get(0);
+        luoVarjopalikka();
 
         this.paalla = true;
         this.tarkistaRivit = false;
+        this.paivitaOhjaus = false;
+        this.paused = false;
         this.gameover = false;
         this.painovoimaPaalla = true;
         this.liukuAikaPaalla = false;
@@ -114,6 +124,37 @@ public class Peli {
         return kandidaatti;
     }
 
+    public void paivita() {
+        if (gameover) {
+            if (paivitaOhjaus) {
+                toteutaOhjausGameover();
+            }
+        } else {
+            if (!paused) {
+                paivitaFysiikka();
+                kasvataKelloa();
+            }
+
+            if (paivitaOhjaus) {
+                toteutaOhjaus();
+                nollaaOhjaimet();
+                paivitaOhjaus = false;
+            }
+
+            if (tarkistaRivit) {
+                poistaTaydetRivitKetjureaktioilla();
+                tarkistaRivit = false;
+            }
+
+            paivitaAikayksikko();
+
+        }
+
+        paivitettava.paivita();
+
+
+    }
+
     public void paivitaFysiikka() {
         if (tormayslogiikka.onkoPalikallaAlusta(nykyinenPalikka)) {
             liukuAikaPaalla = true;
@@ -138,12 +179,46 @@ public class Peli {
             gameover();
         }
 
-        if (tarkistaRivit) {
-            poistaTaydetRivitKetjureaktioilla();
-            tarkistaRivit = false;
-        }
+        luoVarjopalikka();
+    }
 
-        paivitaAikayksikko();
+    private void toteutaOhjaus() {
+        if (painike == Painike.P) {
+            pause();
+            return;
+        }
+        if (!paused) {
+            if (painike == Painike.Z) {
+                kaannaVasen();
+            } else if (painike == Painike.X) {
+                kaannaOikea();
+            }
+            if (suunta == Suunta.ALAS) {
+                if (liukuAikaPaalla) {
+                    lukitsePalikkaJosAlusta();
+                } else {
+                    pudotaPalikkaa();
+                }
+                nollaaAjastimet();
+            } else if (suunta == Suunta.YLOS) {
+                pudotaJaLukitsePalikka();
+                nollaaAjastimet();
+            } else if (suunta == Suunta.VASEN) {
+                liikutaVasen();
+            } else if (suunta == Suunta.OIKEA) {
+                liikutaOikea();
+            }
+        }
+    }
+
+    private void toteutaOhjausGameover() {
+        if (painike == Painike.Y) {
+            restart();
+            gameover = false;
+        }
+        if (painike == Painike.N) {
+            quit();
+        }
     }
 
     public void poistaTaydetRivitKetjureaktioilla() {
@@ -175,6 +250,10 @@ public class Peli {
         int muutos = vaikeustaso / 50;
         aikayksikko = 20 - muutos;
     }
+    
+    private void quit() {
+        
+    }
 
     public int getAikayksikko() {
         return aikayksikko;
@@ -200,8 +279,27 @@ public class Peli {
         }
     }
 
-    public boolean pudotaAlas() {
-        return tormayslogiikka.yritaPudottaaLiikutettavaaPalikkaa(nykyinenPalikka);
+    public void pudotaPalikkaKokonaan(Palikka palikka) {
+        while (pudotaPalikkaa(palikka)) {
+            pudotaPalikkaa(palikka);
+        }
+    }
+
+    public void pudotaPalikkaKokonaan() {
+        pudotaPalikkaKokonaan(nykyinenPalikka);
+    }
+
+    public boolean pudotaPalikkaa(Palikka palikka) {
+        return tormayslogiikka.yritaPudottaaLiikutettavaaPalikkaa(palikka);
+    }
+
+    public boolean pudotaPalikkaa() {
+        return pudotaPalikkaa(nykyinenPalikka);
+    }
+
+    private void luoVarjopalikka() {
+        varjoPalikka = new KaantyvaPalikka(nykyinenPalikka);
+        pudotaPalikkaKokonaan(varjoPalikka);
     }
 
     public void kaannaVasen() {
@@ -213,9 +311,7 @@ public class Peli {
     }
 
     public void pudotaJaLukitsePalikka() {
-        while (pudotaAlas()) {
-            pudotaAlas();
-        }
+        nykyinenPalikka = varjoPalikka;
         lukitsePalikka();
 
     }
@@ -228,8 +324,9 @@ public class Peli {
 
     public void lukitsePalikka() {
         pelilauta.lisaaLiitettyPalikka(nykyinenPalikka);
-        tarkistaRivit = true;
+        nollaaAjastimet();
         seuraavaPalikka();
+        tarkistaRivit = true;
         liukuAikaPaalla = false;
         poistaTaydetRivitKetjureaktioilla();
     }
@@ -247,14 +344,40 @@ public class Peli {
             if (i == 0) {
                 pl.setXpos(3);
                 pl.setYpos(0);
-            } else if (i == 1) {
-                pl.setXpos(3);
-                pl.setYpos(-3);
             } else {
-                pl.setXpos(12);
-                pl.setYpos((i - 2) * 5);
+                pl.setXpos(11);
+                pl.setYpos(1 + (i - 1) * 3);
             }
         }
+    }
+
+    public void setSuunta(Suunta suunta) {
+        this.suunta = suunta;
+    }
+
+    public Suunta getSuunta() {
+        return this.suunta;
+    }
+
+    public void setPainike(Painike painike) {
+        this.painike = painike;
+    }
+
+    private void nollaaOhjaimet() {
+        this.suunta = Suunta.NEUTRAL;
+        this.painike = Painike.NEUTRAL;
+    }
+
+    public void setPaivitaOhjaus(boolean bool) {
+        this.paivitaOhjaus = bool;
+    }
+
+    private void kasvataKelloa() {
+        kello.kasvata();
+    }
+
+    public String getAika() {
+        return this.kello.toString();
     }
 
     public boolean onkoPaalla() {
@@ -278,8 +401,27 @@ public class Peli {
     }
 
     public void gameover() {
-        paalla = false;
-        resetoiAjastin();
+//        paalla = false;
+        nollaaOhjaimet();
+    }
+
+    public void restart() {
+        this.aikayksikko = 20;
+        this.pisteet = 0;
+        this.vaikeustaso = 0;
+        nollaaAjastimet();
+        nollaaOhjaimet();
+        kello.reset();
+        poistot.poistaKaikki();
+        this.seuraavatPalikat.clear();
+        this.palikkaHistoria.clear();
+        alustaPalikkaHistoria();
+        luoPalikat();
+        asetaSeuraavat();
+        this.nykyinenPalikka = seuraavatPalikat.get(0);
+        luoVarjopalikka();
+        paalla = true;
+
     }
 
     public ArrayList<KaantyvaPalikka> getSeuraavatPalikat() {
@@ -289,15 +431,43 @@ public class Peli {
     public Pelilauta getPelilauta() {
         return this.pelilauta;
     }
-    
+
     public int getPisteet() {
         return this.pisteet;
     }
-    
+
+    public KaantyvaPalikka getVarjopalikka() {
+        return this.varjoPalikka;
+    }
+
     public int getVaikeustaso() {
         return this.vaikeustaso;
     }
-    
+
+    public void pause() {
+        if (!paused) {
+            paused = true;
+        } else {
+            paused = false;
+        }
+    }
+
+    public boolean getPaused() {
+        return this.paused;
+    }
+
+    public PeliLoop getPeliloop() {
+        return this.peliloop;
+    }
+
+    public int getFrame() {
+        return this.peliloop.getFrame();
+    }
+
+    public boolean getGameover() {
+        return this.gameover;
+    }
+
     public void nollaaAjastimet() {
         peliloop.nollaaAjastimet();
     }
