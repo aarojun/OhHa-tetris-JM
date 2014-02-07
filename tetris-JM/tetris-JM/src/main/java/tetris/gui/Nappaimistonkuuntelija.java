@@ -21,7 +21,7 @@ public class Nappaimistonkuuntelija implements KeyListener {
     public void keyPressed(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_P) {
             // paused = true;
-            return;
+//            return;
         } else if (ke.getKeyCode() == KeyEvent.VK_Z) {
             peli.kaannaVasen();
         } else if (ke.getKeyCode() == KeyEvent.VK_X) {
@@ -33,12 +33,10 @@ public class Nappaimistonkuuntelija implements KeyListener {
             } else {
                 peli.pudotaAlas();
             }
-            //painovoimaFrame = 0;
-            //liukuFrame = 0;
+            peli.nollaaAjastimet();
         } else if (ke.getKeyCode() == KeyEvent.VK_UP) {
             peli.pudotaJaLukitsePalikka();
-//          painovoimaFrame = 0;
-//          liukuFrame = 0;
+            peli.nollaaAjastimet();
         } else if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
             peli.liikutaVasen();
         } else if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {

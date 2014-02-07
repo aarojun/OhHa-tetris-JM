@@ -56,10 +56,12 @@ public class TormaysLogiikka {
         boolean pudonneita = false;
         ArrayList<Palikka> putoavatPalikat = new ArrayList<>();
         for (Palikka palikka : this.pelilauta.getPalikat()) {
+            pelilauta.irrotaPalikka(palikka);
             if (!onkoPalikallaAlusta(palikka)) {
                 putoavatPalikat.add(palikka);
                 pudonneita = true;
             }
+            pelilauta.liitaPalikka(palikka);
         }
         for (Palikka palikka : putoavatPalikat) {
             pelilauta.irrotaPalikka(palikka);
@@ -103,10 +105,12 @@ public class TormaysLogiikka {
             uusiPalikka.kaannaOikealle();
         }
         if (kaannosOnnistuu(uusiPalikka)) {
-            poistaPalikka(palikka);
+            palikka.setXpos(uusiPalikka.getXpos());
+            palikka.setYpos(uusiPalikka.getYpos());
+            palikka.setMuoto(uusiPalikka.getMuoto());
+            palikka.setRotaatio(uusiPalikka.getRotaatio());
             return true;
         } else {
-            poistaPalikka(uusiPalikka);
             return false;
         }
 

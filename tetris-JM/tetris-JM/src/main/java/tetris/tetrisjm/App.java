@@ -9,7 +9,7 @@ public class App {
     public static void main(String[] args) {
     Peli peli = new Peli();
     
-    Kayttoliittyma kali = new Kayttoliittyma(peli,20);
+    Kayttoliittyma kali = new Kayttoliittyma(peli,30);
     SwingUtilities.invokeLater(kali);
     
     while(kali.getPaivitettava() == null) {

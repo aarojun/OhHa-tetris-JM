@@ -32,10 +32,10 @@ public class KaantyvaPalikka extends Palikka {
     }
 
     public int[] vasenKaannos() {
-        if (this.rotaatio < 2) {
+        if (this.rotaatio <= 1) {
             this.rotaatio = maxRotaatio;
         } else {
-            this.rotaatio--;
+            this.rotaatio = this.rotaatio -1;
         }
         return this.tetromino.getPisteet(rotaatio);
     }
@@ -43,6 +43,8 @@ public class KaantyvaPalikka extends Palikka {
     public int[] oikeaKaannos() {
         if (this.rotaatio == maxRotaatio) {
             this.rotaatio = 1;
+        } else if (this.rotaatio == 0) {
+            this.rotaatio = 2;
         } else {
             this.rotaatio++;
         }
@@ -77,6 +79,10 @@ public class KaantyvaPalikka extends Palikka {
     
     public int getRotaatio() {
         return this.rotaatio;
+    }
+    
+    public void setRotaatio(int rotaatio) {
+        this.rotaatio = rotaatio;
     }
     
     public int getMaxRotaatio() {

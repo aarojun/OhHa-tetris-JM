@@ -23,7 +23,7 @@ public class Kayttoliittyma implements Runnable {
     public void run() {
         frame = new JFrame("TetrisJM");
         int leveys = 10*sivunPituus+10;
-        int korkeus = 20*sivunPituus+10;
+        int korkeus = 20*sivunPituus+30;
         
         frame.setPreferredSize(new Dimension(leveys,korkeus));
         

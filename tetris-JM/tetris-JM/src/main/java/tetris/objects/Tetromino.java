@@ -9,7 +9,7 @@ public enum Tetromino {
     L(new int[][]{{0, 0, 1, 0, 2, 0, 0, 1}, {0, 1, 1, 1, 2, 1, 0, 2}, {0, 0, 1, 0, 1, 1, 1, 2},
 {2, 1, 0, 2, 1, 2, 2, 2}, {1, 0, 1, 1, 1, 2, 2, 2}}, Vari.ORANGE),
     J(new int[][]{{0, 0, 1, 0, 2, 0, 2, 1}, {0, 1, 1, 1, 2, 1, 2, 2}, {1, 0, 1, 1, 0, 2, 1, 2},
-{0, 1, 0, 2, 1, 2, 2, 2}, {1, 0, 1, 1, 0, 2, 1, 2}}, Vari.BLUE),
+{0, 1, 0, 2, 1, 2, 2, 2}, {1, 0, 2, 0, 1, 1, 1, 2}}, Vari.BLUE),
     S(new int[][]{{1, 0, 2, 0, 0, 1, 1, 1}, {1, 1, 2, 1, 0, 2, 1, 2}, {0, 0, 0, 1, 1, 1, 1, 2}}, Vari.MAGENTA),
     Z(new int[][]{{0, 0, 1, 0, 1, 1, 2, 1}, {0, 1, 1, 1, 1, 2, 2, 2}, {2, 0, 1, 1, 2, 1, 1, 2}}, Vari.LIME);
     private int[][] rotaatioJaMuoto; // palikan asento ja sita vastaava tetris-palikan esitys numerosarjana joissa jokainen lukupari on yhden pisteen x ja y -koordinaatti

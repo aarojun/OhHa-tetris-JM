@@ -35,6 +35,17 @@ public class KaantyvaPalikkaTest {
     @After
     public void tearDown() {
     }
+    
+    @Test
+    public void rotaatioPaivittyyJosKaannetaan() {
+        KaantyvaPalikka palikka = new KaantyvaPalikka(Tetromino.T);
+        palikka.kaannaOikealle();
+        assertEquals(palikka.getRotaatio(), 2);
+        palikka.kaannaOikealle();
+        assertEquals(palikka.getRotaatio(), 3);
+        palikka.kaannaVasemmalle();
+        assertEquals(palikka.getRotaatio(), 2);
+    }
 
     @Test
     public void vasenKaannosKiertaaMaksimirotaatioonJosRotaatioOnAlleKaksi() {

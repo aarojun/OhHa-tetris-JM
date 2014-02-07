@@ -37,7 +37,6 @@ public class PeliLoop extends TimerTask {
             if (paused) {
                 toteutaOhjausPaused();
             } else {
-                toteutaOhjaus();
                 tarkistaAjastimet();
 
                 peli.paivitaFysiikka();
@@ -95,32 +94,9 @@ public class PeliLoop extends TimerTask {
         liukuAika = peli.getAikayksikko() * 2;
     }
 
-    private void toteutaOhjaus() {
-//            if (painike == p) {
-//                paused = true;
-//                return;
-//            } else if (painike == z) {
-//                peli.kaannaVasen();
-//            } else if (painike == x) {
-//                peli.kaannaOikea();
-//            }
-//            if (suunta == alas) {
-//                if(peli.liukuAikaPaalla()) {
-//                    peli.lukitsePalikka();
-//                } else { 
-//                    peli.pudotaAlas();
-//                }            
-//                painovoimaFrame = 0;
-//                liukuFrame = 0;
-//            } else if (suunta == ylos) {
-//                peli.pudotaJaLukitsePalikka();
-//                painovoimaFrame = 0;
-//                liukuFrame = 0;
-//            } else if (suunta == vasen) {
-//                peli.liikutaVasen();
-//            } else if (suunta == oikea) {
-//                peli.liikutaOikea();
-//            }
+    public void nollaaAjastimet() {
+        this.liukuFrame = 0;
+        this.painovoimaFrame = 0;
     }
 
     private void toteutaOhjausPaused() {

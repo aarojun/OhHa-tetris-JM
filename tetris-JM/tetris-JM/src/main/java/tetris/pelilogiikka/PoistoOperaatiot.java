@@ -8,7 +8,6 @@ import tetris.objects.Vari;
 public class PoistoOperaatiot {
 
     private Pelilauta pelilauta;
-    private ArrayList<Integer> poistettavatRivit;
     private ArrayList<Palikka> palikat;
     private ArrayList<Palikka> poistettavatPalikat;
     private ArrayList<Palikka> tarkistettavatPalikat;
@@ -16,60 +15,73 @@ public class PoistoOperaatiot {
     public PoistoOperaatiot(Pelilauta pelilauta) {
         this.pelilauta = pelilauta;
         this.palikat = pelilauta.getPalikat();
-        this.poistettavatRivit = new ArrayList<>();
         this.poistettavatPalikat = new ArrayList<>();
         this.tarkistettavatPalikat = new ArrayList<>();
     }
 
     public boolean onkoPoistettavia() {
-        this.poistettavatRivit = this.pelilauta.taydetRivit();
-        if (!this.poistettavatRivit.isEmpty()) {
+        if (!this.pelilauta.taydetRivit().isEmpty()) {
             return true;
         }
         return false;
     }
 
     public int poistaTaydetRivit() {
-        this.poistettavatRivit = this.pelilauta.taydetRivit();
+        ArrayList<Integer> poistettavatRivit = this.pelilauta.taydetRivit();
         int poistettavia = poistettavatRivit.size();
-        if (poistettavia > 0) {
-            for (int i = 0; i < poistettavia; i++) {
-                poistaRivi(poistettavatRivit.get(i));
-            }
+        if (!poistettavatRivit.isEmpty()) {
+            poistaRivit(poistettavatRivit);
             poistaPoistettavatPalikat();
             tarkistaPalikat();
         }
         return poistettavia;
     }
 
-    private void poistaRivi(int y) {
-        this.pelilauta.nollaaRivi(y);
+    private void poistaRivit(ArrayList<Integer> poistettavatRivit) {
+        for (int rivi : poistettavatRivit) {
+            this.pelilauta.nollaaRivi(rivi);
+        }
         for (Palikka palikka : palikat) {
-            if (palikka.getYpos() <= y && palikka.getYpos() >= y - 4) {
-
-                ArrayList<int[]> muoto = palikka.getMuoto();
-                int i = muoto.size() - 1;
-                ArrayList<Integer> poistettavatPisteet = new ArrayList<>();
-                int k = 0;
-                while (palikka.getMuoto().get(i) != null) {
-                    if (palikka.getMuoto().get(i)[1] == y) {
-                        poistettavatPisteet.add(k, i);
-                        k++;
-                    }
-                    i--;
+            ArrayList<Integer> poistettavatPisteet = new ArrayList<>();
+            ArrayList<int[]> muoto = palikka.getMuoto();
+            int k = 0;
+            for (int i = muoto.size() - 1; i >= 0; i--) {
+                int pisteenKorkeus = palikka.getYpos() + palikka.getMuoto().get(i)[1];
+                if (poistettavatRivit.contains(pisteenKorkeus)) {
+                    poistettavatPisteet.add(i);
                 }
-                if (k != 0) {
-                    poistaPisteet(palikka, poistettavatPisteet);
-                }
+            }
+            if (!poistettavatPisteet.isEmpty()) {
+                poistaPisteet(palikka, poistettavatPisteet);
             }
         }
     }
 
+//    private void poistaRivi(int y) {
+//        this.pelilauta.nollaaRivi(y);
+//        for (Palikka palikka : palikat) {
+//            if (palikka.getYpos() <= y && palikka.getYpos() >= y - 4) {
+//
+//                ArrayList<int[]> muoto = palikka.getMuoto();
+//                ArrayList<Integer> poistettavatPisteet = new ArrayList<>();
+//                int k = 0;
+//                for (int i = muoto.size() - 1; i >= 0; i--) {
+//                    if (palikka.getYpos() + palikka.getMuoto().get(i)[1] == y) {
+//                        poistettavatPisteet.add(i);
+//                        k++;
+//                    }
+//                }
+//                if (k != 0) {
+//                    poistaPisteet(palikka, poistettavatPisteet);
+//                }
+//            }
+//        }
+//    }
+
     private void poistaPisteet(Palikka palikka, ArrayList<Integer> poistettavatPisteet) {
         ArrayList<int[]> muoto = palikka.getMuoto();
-        for (int i = 0; i < poistettavatPisteet.size(); i++) {
-            int poistettavaIndeksi = poistettavatPisteet.get(i);
-            muoto.remove(poistettavaIndeksi);
+        for (int poistettava : poistettavatPisteet) {
+            muoto.remove(poistettava);
         }
         if (muoto.isEmpty()) {
             palikka.setYpos(30); // palikka siirretaan ulos pelilaudalta jottei rivinpoistooperaatiot kasittele sita
@@ -78,7 +90,7 @@ public class PoistoOperaatiot {
             tarkistettavatPalikat.add(palikka);
         }
     }
-    
+
     public void poistaPiste(Palikka palikka, int poistettavaIndeksi) {
         palikka.getMuoto().remove(poistettavaIndeksi);
     }
@@ -107,11 +119,11 @@ public class PoistoOperaatiot {
         }
 
         int i = 0;
-        while (muoto.get(i) != null) {
+        while (i < muoto.size()) {
             int[] piste1 = muoto.get(i);
             boolean vieruksia = false;
             int j = 0;
-            while (muoto.get(j) != null) {
+            while (j < muoto.size()) {
                 if (i != j) {
                     int[] piste2 = muoto.get(j);
                     if (onkoVierusPiste(piste1, piste2)) {
