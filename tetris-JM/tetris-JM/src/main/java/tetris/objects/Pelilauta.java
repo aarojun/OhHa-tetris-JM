@@ -8,21 +8,16 @@ public class Pelilauta {
     private int leveys;
     private int korkeus;
     private ArrayList<Palikka> palikat;
-
+    
+    
     public Pelilauta(int leveys, int korkeus) {
         this.leveys = leveys;
         this.korkeus = korkeus;
         this.palikat = new ArrayList<>();
         this.alueMatriisi = new int[leveys][korkeus];
     }
-
-    public int[][] getAlueMatriisi() {
-        return this.alueMatriisi;
-    }
-
-    public ArrayList<Palikka> getPalikat() {
-        return this.palikat;
-    }
+    // 2-ulotteinen matriisi joka kuvaa pelilaudalle asetettuja alueita
+    // luokka tuntee kaikki laudalle lukitut palikat
 
     public void asetaPiste(int x, int y) {
         if (x < 10 && y < 20) {
@@ -59,8 +54,9 @@ public class Pelilauta {
         }
     }
 
+    // palauttaa tosi jos pisteella on palikka tai seina
     public boolean tarkistaPiste(int x, int y) {
-        if (x < 0 || y < 0 || y >= this.korkeus || x >= this.leveys) { //virhe GUIssa, korkeus valiaikaisesti -1
+        if (x < 0 || y < 0 || y >= this.korkeus || x >= this.leveys) {
             return true;
         } else if (this.alueMatriisi[x][y] == 1) {
             return true;
@@ -68,6 +64,7 @@ public class Pelilauta {
         return false;
     }
 
+    //antaa listan kaikkien taysien rivien y-koordinaateista
     public ArrayList<Integer> taydetRivit() {
         ArrayList<Integer> taydetRivit = new ArrayList<>();
         int k = 0;
@@ -93,8 +90,17 @@ public class Pelilauta {
         }
     }
     
+    // tyhjentaa pelilaudan
     public void clear() {
         this.alueMatriisi = new int[leveys][korkeus];
         this.palikat.clear();
+    }
+    
+    public ArrayList<Palikka> getPalikat() {
+        return this.palikat;
+    }
+    
+    public int[][] getAlueMatriisi() {
+        return this.alueMatriisi;
     }
 }

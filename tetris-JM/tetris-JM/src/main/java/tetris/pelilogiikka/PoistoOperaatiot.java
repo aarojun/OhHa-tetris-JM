@@ -36,7 +36,8 @@ public class PoistoOperaatiot {
         }
         return poistettavia;
     }
-
+    
+    //poistaa jokaisesta palikasta pisteet joilla on rivin y-koordinaatti
     private void poistaRivit(ArrayList<Integer> poistettavatRivit) {
         for (int rivi : poistettavatRivit) {
             this.pelilauta.nollaaRivi(rivi);
@@ -67,7 +68,7 @@ public class PoistoOperaatiot {
             palikka.setYpos(30); // palikka siirretaan ulos pelilaudalta jottei rivinpoistooperaatiot kasittele sita
             poistettavatPalikat.add(palikka);
         } else if (muoto.size() > 1) {
-            tarkistettavatPalikat.add(palikka);
+            tarkistettavatPalikat.add(palikka);  // palikan yhtenaisyys tarkistetaan
         }
     }
 
@@ -92,6 +93,7 @@ public class PoistoOperaatiot {
         this.tarkistettavatPalikat = new ArrayList<>();
     }
 
+    // tarkistaa palikan pisteiden viereisyyden, jos yksi piste on erillinen se siirretaan uuteen palikkaan
     public boolean tarkistaYhtenaisyys(Palikka palikka) {
         ArrayList<int[]> muoto = palikka.getMuoto();
         if (muoto.isEmpty()) {

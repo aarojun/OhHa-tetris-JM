@@ -3,6 +3,7 @@ package tetris.pelilogiikka;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
+import tetris.gui.Kayttoliittyma;
 import tetris.gui.Paivitettava;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
@@ -11,13 +12,13 @@ import tetris.objects.Tetromino;
 
 public class Peli {
 
+    private Kayttoliittyma kayttoliittyma;
     private PeliLoop peliloop;
     private Timer ajastin;
     private Kello kello;
     private Random random;
     private Pelilauta pelilauta;
     private ArrayList<KaantyvaPalikka> seuraavatPalikat;
-    private ArrayList<Palikka> palikat;
     private ArrayList<Tetromino> palikkaHistoria;
     private KaantyvaPalikka nykyinenPalikka;
     private KaantyvaPalikka varjoPalikka;
@@ -28,13 +29,12 @@ public class Peli {
     private int pisteet;
     private TormaysLogiikka tormayslogiikka;
     private PoistoOperaatiot poistot;
-    private Paivitettava paivitettava;
+    private Paivitettava gui;
     private boolean paalla;
     private boolean paused;
     private boolean gameover;
     private boolean tarkistaRivit;
     private boolean paivitaOhjaus;
-    private boolean painovoimaPaalla;
     private boolean liukuAikaPaalla;
     private boolean palikallaVasenSeina;
     private boolean palikallaOikeaSeina;
@@ -46,7 +46,6 @@ public class Peli {
         this.pelilauta = new Pelilauta(10, 20);
         this.seuraavatPalikat = new ArrayList<>();
         this.palikkaHistoria = new ArrayList<>();
-        this.palikat = pelilauta.getPalikat();
 
         this.aikayksikko = 20;
         this.vaikeustaso = 0;
@@ -69,14 +68,17 @@ public class Peli {
         this.paivitaOhjaus = false;
         this.paused = false;
         this.gameover = false;
-        this.painovoimaPaalla = true;
         this.liukuAikaPaalla = false;
         this.palikallaVasenSeina = false;
         this.palikallaOikeaSeina = false;
     }
 
     public void setPaivitettava(Paivitettava paivitettava) {
-        this.paivitettava = paivitettava;
+        this.gui = paivitettava;
+    }
+    
+    public void setKayttoliittyma(Kayttoliittyma kayttoliittyma) {
+        this.kayttoliittyma = kayttoliittyma;
     }
 
     public void start() {
@@ -84,7 +86,7 @@ public class Peli {
     }
 
     private void aloitaPeliLoop() {
-        this.peliloop = new PeliLoop(this, paivitettava);
+        this.peliloop = new PeliLoop(this, gui);
         ajastin.schedule(peliloop,
                 0,
                 (long) (1000 / 60));
@@ -150,7 +152,7 @@ public class Peli {
 
         }
 
-        paivitettava.paivita();
+        gui.paivita();
 
 
     }
@@ -236,7 +238,7 @@ public class Peli {
         vaikeustaso++;
         if (taysiaRiveja > 0) {
             pisteet += taysiaRiveja * taysiaRiveja * 100;
-            vaikeustaso += 1 + taysiaRiveja * taysiaRiveja;
+            vaikeustaso += 2 * taysiaRiveja * taysiaRiveja;
         }
     }
 
@@ -252,7 +254,7 @@ public class Peli {
     }
     
     private void quit() {
-        
+        kayttoliittyma.quit();
     }
 
     public int getAikayksikko() {
@@ -346,7 +348,7 @@ public class Peli {
                 pl.setYpos(0);
             } else {
                 pl.setXpos(11);
-                pl.setYpos(1 + (i - 1) * 3);
+                pl.setYpos(2 + (i - 1) * 3);
             }
         }
     }
@@ -394,10 +396,6 @@ public class Peli {
 
     public boolean palikallaOikeaSeina() {
         return this.palikallaOikeaSeina;
-    }
-
-    public boolean painovoimaPaalla() {
-        return this.painovoimaPaalla;
     }
 
     public void gameover() {

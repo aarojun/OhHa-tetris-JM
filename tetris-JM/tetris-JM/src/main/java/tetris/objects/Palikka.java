@@ -3,10 +3,10 @@ package tetris.objects;
 import java.util.ArrayList;
 
 public class Palikka {
-    private Vari vari;
     private ArrayList<int[]> muoto;
     private int xPos;
     private int yPos;
+    private Vari vari;
 
     public Palikka(int[] pisteet, int x, int y, Vari vari) {
         this.xPos = x;
@@ -24,7 +24,9 @@ public class Palikka {
         
         this.muoto = new ArrayList<>(muoto);
         }
-
+     // muoto kuvaa palikan pisteita suhteessa palikan koordinaatteihin
+    
+    // asettaa palikan pisteet tetromino -Enumin antamassa muodossa
     public void setMuoto(int[] pisteet) {
          this.muoto.clear();
          for (int i = 0; i <= 6; i += 2) {
@@ -34,6 +36,7 @@ public class Palikka {
     }
     }
          
+    //kopioi valmiin palikka - muodon
     public void setMuoto(ArrayList<int[]> muoto) {
          this.muoto = new ArrayList<>(muoto);
     }

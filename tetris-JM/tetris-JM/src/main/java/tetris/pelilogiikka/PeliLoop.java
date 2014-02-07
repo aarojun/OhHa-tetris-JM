@@ -29,8 +29,7 @@ public class PeliLoop extends TimerTask {
 
     @Override
     public void run() {
-        if (!peli.onkoPaalla()) {
-        } else {
+        if (peli.onkoPaalla()) {
             if (peli.getPaused()) {
                 peli.paivita();
             } else {
@@ -43,26 +42,10 @@ public class PeliLoop extends TimerTask {
         }
     }
 
-    private void kasvataAjastimia() {
-        if (peli.painovoimaPaalla()) {
-            painovoimaFrame++;
-        } else {
-            painovoimaFrame = 0;
-        }
-        if (peli.liukuAikaPaalla()) {
-            liukuFrame++;
-        } else {
-            liukuFrame = 0;
-        }
-    }
-
     private void tarkistaAjastimet() {
-        if (peli.painovoimaPaalla()) {
-            painovoimaFrame++;
-        } else {
-            painovoimaFrame = 0;
-        }
+        painovoimaFrame++;
 
+        // liukuAika on paalla jos palikalla alusta
         if (peli.liukuAikaPaalla()) {
             liukuFrame++;
         } else {
@@ -73,26 +56,27 @@ public class PeliLoop extends TimerTask {
             }
         }
 
+        // palikka lukitaan kun aika loppunut
         if (liukuFrame >= liukuAika) {
             peli.lukitsePalikkaJosAlusta();
             liukuFrame = 0;
         }
     }
 
+    // nopeuttaa painovoimaa kun vaikeustaso etenee
     private void paivitaAikarajat() {
         painovoimaPaivitys = peli.getAikayksikko();
-//        liukuAika = peli.getAikayksikko() * 2;
     }
 
     public void nollaaAjastimet() {
         this.liukuFrame = 0;
         this.painovoimaFrame = 0;
     }
-    
+
     public boolean getPaused() {
         return this.paused;
     }
-    
+
     public int getFrame() {
         return this.frame;
     }

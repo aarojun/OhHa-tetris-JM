@@ -1,35 +1,36 @@
 package tetris.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
-import tetris.objects.Vari;
-import tetris.pelilogiikka.Nappaimistonkuuntelija;
 import tetris.pelilogiikka.Peli;
-import tetris.pelilogiikka.Suunta;
 
 public class Piirtoalusta extends JPanel implements Paivitettava {
 
     private Peli peli;
     private int nelionKoko;
-    private Nappaimistonkuuntelija ohjaus;
+    private Color varjo;
+    private Font pisteFont;
+    private Font menuFont;
 
-    public Piirtoalusta(Peli peli, int nelionSivunPituus, Nappaimistonkuuntelija ohjaus) {
+    public Piirtoalusta(Peli peli, int nelionSivunPituus) {
         this.peli = peli;
         this.nelionKoko = nelionSivunPituus;
-        this.ohjaus = ohjaus;
+        
+        this.pisteFont = new Font(Font.SANS_SERIF,1,16);
+        this.menuFont = new Font(Font.SANS_SERIF,0,20);
+        this.varjo = new Color(255,255,255, 90);
+        this.setBackground(Color.BLACK);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, 0, 10 * nelionKoko, 20 * nelionKoko);
         
@@ -57,6 +58,7 @@ public class Piirtoalusta extends JPanel implements Paivitettava {
 
     private void piirraPalikka(Graphics g, Palikka pl) {
         Color vari = pl.getVari().getColor();
+        Color vari2 = vari.darker().darker();
         int xPos = pl.getXpos();
         int yPos = pl.getYpos();
         ArrayList<int[]> muoto = pl.getMuoto();
@@ -64,7 +66,7 @@ public class Piirtoalusta extends JPanel implements Paivitettava {
             int[] piste = muoto.get(i);
             g.setColor(vari);
             g.fillRect((xPos + piste[0]) * nelionKoko, (yPos + piste[1]) * nelionKoko, nelionKoko, nelionKoko);
-            g.setColor(Color.BLACK);
+            g.setColor(vari2);
             g.fillRect((xPos + piste[0]) * nelionKoko + 6, (yPos + piste[1]) * nelionKoko + 6, nelionKoko - 12, nelionKoko - 12);
 
             if (vierusPiste(muoto, i, 1, 0)) {
@@ -84,25 +86,33 @@ public class Piirtoalusta extends JPanel implements Paivitettava {
     
     private void piirraVarjopalikka(Graphics g) {
         Palikka varjopalikka = peli.getVarjopalikka();
+        g.setColor(varjo);
         int vXPos = varjopalikka.getXpos();
         int vYPos = varjopalikka.getYpos();
         ArrayList<int[]> varjoMuoto = varjopalikka.getMuoto();
         for (int i = 0; i < varjoMuoto.size(); i++) {
             int[] piste = varjoMuoto.get(i);
-            g.setColor(Color.LIGHT_GRAY);
             g.fillRect((vXPos + piste[0]) * nelionKoko, (vYPos + piste[1]) * nelionKoko, nelionKoko, nelionKoko);
         }
     }
 
     private void piirraMittarit(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.drawString("SCORE " + Integer.toString(peli.getPisteet()), 7 * nelionKoko, 1 * nelionKoko);
-        g.drawString("LEVEL " + Integer.toString(peli.getVaikeustaso()), 7 * nelionKoko, 2 * nelionKoko);
+        g.setColor(Color.DARK_GRAY);
+        g.drawLine(10*nelionKoko, 1*nelionKoko+16, 20*nelionKoko, 1*nelionKoko+16);
+        g.drawLine(10*nelionKoko, 11*nelionKoko-6, 20*nelionKoko, 11*nelionKoko-6);
         
-        g.drawString("TIME " + peli.getAika(), 7 * nelionKoko, 3 * nelionKoko);
+        g.setFont(pisteFont);
+  
+        g.setColor(Color.LIGHT_GRAY);
+        int leveys = (int)(10.5*nelionKoko);
+        g.drawString("NEXT", 12 * nelionKoko-10, 1 * nelionKoko);
+        g.drawString("SCORE " + Integer.toString(peli.getPisteet()), leveys, 12 * nelionKoko);
+        g.drawString("LEVEL " + Integer.toString(peli.getVaikeustaso()), leveys, 13 * nelionKoko);
+        
+        g.drawString("TIME " + peli.getAika(), leveys, 14 * nelionKoko);
 
         g.setColor(Color.WHITE);
-        
+        g.setFont(menuFont);
         
         if (peli.getPaused()) {
             g.drawString("PAUSE", 4 * nelionKoko, 8 * nelionKoko);
@@ -115,12 +125,12 @@ public class Piirtoalusta extends JPanel implements Paivitettava {
     }
     
     private void piirraOhjausNaytto(Graphics g) {
-        g.setColor(Color.BLACK);
-        
-        
-        if(peli.getSuunta()==Suunta.VASEN) {
-            g.drawPolygon(new Kolmio(10, 11*nelionKoko,18*nelionKoko));
-        }
+//        g.setColor(Color.BLACK);
+//        
+//        
+//        if(peli.getSuunta()==Suunta.VASEN) {
+//            g.drawPolygon(new Kolmio(10, 11*nelionKoko,18*nelionKoko));
+//        }
     }
 
     private boolean vierusPiste(ArrayList<int[]> muoto, int pisteenIndeksi, int xMuutos, int yMuutos) {

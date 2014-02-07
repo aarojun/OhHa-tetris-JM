@@ -3,13 +3,13 @@ package tetris.objects;
 import java.awt.Color;
 
 public enum Vari {
-    RED(Color.RED), MAGENTA(Color.MAGENTA), YELLOW(Color.YELLOW), CYAN(Color.CYAN), 
-    BLUE(Color.BLUE), ORANGE(Color.ORANGE), LIME(Color.GREEN);
+    RED(220,20,60), MAGENTA(199,21,133), YELLOW(255,215,0), CYAN(127,255,212), 
+    BLUE(0,0,205), ORANGE(255,140,0), LIME(154,205,50);
     
     private Color awtVari;
     
-    private Vari(Color awtColor) {
-        this.awtVari = awtColor;
+    private Vari(int red, int green, int blue) {
+        this.awtVari = new Color(red,green,blue);
     }
     
     public Color getColor() {

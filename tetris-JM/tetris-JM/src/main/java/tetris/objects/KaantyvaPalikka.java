@@ -6,29 +6,28 @@ public class KaantyvaPalikka extends Palikka {
     private int rotaatio;
     private int maxRotaatio;
     
-    public KaantyvaPalikka(Tetromino tetromino, int x, int y, int rotaatio, int maxRotaatio) {
-        super(tetromino.getPisteet(rotaatio), x, y, tetromino.getVari());
-        this.tetromino = tetromino;
-        this.rotaatio = rotaatio;
-        this.maxRotaatio = maxRotaatio;
-    }
     
-    public KaantyvaPalikka(KaantyvaPalikka kopioitava) {
-        super(kopioitava.tetromino.getPisteet(kopioitava.getRotaatio()), kopioitava.getXpos(),kopioitava.getYpos(),kopioitava.tetromino.getVari());
-        this.tetromino = kopioitava.tetromino;
-        this.rotaatio = kopioitava.rotaatio;
-        this.maxRotaatio = kopioitava.maxRotaatio;
-    }
-
+    // palikka johon on liitetty kaantymis -ominaisuus. 
+//     kaantymismuodot haetaan liitetysta Tetrominosta
+    
     public KaantyvaPalikka(Tetromino tetromino) {
         super(tetromino.getPisteet(0), 0, 0, tetromino.getVari());
         this.tetromino = tetromino;
         this.rotaatio = 0;
         int i = 0;
+        // tarkistaa tetrominon maksimirotaation
         while (tetromino.getPisteet(i) != null) {
             i++;
         }
         this.maxRotaatio = i-1;
+    }
+    
+    // kopioimiseen tarkoitettu konstruktori
+    public KaantyvaPalikka(KaantyvaPalikka kopioitava) {
+        super(kopioitava.tetromino.getPisteet(kopioitava.getRotaatio()), kopioitava.getXpos(),kopioitava.getYpos(),kopioitava.tetromino.getVari());
+        this.tetromino = kopioitava.tetromino;
+        this.rotaatio = kopioitava.rotaatio;
+        this.maxRotaatio = kopioitava.maxRotaatio;
     }
 
     public int[] vasenKaannos() {
@@ -51,26 +50,12 @@ public class KaantyvaPalikka extends Palikka {
         return this.tetromino.getPisteet(rotaatio);
     }
 
-    public void kaannaVasemmalle(int x) {
-        super.setMuoto(vasenKaannos());
-        if (x != 0) {
-            super.liiku(x, 0);
-        }
-    }
-
-    public void kaannaOikealle(int x) {
-        super.setMuoto(oikeaKaannos());
-        if (x != 0) {
-            super.liiku(x, 0);
-        }
-    }
-    
     public void kaannaVasemmalle() {
-        kaannaVasemmalle(0);
-    }
-    
+        super.setMuoto(vasenKaannos());
+     }
+
     public void kaannaOikealle() {
-        kaannaOikealle(0);
+        super.setMuoto(oikeaKaannos());
     }
     
     public Tetromino getTetromino() {

@@ -16,6 +16,7 @@ public class TormaysLogiikka {
         this.poistot = poistot;
     }
 
+    //tarkistaa onko palikassa pistetta joka tormaa seinaan jos siirtyma toteutetaan
     public boolean onkoPalikkaVasten(Palikka palikka, int xSiirtyma, int ySiirtyma) {
         int x = palikka.getXpos();
         int y = palikka.getYpos();
@@ -52,6 +53,7 @@ public class TormaysLogiikka {
         return false;
     }
 
+    // pudottaa kaikkia palikoita joita voi pudottaa yhdella koordinaatilla
     public boolean pudotaPalikoitaYhdella() {
         boolean pudonneita = false;
         ArrayList<Palikka> putoavatPalikat = new ArrayList<>();
@@ -82,19 +84,8 @@ public class TormaysLogiikka {
         this.poistot.poistaPalikka(poistettava);
     }
 
-    public void asetaPalikka(Palikka asetettava) {
-        ArrayList<int[]> pisteet = asetettava.getMuoto();
-        int x = asetettava.getXpos();
-        int y = asetettava.getYpos();
-
-        int i = 0;
-        while (pisteet.get(i) != null) {
-            pelilauta.asetaPiste(x + pisteet.get(i)[0], y + pisteet.get(i)[1]);
-        }
-    }
-
     public boolean kaannaPalikka(KaantyvaPalikka palikka, int suunta) { // 0 = vasen, 1 = oikea
-        if (palikka.getVari() == Vari.YELLOW) {                                   // palikka on O-palikka eli ei voi kaantya
+        if (palikka.getVari() == Vari.YELLOW) {                         // palikka on O-palikka eli ei voi kaantya
             return false;
         }
 
@@ -116,6 +107,8 @@ public class TormaysLogiikka {
 
     }
 
+    // tarkistaa onnistuuko palikan kaannos.
+//    lisatty ominaisuus jossa palikkaa 'potkaistaan' sivulle jos on seinan vieressa
     private boolean kaannosOnnistuu(KaantyvaPalikka palikka) {
         if (onkoPalikkaSeinanSisalla(palikka)) {
             palikka.liiku(1, 0);                                  // kokeillaan toimiiko kaannos jos siirretaan yhden oikealle
@@ -138,12 +131,12 @@ public class TormaysLogiikka {
     }
 
     public KaantyvaPalikka kopioiPalikka(KaantyvaPalikka kop) {
-        KaantyvaPalikka kopio = new KaantyvaPalikka(kop.getTetromino(), kop.getXpos(), kop.getYpos(), kop.getRotaatio(), kop.getMaxRotaatio());
+        KaantyvaPalikka kopio = new KaantyvaPalikka(kop);
         return kopio;
     }
 
     public Palikka kopioiPalikka(Palikka kop) {
-        Palikka kopio = new Palikka(kop.getMuoto(), kop.getXpos(), kop.getYpos(), kop.getVari());  // muoto ei mahdollisesti kopioidu erilliseksi viela!
+        Palikka kopio = new Palikka(kop.getMuoto(), kop.getXpos(), kop.getYpos(), kop.getVari());
         return kopio;
     }
 }
