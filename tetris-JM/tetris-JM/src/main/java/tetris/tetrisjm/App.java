@@ -19,8 +19,6 @@ public class App {
             System.out.println("Piirtoalustaa ei luotu");
         }
      }
-    peli.setKayttoliittyma(kali);
-    
     peli.setPaivitettava(kali.getPaivitettava());
     peli.start();
     }
