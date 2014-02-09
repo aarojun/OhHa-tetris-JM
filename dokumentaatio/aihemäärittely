@@ -1,29 +1,38 @@
 Aihe: Tetris-peli 
-Toteutetaan klassisen tetris-videopelin perustoiminnallisuus ja sen jälkeen lisätään graafisia ja monimutkaisempia peli-ominaisuuksia
+Toteutetaan klassisen tetris-videopelin perustoiminnallisuus ja sen jälkeen lisätään graafisia ja monimutkaisempia peli-ominaisuuksia.
+
+Mallina käytetty monenlaisia tetris-pelejä mutta erityisesti Tetris the Grand Master -pelisarjaa
+
 
 Pelin kulku:
-Käyttäjälle annetaan ohjattavaksi satunnaisesti valittu 'palikka', joka on muodostettu laatikonmuotoisista osista ja joka liikkuu ajan myötä alaspäin. 
-Palikkaa liikutellaan nuolinäppäimillä ja pystytään kääntämään z ja x -näppäimillä. 
-Kun palikka osuu pelialueen alarajaan tai pelialueelle jo asetettuun palikkaan, palikka muutetaan pelilaudan osaksi ja pelaajalle annetaan uusi ohjattava palikka.
+Käyttäjälle annetaan ohjattavaksi satunnaisesti valittu 'palikka', joka on muodostettu nejästä laatikonmuotoisesta osasta ja joka liikkuu ajan myötä alaspäin. 
 
-Jos pelilaudalla on rivi joka on kokonaan täysi, se tyhjennetään ja ylläolevia palikoita tiputetaan yhden rivin verran. 
+Kun palikka osuu pelialueen alarajaan tai pelialueelle jo asetettuun palikkaan, kaynnistetaan lyhyt ajastin armonajalle, sen aikana pystyy viela 'liuttamaan' palikkaa. kun aika on loppu palikka muutetaan pelilaudan osaksi ja pelaajalle annetaan uusi ohjattava palikka.
+
+Jos pelilaudalla on rivi joka on kokonaan täysi, se tyhjennetään ja ylläolevia palikoita tiputetaan painovoiman tapaan kunnes ketjureaktiot paattyvat
 Jos pelilaudan osaksi asetetaan palikka jonka osa ylittää pelilaudan ylärajan, peli päättyy.
 
-Pelin nopeus kiihtyy jatkuvasti tiettyjen aikamääreiden yhteydessä.
+Palikoiden kääntely hyväksyy tiettyjä törmäyksiä: palikkaa potkaistaan seinästä pois jos mahdollista
 
-Kääntelyn ja satunnaisuuden implementointi aiheuttaa ehkä vaikeuksia, jos halutaan että kääntely on "joustavampaa" eli hyväksyy tietynlaisia törmäyksiä, 
-tai jos halutaan että satunnaisuudella on tietyt rajat tai jos korvataan satunnaisuus muulla järjestelmällä.
+Pelin nopeus kiihtyy jatkuvasti suhteessa liitettyihin palikoihin, poistettujen rivien maaraan ja aikaan. Nopeus/vaikeusaste naytetään LEVEL-kuvakkeessa.
+
+
+Ohjaimet:
+VASEN ja OIKEA nuolinäppäimet: palikan liikuttaminen sivusuuntaan
+ALAS: palikan liikuttaminen alaspain
+YLOS: palikan kokonaan pudottaminen ja liittaminen laudalle ('varjopalikka' näyttää minne päätyy)
+
+Z ja X näppäimet: palikan kääntäminen vasemmalle ja oikealle.
+
 
 Käyttäjät: pelaaja
 
 Käyttäjän toiminnot:
 
-Päävalikko
-- Pelin aloittaminen
-- hi-score listan lukeminen
-- tiettyjen pelin ominaisuuksien valitseminen (mahdollisesti)
-- ohjelman sulkeminen
+Peli:
+- pelaaminen
+- pause / tauko
 
-Pelin aikainen valikko
-- pelin keskeyttäminen
-- pelin jatkaminen
+Game over - valikko:
+- quit - 'N'
+- restart - 'Y'

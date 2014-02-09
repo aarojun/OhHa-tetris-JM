@@ -4,155 +4,140 @@ import java.awt.event.ActionEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// pelin inputtien lukija. keybindingit lahettaa komennon SyotteenLukija -rajapinnassa maariteltyyn liikkeeseen.
+
 public class LiikeToiminnat implements SyotteenLukija {
 
-    // paalla-merkinnat ja toisto-ajastimet liikkeille jotka toistuvat automaattisesti
-    private boolean vasenPaalla;
-    private boolean oikeaPaalla;
-    private boolean alasPaalla;
-    private boolean ylosPaalla;
-    private boolean vasKaannosPaalla;
-    private boolean oikKaannosPaalla;
-    private Timer vasenToisto;
-    private Timer oikeaToisto;
-    private Timer alasToisto;
-    private Timer ylosToisto;
-    private Timer vasKaannosToisto;
-    private Timer oikKaannosToisto;
+    // liike-toiminnat ja niihin liittyvat ajastimet sailytetaan omassa luokassaan
+    // toiminnat joihin pohjassa painaminen ei vaikuta toteutetaan ilman Liike -oliota.
+    private Liike vasen;
+    private Liike oikea;
+    private Liike alas;
+    private Liike ylos;
+    private Liike vasKaannos;
+    private Liike oikKaannos;
+    private Timer autorepeatFix;
+    
     private Peli peli;
 
-    public LiikeToiminnat(Peli peli) {
-        vasenPaalla = false;
-        oikeaPaalla = false;
-        alasPaalla = false;
-        ylosPaalla = false;
-        vasKaannosPaalla = false;
-        oikKaannosPaalla = false;
+    public LiikeToiminnat(final Peli peli) {
         this.peli = peli;
+        this.autorepeatFix = new Timer();
+
+
+        // luodaan liikkeet. konstruktori: (pyoritettava koodi, 
+        // pohjassa painettuna toteutettavan toiston viive, viite toistokorjaus -ajastimeen)
+        this.vasen = new Liike(new Runnable() {
+                @Override
+                public void run() {
+                        peli.vasemmalle();
+                }
+            }, 140, autorepeatFix);
+        
+        this.oikea = new Liike(new Runnable() {
+                @Override
+                public void run() {
+                        peli.oikealle();
+                }
+            }, 140, autorepeatFix);
+        
+        this.alas = new Liike(new Runnable() {
+                @Override
+                public void run() {
+                        peli.alas();
+                }
+            }, 140, autorepeatFix);
+        
+        this.ylos = new Liike(new Runnable() {
+                @Override
+                public void run() {
+                        peli.pudotaKokonaan();
+                }
+            }, 200, autorepeatFix);
+        
+        this.vasKaannos = new Liike(new Runnable() {
+                @Override
+                public void run() {
+                        peli.kaannaVasen();
+                }
+            }, 180, autorepeatFix);
+        
+        this.oikKaannos = new Liike(new Runnable() {
+                @Override
+                public void run() {
+                        peli.kaannaOikea();
+                }
+            }, 180, autorepeatFix);
+        
+        this.vasen.setPoisSuljettava(oikea);
+        this.oikea.setPoisSuljettava(vasen);
+        this.alas.setPoisSuljettava(ylos);
+        this.ylos.setPoisSuljettava(alas);
+        this.vasKaannos.setPoisSuljettava(oikKaannos);
+        this.oikKaannos.setPoisSuljettava(vasKaannos);        
+    }
+
+    public void autorepeatFix(TimerTask timertask) {
+        this.autorepeatFix = new Timer();
+        autorepeatFix.schedule(timertask, 4);
     }
 
     public void vasenPush(ActionEvent e) {
-        if (!vasenPaalla) {
-            vasenPaalla = true;
-            vasenToisto = new Timer();
-            vasenToisto.scheduleAtFixedRate(new TimerTask(){
-            @Override
-            public void run() {
-                peli.vasemmalle();
-            }
-            },
-                    0, 140);
+        vasen.push();
     }
-    }
-    
+
     public void vasenRelease(ActionEvent e) {
-        vasenToisto.cancel();
-        vasenPaalla = false;
+        vasen.release();
     }
 
     public void oikeaPush(ActionEvent e) {
-        if (!oikeaPaalla) {
-            oikeaPaalla = true;
-            oikeaToisto = new Timer();
-            oikeaToisto.scheduleAtFixedRate(new TimerTask(){
-            @Override
-            public void run() {
-                peli.oikealle();
-            }
-            },
-                    0, 140);
+        oikea.push();
     }
-    }
-    
+
     public void oikeaRelease(ActionEvent e) {
-        oikeaToisto.cancel();
-        oikeaPaalla = false;
+        oikea.release();
     }
 
     public void alasPush(ActionEvent e) {
-        if(!alasPaalla) {
-            alasPaalla = true;
-            alasToisto = new Timer();
-            alasToisto.scheduleAtFixedRate(new TimerTask(){
-            @Override
-            public void run() {
-                peli.alas();
-            }
-            },
-                    0, 140);
-        }
+        alas.push();
     }
-    
+
     public void alasRelease(ActionEvent e) {
-        alasToisto.cancel();
-        alasPaalla = false;
+        alas.release();
     }
 
     public void ylosPush(ActionEvent e) {
-        if(!ylosPaalla) {
-            ylosPaalla = true;
-            ylosToisto = new Timer();
-            ylosToisto.scheduleAtFixedRate(new TimerTask(){
-            @Override
-            public void run() {
-                peli.pudotaKokonaan();
-            }
-            },
-                    0, 200);
-        }
+        ylos.push();
     }
-    
+
     public void ylosRelease(ActionEvent e) {
-        ylosToisto.cancel();
-        ylosPaalla = false;
+        ylos.release();
     }
 
     public void vasenKaannosPush(ActionEvent e) {
-        if(!vasKaannosPaalla) {
-            vasKaannosPaalla = true;
-            vasKaannosToisto = new Timer();
-            vasKaannosToisto.scheduleAtFixedRate(new TimerTask(){
-            @Override
-            public void run() {
-                peli.kaannaVasen();
-            }
-            },
-                    0, 160);
-        }
+        vasKaannos.push();
     }
-    
+
     public void vasenKaannosRelease(ActionEvent e) {
-        vasKaannosToisto.cancel();
-        vasKaannosPaalla = false;
+        vasKaannos.release();
     }
 
     public void oikeaKaannosPush(ActionEvent e) {
-        if(!oikKaannosPaalla) {
-            oikKaannosPaalla = true;
-            oikKaannosToisto = new Timer();
-            oikKaannosToisto.scheduleAtFixedRate(new TimerTask(){
-            @Override
-            public void run() {
-                peli.kaannaOikea();
-            }
-            },
-                    0, 160);
-        }
+        oikKaannos.push();
     }
-    
+
     public void oikeaKaannosRelease(ActionEvent ae) {
-        oikKaannosToisto.cancel();
-        oikKaannosPaalla = false;
+        oikKaannos.release();
     }
-    
+
     public void pausePush(ActionEvent ae) {
         peli.pause();
     }
-    
+
     public void yesPush(ActionEvent ae) {
         peli.yes();
     }
-    
+
     public void noPush(ActionEvent ae) {
         peli.no();
     }

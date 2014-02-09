@@ -2,6 +2,8 @@ package tetris.pelilogiikka;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tetris.gui.Paivitettava;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
@@ -20,6 +22,7 @@ public class Peli {
     private KaantyvaPalikka varjoPalikka;
     private int aikayksikko;
     private int vaikeustaso;
+    private int frame;
     private int pisteet;
     private TormaysLogiikka tormayslogiikka;
     private PoistoOperaatiot poistot;
@@ -47,9 +50,10 @@ public class Peli {
         this.seuraavatPalikat = new ArrayList<>();
         this.palikkaHistoria = new ArrayList<>();
 
-        this.aikayksikko = 20;
+        this.aikayksikko = 30;
         this.vaikeustaso = 0;
         this.pisteet = 0;
+        this.frame = 0;
 
         this.poistot = new PoistoOperaatiot(pelilauta);
         this.tormayslogiikka = new TormaysLogiikka(pelilauta, poistot);
@@ -133,8 +137,10 @@ public class Peli {
             toteutaOhjausGameover();
         } else {
             if (!paused) {
+                frame++;
                 paivitaFysiikka();
                 kasvataKelloa();
+                nostaVaikeustaso();
             }
             toteutaOhjaus();
 
@@ -142,6 +148,14 @@ public class Peli {
                 poistaTaydetRivitKetjureaktioilla();
                 tarkistaRivit = false;
             }
+            paivitaAikayksikko();
+        }
+    }
+    
+    public void nostaVaikeustaso() {
+        if (frame >= 300) {
+            frame = 0;
+            vaikeustaso++;
             paivitaAikayksikko();
         }
     }
@@ -188,16 +202,16 @@ public class Peli {
                 pudotaKokonaan = false;
                 pudotaJaLukitsePalikka();
             } else {
-                if(alas) {
+                if (alas) {
                     this.alas = false;
-                    if(liukuAikaPaalla) {
+                    if (liukuAikaPaalla) {
                         lukitsePalikka();
                     } else {
                         pudota = true;
                         nollaaAjastimet();
                     }
                 }
-                 if (vasen) {
+                if (vasen) {
                     vasen = false;
                     liikutaVasen();
                 } else if (oikea) {
@@ -234,7 +248,7 @@ public class Peli {
         vaikeustaso++;
         if (taysiaRiveja > 0) {
             pisteet += taysiaRiveja * taysiaRiveja * 100;
-            vaikeustaso += 2 * taysiaRiveja * taysiaRiveja;
+            vaikeustaso += 1.5 * taysiaRiveja * taysiaRiveja;
         }
     }
 
@@ -245,8 +259,8 @@ public class Peli {
     }
 
     private void paivitaAikayksikko() {
-        int muutos = vaikeustaso / 80;
-        aikayksikko = 20 - muutos;
+        int muutos = vaikeustaso / 60;
+        aikayksikko = 30 - muutos;
     }
 
     public int getAikayksikko() {
@@ -331,7 +345,7 @@ public class Peli {
     public void kaannaOikea() {
         this.kaannaOikea = true;
     }
-    
+
     public void alas() {
         this.alas = true;
     }
@@ -343,7 +357,7 @@ public class Peli {
     public void pudota() {
         this.pudota = true;
     }
-    
+
     public void lukitse() {
         this.lukitse = true;
     }
@@ -387,13 +401,21 @@ public class Peli {
 
     private void asetaSeuraavat() {
         for (int i = 0; i < 4; i++) {
-            Palikka pl = seuraavatPalikat.get(i);
+            KaantyvaPalikka pl = seuraavatPalikat.get(i);
             if (i == 0) {
                 pl.setXpos(3);
                 pl.setYpos(0);
+                if (kaannaVasen) {
+                    tormayslogiikka.kaannaPalikkaVasemmalle(pl);
+                } else if (kaannaOikea) {
+                    tormayslogiikka.kaannaPalikkaOikealle(pl);
+                }
+            } else if (i == 1) {
+                pl.setXpos(3);
+                pl.setYpos(-3);
             } else {
                 pl.setXpos(11);
-                pl.setYpos(2 + (i - 1) * 3);
+                pl.setYpos((i - 1) * 3);
             }
         }
     }
@@ -458,7 +480,7 @@ public class Peli {
         aloitaPeliLoop();
 
     }
-    
+
     private void quit() {
         System.exit(0);
     }
@@ -474,7 +496,7 @@ public class Peli {
     public int getPisteet() {
         return this.pisteet;
     }
-    
+
     public int getVaikeustaso() {
         return this.vaikeustaso;
     }

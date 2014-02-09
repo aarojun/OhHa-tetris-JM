@@ -34,7 +34,7 @@ public class Kayttoliittyma implements Runnable {
     public void run() {
         frame = new JFrame("TetrisJM");
         int leveys = 15 * sivunPituus + 10;
-        int korkeus = 20 * sivunPituus + 30;
+        int korkeus = 24 * sivunPituus;
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension ruutu = new Dimension(leveys, korkeus);
@@ -62,6 +62,7 @@ public class Kayttoliittyma implements Runnable {
 //        tausta = new TaustaPiirto(sivunPituus);
 //        tausta.add(piirto);
         
+        piirto.setLocation(20,200);
         container.add(piirto);
     }
     

@@ -29,10 +29,17 @@ public class Piirtoalusta extends JPanel implements Paivitettava {
 
     @Override
     public void paintComponent(Graphics g) {
+                
+        g.translate(10, 100);
         super.paintComponent(g);
+        
+        g.setColor(Color.BLACK);
+        g.fillRect(-10, -100, 15 * nelionKoko+10, 20 * nelionKoko+110);
         
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, 0, 10 * nelionKoko, 20 * nelionKoko);
+        
+        g.fillRect(2*nelionKoko, -3*nelionKoko, 6 * nelionKoko, 2 * nelionKoko);
         
         piirraVarjopalikka(g);
         piirraKaantPalikat(g, peli.getSeuraavatPalikat());
@@ -40,8 +47,7 @@ public class Piirtoalusta extends JPanel implements Paivitettava {
 
         piirraMittarit(g);
         
-        piirraOhjausNaytto(g);
-
+        piirraOhjausNaytto(g);        
     }
     
     private void piirraKaantPalikat(Graphics g, ArrayList<KaantyvaPalikka> palikat) {
@@ -98,18 +104,18 @@ public class Piirtoalusta extends JPanel implements Paivitettava {
 
     private void piirraMittarit(Graphics g) {
         g.setColor(Color.DARK_GRAY);
-        g.drawLine(10*nelionKoko, 1*nelionKoko+16, 20*nelionKoko, 1*nelionKoko+16);
-        g.drawLine(10*nelionKoko, 11*nelionKoko-6, 20*nelionKoko, 11*nelionKoko-6);
+        g.drawLine(10*nelionKoko, 0, 20*nelionKoko, 0);
+        g.drawLine(10*nelionKoko, 9*nelionKoko-6, 20*nelionKoko, 9*nelionKoko-6);
         
         g.setFont(pisteFont);
   
         g.setColor(Color.LIGHT_GRAY);
         int leveys = (int)(10.5*nelionKoko);
         g.drawString("NEXT", 12 * nelionKoko-10, 1 * nelionKoko);
-        g.drawString("SCORE " + Integer.toString(peli.getPisteet()), leveys, 12 * nelionKoko);
-        g.drawString("LEVEL " + Integer.toString(peli.getVaikeustaso()), leveys, 13 * nelionKoko);
         
-        g.drawString("TIME " + peli.getAika(), leveys, 14 * nelionKoko);
+        g.drawString("SCORE " + Integer.toString(peli.getPisteet()), leveys, 10 * nelionKoko);
+        g.drawString("LEVEL " + Integer.toString(peli.getVaikeustaso()), leveys, 11 * nelionKoko);
+        g.drawString("TIME " + peli.getAika(), leveys, 12 * nelionKoko);
 
         g.setColor(Color.WHITE);
         g.setFont(menuFont);
