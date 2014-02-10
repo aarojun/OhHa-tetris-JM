@@ -5,11 +5,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import tetris.pelilogiikka.LiikeToiminnat;
@@ -33,8 +32,8 @@ public class Kayttoliittyma implements Runnable {
     @Override
     public void run() {
         frame = new JFrame("TetrisJM");
-        int leveys = 15 * sivunPituus + 10;
-        int korkeus = 24 * sivunPituus;
+        int leveys = 16 * sivunPituus + 10;
+        int korkeus = 24 * sivunPituus + 10;
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension ruutu = new Dimension(leveys, korkeus);
@@ -45,16 +44,17 @@ public class Kayttoliittyma implements Runnable {
         frame.setPreferredSize(new Dimension(leveys, korkeus+20));
         frame.setMaximumSize(ruutu);
         frame.setMinimumSize(ruutu);
+        frame.setResizable(false);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        luoKomponentit(frame.getContentPane());
+        luoKomponentit();
 
         frame.pack();
         frame.setVisible(true);
     }
 
-    private void luoKomponentit(Container container) {
+    private void luoKomponentit() {
         this.lukija = new LiikeToiminnat(peli);
         piirto = new Piirtoalusta(peli, sivunPituus);
         
@@ -62,8 +62,8 @@ public class Kayttoliittyma implements Runnable {
 //        tausta = new TaustaPiirto(sivunPituus);
 //        tausta.add(piirto);
         
-        piirto.setLocation(20,200);
-        container.add(piirto);
+//        piirto.setLocation(20,200);
+        frame.setContentPane(piirto);
     }
     
     private void luoKeyBindings(JComponent jc) {

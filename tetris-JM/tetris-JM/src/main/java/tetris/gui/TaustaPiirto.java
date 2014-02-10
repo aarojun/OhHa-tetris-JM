@@ -1,41 +1,82 @@
 package tetris.gui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import tetris.objects.Pelilauta;
 
-public class TaustaPiirto extends JPanel implements Paivitettava {
+public class TaustaPiirto extends BufferoituPanel {
+
+    private BufferedImage tausta;
+    private int korkeus;
+    private int leveys;
     private int nelionKoko;
-    
-    public TaustaPiirto(int nelionSivunPituus) {
-        this.nelionKoko = nelionSivunPituus;
-        this.setBackground(Color.BLACK);
-//        this.setOpaque(true);
+    private final Color taustaVari = new Color(50, 70, 90);
+    private final Color gridVari = new Color(255, 255, 255, 70);
+
+    public TaustaPiirto(Pelilauta lauta, int nelionKoko) {
+//        initComponents();
+        this.setOpaque(false);
+        this.nelionKoko = nelionKoko;
+        this.korkeus = lauta.getKorkeus();
+        this.leveys = lauta.getLeveys();
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, 0, 10 * nelionKoko, 20 * nelionKoko);
+        g.translate(nelionKoko, nelionKoko);
+
+        Graphics2D g2 = (Graphics2D) g;
+
+        if (tausta == null) {
+            uudelleenPiirra();
+        } 
+        g2.drawImage(tausta, null, 0, 0);
         
-        g.drawLine(10*nelionKoko, 1*nelionKoko+16, 20*nelionKoko, 1*nelionKoko+16);
-        g.drawLine(10*nelionKoko, 11*nelionKoko-6, 20*nelionKoko, 11*nelionKoko-6);
-        
-        Font font = new Font(Font.SANS_SERIF,1,16);
-        g.setFont(font);
-  
-        g.setColor(Color.LIGHT_GRAY);
-        g.drawString("NEXT", 12 * nelionKoko-10, 1 * nelionKoko);
-        
-       
     }
-    
+
+    public void piirraGrid(Graphics g) {
+        g.setColor(gridVari);
+        for (int j = 0; j < korkeus; j++) {
+            g.drawLine(0, j * nelionKoko, leveys * nelionKoko, j * nelionKoko);
+        }
+        for (int i = 1; i < leveys; i++) {
+            g.drawLine(i * nelionKoko, 0, i * nelionKoko, korkeus * nelionKoko);
+        }
+    }
+
     @Override
     public void paivita() {
         super.repaint();
+    }
+
+    public void uudelleenPiirra() {
+        int leveys = this.getWidth();
+        int korkeus = this.getHeight();
+        tausta = (BufferedImage) (this.createImage(leveys, korkeus));
+        Graphics2D gc = tausta.createGraphics();
+        gc.setColor(taustaVari);
+        gc.fillRect(0, 0, leveys * nelionKoko, (korkeus - 3) * nelionKoko);
+
+        gc.fillRect(2 * nelionKoko, -3 * nelionKoko, 6 * nelionKoko, 2 * nelionKoko);
+
+        piirraGrid(gc);
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">
+    private void initComponents() {
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 400, Short.MAX_VALUE));
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 300, Short.MAX_VALUE));
     }
 }

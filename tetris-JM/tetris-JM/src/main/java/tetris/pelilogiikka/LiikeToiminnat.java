@@ -32,42 +32,42 @@ public class LiikeToiminnat implements SyotteenLukija {
                 public void run() {
                         peli.vasemmalle();
                 }
-            }, 140, autorepeatFix);
+            }, 60, 260, autorepeatFix);
         
         this.oikea = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.oikealle();
                 }
-            }, 140, autorepeatFix);
+            }, 60, 260, autorepeatFix);
         
         this.alas = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.alas();
                 }
-            }, 140, autorepeatFix);
+            }, 60, 260, autorepeatFix);
         
         this.ylos = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.pudotaKokonaan();
                 }
-            }, 200, autorepeatFix);
+            }, 200, 360, autorepeatFix);
         
         this.vasKaannos = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.kaannaVasen();
                 }
-            }, 180, autorepeatFix);
+            }, 180, 320, autorepeatFix);
         
         this.oikKaannos = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.kaannaOikea();
                 }
-            }, 180, autorepeatFix);
+            }, 180, 320, autorepeatFix);
         
         this.vasen.setPoisSuljettava(oikea);
         this.oikea.setPoisSuljettava(vasen);

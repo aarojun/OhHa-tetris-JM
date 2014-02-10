@@ -40,6 +40,10 @@ public class Palikka {
     public void setMuoto(ArrayList<int[]> muoto) {
          this.muoto = new ArrayList<>(muoto);
     }
+    
+    public void setVari(Vari vari) {
+        this.vari = vari;
+    }
 
 
     public void liiku(int x, int y) {

@@ -9,6 +9,7 @@ import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
 import tetris.objects.Tetromino;
+import tetris.objects.Vari;
 
 public class Peli {
 
@@ -19,18 +20,22 @@ public class Peli {
     private ArrayList<KaantyvaPalikka> seuraavatPalikat;
     private ArrayList<Tetromino> palikkaHistoria;
     private KaantyvaPalikka nykyinenPalikka;
+    private KaantyvaPalikka fxPalikka;
     private KaantyvaPalikka varjoPalikka;
+    private final int perusAikayksikko = 30;
     private int aikayksikko;
     private int vaikeustaso;
-    private int frame;
+    private int vuoro;
     private int pisteet;
+    private int highScore;
     private TormaysLogiikka tormayslogiikka;
     private PoistoOperaatiot poistot;
     private Paivitettava gui;
+    private boolean lautaPaivita = true;
+    private boolean vaihtoAika;
     private boolean paalla;
     private boolean paused;
     private boolean gameover;
-    private boolean tarkistaRivit;
     private boolean liukuAikaPaalla;
     private boolean lukitse;
     private boolean alas;
@@ -46,14 +51,14 @@ public class Peli {
         Tetromino.L, Tetromino.O, Tetromino.S, Tetromino.T, Tetromino.Z};
 
     public Peli() {
-        this.pelilauta = new Pelilauta(10, 20);
+        this.pelilauta = new Pelilauta(10, 23);
         this.seuraavatPalikat = new ArrayList<>();
         this.palikkaHistoria = new ArrayList<>();
 
-        this.aikayksikko = 30;
+        this.aikayksikko = perusAikayksikko;
         this.vaikeustaso = 0;
         this.pisteet = 0;
-        this.frame = 0;
+        this.vuoro = 0;
 
         this.poistot = new PoistoOperaatiot(pelilauta);
         this.tormayslogiikka = new TormaysLogiikka(pelilauta, poistot);
@@ -68,7 +73,6 @@ public class Peli {
         luoVarjopalikka();
 
         this.paalla = true;
-        this.tarkistaRivit = false;
         this.paused = false;
         this.gameover = false;
         this.liukuAikaPaalla = false;
@@ -137,30 +141,19 @@ public class Peli {
             toteutaOhjausGameover();
         } else {
             if (!paused) {
-                frame++;
-                paivitaFysiikka();
                 kasvataKelloa();
-                nostaVaikeustaso();
+                if (vaihtoAika) {
+                    toteutaOhjausVaihtoaika();
+                } else {
+                    paivitaFysiikka();
+                    toteutaOhjaus();
+                }
+                paivitaAikayksikko();
             }
-            toteutaOhjaus();
-
-            if (tarkistaRivit) {
-                poistaTaydetRivitKetjureaktioilla();
-                tarkistaRivit = false;
-            }
-            paivitaAikayksikko();
-        }
-    }
-    
-    public void nostaVaikeustaso() {
-        if (frame >= 300) {
-            frame = 0;
-            vaikeustaso++;
-            paivitaAikayksikko();
         }
     }
 
-    public void paivitaFysiikka() {
+    private void paivitaFysiikka() {
         if (tormayslogiikka.onkoPalikallaAlusta(nykyinenPalikka)) {
             liukuAikaPaalla = true;
         } else {
@@ -183,9 +176,16 @@ public class Peli {
                 nykyinenPalikka.liiku(0, 1);
             }
             pudota = false;
+            alas = false;
         }
         if (lukitse) {
             lukitsePalikka();
+        }
+    }
+    
+    private void pudotaNykPalikkaa() {
+        if(!tormayslogiikka.onkoPalikallaAlusta(nykyinenPalikka)) {
+            nykyinenPalikka.liiku(0,1);
         }
     }
 
@@ -204,10 +204,10 @@ public class Peli {
             } else {
                 if (alas) {
                     this.alas = false;
-                    if (liukuAikaPaalla) {
+                    if (palikallaAlusta()) {
                         lukitsePalikka();
                     } else {
-                        pudota = true;
+                        nykyinenPalikka.liiku(0, 1);
                         nollaaAjastimet();
                     }
                 }
@@ -222,6 +222,16 @@ public class Peli {
         }
     }
 
+    private void toteutaOhjausVaihtoaika() {
+        if (kaannaVasen) {
+            kaannaVasen = true;
+            kaannaOikea = false;
+        } else if (kaannaOikea) {
+            kaannaOikea = true;
+            kaannaVasen = false;
+        }
+    }
+
     private void toteutaOhjausGameover() {
         if (yes) {
             yes = false;
@@ -233,7 +243,7 @@ public class Peli {
         }
     }
 
-    public void poistaTaydetRivitKetjureaktioilla() {
+    private void poistaTaydetRivitKetjureaktioilla() {
         int taysiaRiveja = poistot.poistaTaydetRivit();
         int rivejaPoistettu = 0;
         while (taysiaRiveja > 0) {
@@ -248,7 +258,7 @@ public class Peli {
         vaikeustaso++;
         if (taysiaRiveja > 0) {
             pisteet += taysiaRiveja * taysiaRiveja * 100;
-            vaikeustaso += 1.5 * taysiaRiveja * taysiaRiveja;
+            vaikeustaso += taysiaRiveja * taysiaRiveja;
         }
     }
 
@@ -259,8 +269,8 @@ public class Peli {
     }
 
     private void paivitaAikayksikko() {
-        int muutos = vaikeustaso / 60;
-        aikayksikko = 30 - muutos;
+        int muutos = vaikeustaso / 100;
+        aikayksikko = perusAikayksikko - muutos;
     }
 
     public int getAikayksikko() {
@@ -315,29 +325,6 @@ public class Peli {
         }
     }
 
-    public void pudotaPalikkaKokonaan(Palikka palikka) {
-        while (pudotaPalikkaa(palikka)) {
-            pudotaPalikkaa(palikka);
-        }
-    }
-
-    public void pudotaPalikkaKokonaan() {
-        pudotaPalikkaKokonaan(nykyinenPalikka);
-    }
-
-    public boolean pudotaPalikkaa(Palikka palikka) {
-        return tormayslogiikka.yritaPudottaaLiikutettavaaPalikkaa(palikka);
-    }
-
-    public boolean pudotaPalikkaa() {
-        return pudotaPalikkaa(nykyinenPalikka);
-    }
-
-    private void luoVarjopalikka() {
-        varjoPalikka = new KaantyvaPalikka(nykyinenPalikka);
-        pudotaPalikkaKokonaan(varjoPalikka);
-    }
-
     public void kaannaVasen() {
         this.kaannaVasen = true;
     }
@@ -361,19 +348,42 @@ public class Peli {
     public void lukitse() {
         this.lukitse = true;
     }
+    
+    public void nostaVaikeustasoa() {
+            vaikeustaso++;
+    }
 
-    private void pudotaNykPalikkaa() {
-        if (!tormayslogiikka.onkoPalikallaAlusta(nykyinenPalikka)) {
-            nykyinenPalikka.liiku(0, 1);
-            nollaaAjastimet();
-        } else {
-            lukitsePalikka();
+    public void pudotaPalikkaKokonaan(Palikka palikka) {
+        while (pudotaPalikkaa(palikka)) {
+            pudotaPalikkaa(palikka);
         }
+    }
+
+    public void pudotaPalikkaKokonaan() {
+        pudotaPalikkaKokonaan(nykyinenPalikka);
+    }
+
+    public boolean pudotaPalikkaa(Palikka palikka) {
+        return tormayslogiikka.yritaPudottaaLiikutettavaaPalikkaa(palikka);
+    }
+
+    public boolean pudotaPalikkaa() {
+        return pudotaPalikkaa(nykyinenPalikka);
+    }
+
+    private void luoVarjopalikka() {
+        varjoPalikka = new KaantyvaPalikka(nykyinenPalikka);
+        pudotaPalikkaKokonaan(varjoPalikka);
     }
 
     public void pudotaJaLukitsePalikka() {
         nykyinenPalikka = varjoPalikka;
+        seuraavatPalikat.set(0, varjoPalikka);
         lukitsePalikka();
+    }
+    
+    private boolean palikallaAlusta() {
+        return tormayslogiikka.onkoPalikallaAlusta(nykyinenPalikka);
     }
 
     public void lukitsePalikkaJosAlusta() {
@@ -383,36 +393,58 @@ public class Peli {
     }
 
     public void lukitsePalikka() {
+        nollaaOhjaimet();
         lukitse = false;
+        aloitaVaihtoAika();
         pelilauta.lisaaLiitettyPalikka(nykyinenPalikka);
         nollaaAjastimet();
-        seuraavaPalikka();
-        tarkistaRivit = true;
         liukuAikaPaalla = false;
         poistaTaydetRivitKetjureaktioilla();
+        lautaPaivita = true;
+    }
+    
+    public void seuraavaVuoro() {
+        this.vaihtoAika = false;
+        vuoro++;
+        seuraavaPalikka();
+        lautaPaivita = true;
+    }
+
+    private void aloitaVaihtoAika() {
+        this.fxPalikka = nykyinenPalikka;
+        this.vaihtoAika = true;
+        seuraavatPalikat.remove(0);
+        luoPalikka();
+    }
+
+    public void lopetaVaihtoAika() {
+        this.vaihtoAika = false;
     }
 
     private void seuraavaPalikka() {
-        seuraavatPalikat.remove(0);
-        luoPalikka();
         asetaSeuraavat();
         nykyinenPalikka = seuraavatPalikat.get(0);
+        if(nykyinenPalikka.getTetromino()!=Tetromino.O) {
+                if (kaannaVasen) {
+                    kaannaVasen = false;
+                    nykyinenPalikka.kaannaVasemmalle();
+                } else if (kaannaOikea) {
+                    kaannaOikea = false;
+                    nykyinenPalikka.kaannaOikealle();
+                }
+        }
     }
 
     private void asetaSeuraavat() {
         for (int i = 0; i < 4; i++) {
             KaantyvaPalikka pl = seuraavatPalikat.get(i);
             if (i == 0) {
+                
                 pl.setXpos(3);
                 pl.setYpos(0);
-                if (kaannaVasen) {
-                    tormayslogiikka.kaannaPalikkaVasemmalle(pl);
-                } else if (kaannaOikea) {
-                    tormayslogiikka.kaannaPalikkaOikealle(pl);
-                }
             } else if (i == 1) {
                 pl.setXpos(3);
-                pl.setYpos(-3);
+                pl.setYpos(0);
             } else {
                 pl.setXpos(11);
                 pl.setYpos((i - 1) * 3);
@@ -450,8 +482,15 @@ public class Peli {
     }
 
     public void gameover() {
-//        paalla = false;
+        muutaPalikatHarmaiksi();
         nollaaOhjaimet();
+        lautaPaivita = true;
+    }
+    
+    private void muutaPalikatHarmaiksi() {
+        for (Palikka pl : pelilauta.getPalikat()) {
+            pl.setVari(Vari.GRAY);
+        }
     }
 
     public void restart() {
@@ -459,9 +498,10 @@ public class Peli {
         nollaaAjastimet();
         poistot.poistaKaikki();
         nykyinenPalikka = null;
-        this.aikayksikko = 20;
-        this.pisteet = 0;
+        paivitaHighScore();
+        this.aikayksikko = 30;
         this.vaikeustaso = 0;
+        this.vuoro = 0;
         this.liukuAikaPaalla = false;
         nollaaOhjaimet();
         kello.reset();
@@ -475,10 +515,17 @@ public class Peli {
         pudota = false;
         lukitse = false;
         gameover = false;
+        lautaPaivita = true;
         paalla = true;
         Thread.yield();
         aloitaPeliLoop();
-
+    }
+    
+    private void paivitaHighScore() {
+        if (pisteet>highScore) {
+            highScore = pisteet;
+        }
+        pisteet = 0;
     }
 
     private void quit() {
@@ -496,13 +543,29 @@ public class Peli {
     public int getPisteet() {
         return this.pisteet;
     }
+    
+    public int getHighScore() {
+        return this.highScore;
+    }
 
     public int getVaikeustaso() {
         return this.vaikeustaso;
     }
+    
+    public int getVuoro() {
+        return this.vuoro;
+    }
 
     public KaantyvaPalikka getVarjopalikka() {
         return this.varjoPalikka;
+    }
+
+    public Palikka getEfektiPalikka() {
+        return this.fxPalikka;
+    }
+
+    public boolean onkoEfektitPaalla() {
+        return this.vaihtoAika;
     }
 
     public boolean getPaused() {
@@ -515,6 +578,14 @@ public class Peli {
 
     public boolean getGameover() {
         return this.gameover;
+    }
+    
+    public boolean getLautaPaivita() {
+        return this.lautaPaivita;
+    }
+    
+    public void lautaPaivitetty() {
+        this.lautaPaivita = false;
     }
 
     public void nollaaAjastimet() {

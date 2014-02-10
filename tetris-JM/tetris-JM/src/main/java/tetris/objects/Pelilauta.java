@@ -20,13 +20,13 @@ public class Pelilauta {
     // luokka tuntee kaikki laudalle lukitut palikat
 
     public void asetaPiste(int x, int y) {
-        if (x < 10 && y < 20) {
+        if (x < leveys && y < korkeus) {
             this.alueMatriisi[x][y] = 1;
         }
     }
 
     public void poistaPiste(int x, int y) {
-        if (x < 10 && y < 20) {
+        if (x < leveys && y < korkeus) {
             this.alueMatriisi[x][y] = 0;
         }
     }
@@ -102,5 +102,13 @@ public class Pelilauta {
     
     public int[][] getAlueMatriisi() {
         return this.alueMatriisi;
+    }
+    
+    public int getKorkeus() {
+        return this.korkeus;
+    }
+    
+    public int getLeveys() {
+        return this.leveys;
     }
 }

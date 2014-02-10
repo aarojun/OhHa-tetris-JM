@@ -11,16 +11,19 @@ public class Liike {
     private boolean release;
     //liikkeen automaattisten toistojen valinen viive millisekuntteina
     private long toistoAika;
+    //viive ennen ensimmaista automaattista toistoa
+    private long alkuViive;
     // poisSuljettavan toisto laitetaan pois paalta jos nappi painetaan
     // eli esim vasenta ja oikeaa ei voi toistaa samaan aikaan
     private Liike poisSuljettava;
     // liikkeen toteuttama toiminta, esim peli.vasemmalle()
     private Runnable toiminta;
 
-    public Liike(Runnable toiminta, long toistoAika, Timer autorepeatFix) {
+    public Liike(Runnable toiminta, long toistoAika, long alkuViive, Timer autorepeatFix) {
         this.toisto = new Timer();
         this.toiminta = toiminta;
         this.toistoAika = toistoAika;
+        this.alkuViive = alkuViive;
         this.autorepeatFix = autorepeatFix;
     }
     
@@ -33,7 +36,7 @@ public class Liike {
     }
 
     public void poisPaalta() {
-        paalla = false;
+        this.paalla = false;
     }
     
     // toteutetaan kun nappia painettu
@@ -43,12 +46,13 @@ public class Liike {
             paalla = true;
             this.poisSuljettava.peruToisto();
             toisto = new Timer();
+            toiminta.run();
             toisto.scheduleAtFixedRate(
-                    new TimerTaskAnnetullaSyotteella(toiminta), 0, toistoAika);
+                    new TimerTaskAnnetullaSyotteella(toiminta), alkuViive, toistoAika);
         }
     }
     
-    // toteuttaa 5ms tarkistusajan napin irtipaastolle. jos nappia painetaan heti releasen jalkeen release perutaan.
+    // toteuttaa 6ms tarkistusajan napin irtipaastolle. jos nappia painetaan heti releasen jalkeen release perutaan.
     // tama on toteutettu koska mm. ubuntu lahettaa pressed ja release komentoja samaan aikaan
     // automaattisessa nappaimien toistossaan. emme halua etta tama vaikuttaa ohjelmaan
     public void release() {
@@ -63,7 +67,7 @@ public class Liike {
 
     public void autorepeatFix(TimerTask timertask) {
 //        this.autorepeatFix = new Timer();
-        autorepeatFix.schedule(timertask, 4);
+        autorepeatFix.schedule(timertask, 6);
     }
     
     public void tarkistaRelease() {

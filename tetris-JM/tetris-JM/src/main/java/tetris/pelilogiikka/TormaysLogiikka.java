@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
+import tetris.objects.Tetromino;
 import tetris.objects.Vari;
 
 public class TormaysLogiikka {
@@ -44,9 +45,9 @@ public class TormaysLogiikka {
     public boolean onkoPalikkaSeinanSisalla(Palikka palikka) {
         return onkoPalikkaVasten(palikka, 0, 0);
     }
-    
+
     public boolean yritaPudottaaLiikutettavaaPalikkaa(Palikka palikka) {
-        if(!onkoPalikallaAlusta(palikka)) {
+        if (!onkoPalikallaAlusta(palikka)) {
             palikka.liiku(0, 1);
             return true;
         }
@@ -72,20 +73,20 @@ public class TormaysLogiikka {
         }
         return pudonneita;
     }
-    
+
     public void pudotaLiikutettavaPalikkaKokonaan(Palikka palikka) {
-        while(!onkoPalikallaAlusta(palikka)) {
+        while (!onkoPalikallaAlusta(palikka)) {
             palikka.liiku(0, 1);
         }
         pelilauta.liitaPalikka(palikka);
-    } 
+    }
 
     public void poistaPalikka(Palikka poistettava) {
         this.poistot.poistaPalikka(poistettava);
     }
 
     public boolean kaannaPalikka(KaantyvaPalikka palikka, int suunta) { // 0 = vasen, 1 = oikea
-        if (palikka.getVari() == Vari.YELLOW) {                         // palikka on O-palikka eli ei voi kaantya
+        if (palikka.getTetromino() == Tetromino.O) {                         // palikka on O-palikka eli ei voi kaantya
             return false;
         }
 
@@ -115,7 +116,14 @@ public class TormaysLogiikka {
             if (onkoPalikkaSeinanSisalla(palikka)) {
                 palikka.liiku(-2, 0);                             // kokeillaan toimiiko kaannos jos siirretaan yhden vasemmalle
                 if (onkoPalikkaSeinanSisalla(palikka)) {
+                    if (palikka.getTetromino() == Tetromino.I) {  // I-tetromino voi siirtya 2 oikealle (eli voi kaantya seinaa vasten)
+                        palikka.liiku(3, 0);
+                        if (onkoPalikkaSeinanSisalla(palikka)) {
+                            return false;
+                        }
+                    } else {
                     return false;
+                    }
                 }
             }
         }
