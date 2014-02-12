@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
-// pelin inputtien lukija. keybindingit lahettaa komennon SyotteenLukija -rajapinnassa maariteltyyn liikkeeseen.
-
+/**
+ * pelin inputtien toteuttaja. vastaanottaa keybindingien tuottamia komentoja kayttoliittymasta.
+ * liike-toimintoihin liittyvat ajastimet ja pyoritettava koodi sailytetaan omassa luokassaan
+ * toiminnat joihin pohjassa painaminen ei vaikuta toteutetaan ilman Liike -oliota.
+ * 
+ * @param msPF millisekuntteja per pelin paivitys
+*/
 public class LiikeToiminnat implements SyotteenLukija {
-
-    // liike-toiminnat ja niihin liittyvat ajastimet sailytetaan omassa luokassaan
-    // toiminnat joihin pohjassa painaminen ei vaikuta toteutetaan ilman Liike -oliota.
     private Liike vasen;
     private Liike oikea;
     private Liike alas;
@@ -18,9 +20,19 @@ public class LiikeToiminnat implements SyotteenLukija {
     private Liike oikKaannos;
     private Timer autorepeatFix;
     
-    private Peli peli;
+    private final int FPS = 60;
+    private final long msPF = 1000/FPS;
+    
+    private TetrisPeli peli;
 
-    public LiikeToiminnat(final Peli peli) {
+    
+    /**
+     * Alustaa liikkeille niiden toiminnat. 
+     * liikkeiden konstruktori: 
+     * (pyoritettava koodi(runnable), pohjassa painettuna toteutettavan toiston viive, viite toistokorjaus -ajastimeen)
+     * @param peli peli jota liikkeet komentavat
+     */
+    public LiikeToiminnat(final TetrisPeli peli) {
         this.peli = peli;
         this.autorepeatFix = new Timer();
 
@@ -32,21 +44,21 @@ public class LiikeToiminnat implements SyotteenLukija {
                 public void run() {
                         peli.vasemmalle();
                 }
-            }, 30, 200, autorepeatFix);
+            }, 2*msPF, 200, autorepeatFix);
         
         this.oikea = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.oikealle();
                 }
-            }, 30, 200, autorepeatFix);
+            }, 2*msPF, 200, autorepeatFix);
         
         this.alas = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.alas();
                 }
-            }, 16, 200, autorepeatFix);
+            }, 1*msPF, 200, autorepeatFix);
         
         this.ylos = new Liike(new Runnable() {
                 @Override
@@ -60,14 +72,14 @@ public class LiikeToiminnat implements SyotteenLukija {
                 public void run() {
                         peli.kaannaVasen();
                 }
-            }, 180, 320, autorepeatFix);
+            }, 140, 300, autorepeatFix);
         
         this.oikKaannos = new Liike(new Runnable() {
                 @Override
                 public void run() {
                         peli.kaannaOikea();
                 }
-            }, 180, 320, autorepeatFix);
+            }, 140, 300, autorepeatFix);
         
         this.vasen.setPoisSuljettava(oikea);
         this.oikea.setPoisSuljettava(vasen);
@@ -77,7 +89,7 @@ public class LiikeToiminnat implements SyotteenLukija {
         this.oikKaannos.setPoisSuljettava(vasKaannos);        
     }
 
-    public void autorepeatFix(TimerTask timertask) {
+    private void autorepeatFix(TimerTask timertask) {
         this.autorepeatFix = new Timer();
         autorepeatFix.schedule(timertask, 4);
     }

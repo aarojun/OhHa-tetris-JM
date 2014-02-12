@@ -2,7 +2,7 @@ package tetris.gui;
 
 import java.awt.Color;
 import javax.swing.JLayeredPane;
-import tetris.pelilogiikka.Peli;
+import tetris.pelilogiikka.PeliRajapinta;
 
 // Tetris-pelin JFramen contentPane seka layereiden kasittelija 
 
@@ -17,7 +17,7 @@ public class Piirtoalusta extends JLayeredPane implements Paivitettava {
     private LiikkuvienPiirto liikkuvienPiirto;
     private KehysPiirto kehyksenPiirto;
 
-    public Piirtoalusta(Peli peli, int nelionSivunPituus) {
+    public Piirtoalusta(PeliRajapinta peli, int nelionSivunPituus) {
         this.nelionKoko = nelionSivunPituus;
 
         this.laudanLeveys = peli.getPelilauta().getLeveys();

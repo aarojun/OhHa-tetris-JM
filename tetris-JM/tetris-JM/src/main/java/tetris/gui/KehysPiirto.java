@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import tetris.pelilogiikka.Peli;
+import tetris.pelilogiikka.PeliRajapinta;
 
 public class KehysPiirto extends JPanel implements Paivitettava {
     private int nelionKoko;
-    private Peli peli;
+    private PeliRajapinta peli;
     private Font menuFont = new Font(Font.SANS_SERIF, 0, 20);
     
-    public KehysPiirto(Peli peli, int nelionKoko) {
+    public KehysPiirto(PeliRajapinta peli, int nelionKoko) {
         this.setOpaque(false);
         this.nelionKoko = nelionKoko;
         this.peli = peli;

@@ -9,20 +9,19 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
-import tetris.pelilogiikka.LiikeToiminnat;
-import tetris.pelilogiikka.Peli;
+import tetris.pelilogiikka.PeliRajapinta;
 import tetris.pelilogiikka.SyotteenLukija;
 
 public class Kayttoliittyma implements Runnable {
 
     private JFrame frame;
-    private Peli peli;
+    private PeliRajapinta peli;
     private int sivunPituus;
     private Piirtoalusta piirto;
     private TaustaPiirto tausta;
     private SyotteenLukija lukija;
 
-    public Kayttoliittyma(Peli peli, int sivunPituus) {
+    public Kayttoliittyma(PeliRajapinta peli, int sivunPituus) {
         this.peli = peli;
         this.sivunPituus = sivunPituus;
     }
@@ -53,7 +52,7 @@ public class Kayttoliittyma implements Runnable {
     }
 
     private void luoKomponentit() {
-        this.lukija = new LiikeToiminnat(peli);
+        this.lukija = peli.getLukija();
         piirto = new Piirtoalusta(peli, sivunPituus);
         
         luoKeyBindings(piirto);

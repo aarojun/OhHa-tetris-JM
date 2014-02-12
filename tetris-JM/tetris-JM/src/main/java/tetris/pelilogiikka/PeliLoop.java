@@ -10,7 +10,7 @@ public class PeliLoop {
     
     private int lastFpsTime;
     private int fps;
-    private Peli peli;
+    private TetrisPeli peli;
     private Paivitettava gui;
     private boolean paalla;
     private double painovoimaFrame;
@@ -20,7 +20,7 @@ public class PeliLoop {
     private double fxFrame;
     private int fxAika;
 
-    public PeliLoop(Peli peli, Paivitettava gui) {
+    public PeliLoop(TetrisPeli peli, Paivitettava gui) {
         
         this.peli = peli;
         this.paalla = peli.onkoPaalla();
@@ -41,7 +41,8 @@ public class PeliLoop {
             long now = System.nanoTime();
             long updateLength = now - viimeLoopAika;
             viimeLoopAika = now;
-            double delta = updateLength / ((double)OPTIMAL_TIME);
+//            double delta = updateLength / ((double)OPTIMAL_TIME);  // interpolaatio
+            int delta = 1; // ei interpolaatiota
             
             lastFpsTime += updateLength;
             fps++;
@@ -85,7 +86,7 @@ public class PeliLoop {
                 painovoimaFrame = 0;
         }
         
-        if (peli.onkoEfektitPaalla()) {
+        if (peli.onkoVaihtoAika()) {
                 fxFrame+=delta;
                 if(fxFrame>= fxAika) {
                     peli.seuraavaVuoro();

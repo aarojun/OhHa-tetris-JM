@@ -5,10 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
 import javax.swing.JPanel;
-import tetris.pelilogiikka.Peli;
+import tetris.pelilogiikka.PeliRajapinta;
 
 public class LiikkuvienPiirto extends JPanel implements Paivitettava {
-    private Peli peli;
+    private PeliRajapinta peli;
     private int nelionKoko;
     private int varjotusEro;
     private Color varjo = new Color(0,0,0,130);
@@ -17,7 +17,7 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
     private DecimalFormat nf = new DecimalFormat("0.00");
     private PiirtoTyokalu tyokalu;
     
-    public LiikkuvienPiirto(Peli peli, int nelionKoko, PiirtoTyokalu piirtoKalu) {
+    public LiikkuvienPiirto(PeliRajapinta peli, int nelionKoko, PiirtoTyokalu piirtoKalu) {
         this.setOpaque(false);
         this.peli = peli;
         this.nelionKoko = nelionKoko;

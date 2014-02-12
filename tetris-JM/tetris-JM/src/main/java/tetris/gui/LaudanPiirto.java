@@ -7,18 +7,18 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
-import tetris.pelilogiikka.Peli;
+import tetris.pelilogiikka.PeliRajapinta;
 
 public class LaudanPiirto extends BufferoituPanel {
     private BufferedImage lauta;
     private int korkeus;
     private int leveys;
-    private Peli peli;
+    private PeliRajapinta peli;
     private int nelionKoko;
     private int varjotusEro;
     private PiirtoTyokalu tyokalu;
 
-    public LaudanPiirto(Peli peli, int nelionKoko, PiirtoTyokalu tyokalu) {
+    public LaudanPiirto(PeliRajapinta peli, int nelionKoko, PiirtoTyokalu tyokalu) {
         this.setOpaque(false);
         this.nelionKoko = nelionKoko;
         this.varjotusEro = nelionKoko/5;
@@ -57,7 +57,7 @@ public class LaudanPiirto extends BufferoituPanel {
         tyokalu.piirraPalikat(gc, peli.getPelilauta().getPalikat());
         tyokalu.piirraKaantyvatPalikat(gc, peli.getSeuraavatPalikat());
         
-        if(peli.onkoEfektitPaalla()){
+        if(peli.onkoVaihtoAika()){
             piirraEfektiPalikka(gc);
         }
     }

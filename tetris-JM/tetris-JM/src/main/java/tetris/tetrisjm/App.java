@@ -2,12 +2,12 @@ package tetris.tetrisjm;
 
 import javax.swing.SwingUtilities;
 import tetris.gui.Kayttoliittyma;
-import tetris.pelilogiikka.Peli;
+import tetris.pelilogiikka.TetrisPeli;
 
 public class App {
     
     public static void main(String[] args) {
-    Peli peli = new Peli();
+    TetrisPeli peli = new TetrisPeli();
     
     Kayttoliittyma kali = new Kayttoliittyma(peli,30);
     SwingUtilities.invokeLater(kali);
