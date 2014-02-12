@@ -50,6 +50,7 @@ public class Liike {
             toisto.scheduleAtFixedRate(
                     new TimerTaskAnnetullaSyotteella(toiminta), alkuViive, toistoAika);
         }
+        Thread.yield();
     }
     
     // toteuttaa 6ms tarkistusajan napin irtipaastolle. jos nappia painetaan heti releasen jalkeen release perutaan.

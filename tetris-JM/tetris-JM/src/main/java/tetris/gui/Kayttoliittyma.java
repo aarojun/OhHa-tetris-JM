@@ -1,6 +1,5 @@
 package tetris.gui;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -8,7 +7,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
 import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import tetris.pelilogiikka.LiikeToiminnat;
@@ -32,8 +30,8 @@ public class Kayttoliittyma implements Runnable {
     @Override
     public void run() {
         frame = new JFrame("TetrisJM");
-        int leveys = 16 * sivunPituus + 10;
-        int korkeus = 24 * sivunPituus + 10;
+        int leveys = 18 * sivunPituus + 10;
+        int korkeus = 25 * sivunPituus + 10;
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension ruutu = new Dimension(leveys, korkeus);
@@ -59,10 +57,7 @@ public class Kayttoliittyma implements Runnable {
         piirto = new Piirtoalusta(peli, sivunPituus);
         
         luoKeyBindings(piirto);
-//        tausta = new TaustaPiirto(sivunPituus);
-//        tausta.add(piirto);
-        
-//        piirto.setLocation(20,200);
+
         frame.setContentPane(piirto);
     }
     

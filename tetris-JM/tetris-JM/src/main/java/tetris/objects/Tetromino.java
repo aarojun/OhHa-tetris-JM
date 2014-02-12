@@ -1,5 +1,16 @@
 package tetris.objects;
 
+/**
+ * Tetris -pelin peruspalikka. Tetrominot koostuvat neljasta pisteesta jotka ovat toisiinsa liittyneita.
+ * Tuntee kaikkien tetrominoiden kaannosten muodot seka palikkaan liitetyn varin.
+ * 
+ * rotaatio 0 = alkurotaatio
+ * rotaatio 1 = perusrotaatio (sama kuin alkurotaatio)
+ * rotaatiot 2-n = rotaatiot 2:sta viimeiseen.
+ * rotaatiota n seuraa perusrotaatio.
+ * 
+ * @author zaarock
+ */
 public enum Tetromino {
 
     I(new int[][]{{0, 0, 1, 0, 2, 0, 3, 0}, {0, 1, 1, 1, 2, 1, 3, 1}, {2, 0, 2, 1, 2, 2, 2, 3}}, Vari.RED),
@@ -20,6 +31,11 @@ public enum Tetromino {
         this.vari = vari;
     }
 
+    /**
+     * Palauttaa tetrominon muodon pisteet annetulle tetrominon rotaatiolle
+     * @param rotaatio haluttava tetrominopalikan asento 
+     * @return tetrominopalikkaa vatsaavat pisteet taulukkona jossa jokainen parillinen luku on x-koordinaatti ja sita seuraava pariton y-koordinaatti.
+     */
     public int[] getPisteet(int rotaatio) {
         if (rotaatio < this.rotaatioJaMuoto.length) {
             return this.rotaatioJaMuoto[rotaatio];

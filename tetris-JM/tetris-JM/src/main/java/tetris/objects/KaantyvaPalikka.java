@@ -1,5 +1,11 @@
 package tetris.objects;
 
+/**
+ * Palikka -objekti johon on liitetty kaantymis -ominaisuus. 
+ * Kaannoksiin liittyvat muodot haetaan olioon liitetysta Tetromino -enumista.
+ * 
+ * @author zaarock
+ */
 public class KaantyvaPalikka extends Palikka {
 
     private Tetromino tetromino;
@@ -10,6 +16,12 @@ public class KaantyvaPalikka extends Palikka {
     // palikka johon on liitetty kaantymis -ominaisuus. 
 //     kaantymismuodot haetaan liitetysta Tetrominosta
     
+    /**
+     * Luo uuden palikan ja asettaa pisteet annetun Tetrominon avulla. 
+     * Konstruktori tarkistaa tetrominosta myos kaannos-asentojen maaran.
+     * 
+     * @param tetromino Tetromino - objekti jonka perusteella pisteet asetetaan.
+     */
     public KaantyvaPalikka(Tetromino tetromino) {
         super(tetromino.getPisteet(0), 0, 0, tetromino.getVari());
         this.tetromino = tetromino;
@@ -22,7 +34,11 @@ public class KaantyvaPalikka extends Palikka {
         this.maxRotaatio = i-1;
     }
     
-    // kopioimiseen tarkoitettu konstruktori
+    /**
+     * Kopioi annetun KaantyvaPalikka -olion.
+     * 
+     * @param kopioitava Kopioitava olio
+     */
     public KaantyvaPalikka(KaantyvaPalikka kopioitava) {
         super(kopioitava.tetromino.getPisteet(kopioitava.getRotaatio()), kopioitava.getXpos(),kopioitava.getYpos(),kopioitava.tetromino.getVari());
         this.tetromino = kopioitava.tetromino;
@@ -30,6 +46,11 @@ public class KaantyvaPalikka extends Palikka {
         this.maxRotaatio = kopioitava.maxRotaatio;
     }
 
+    /**
+     * Palauttaa koordinaateista koostuvan muodon jossa palikka on kaannetty 90 astetta vasemmalle.
+     * 
+     * @return Palikan pisteiden koordinaatit jos toteutetaan vasen kaannos.
+     */
     public int[] vasenKaannos() {
         if (this.rotaatio <= 1) {
             this.rotaatio = maxRotaatio;
@@ -39,6 +60,11 @@ public class KaantyvaPalikka extends Palikka {
         return this.tetromino.getPisteet(rotaatio);
     }
 
+    /**
+     * Palauttaa koordinaateista koostuvan muodon jossa palikka on kaannetty 90 astetta oikealle.
+     * 
+     * @return Palikan pisteiden koordinaatit jos toteutetaan oikea kaannos.
+     */
     public int[] oikeaKaannos() {
         if (this.rotaatio == maxRotaatio) {
             this.rotaatio = 1;
@@ -50,10 +76,16 @@ public class KaantyvaPalikka extends Palikka {
         return this.tetromino.getPisteet(rotaatio);
     }
 
+    /**
+     * Kaantaa palikkaa 90-astetta vasemmalle.
+     */
     public void kaannaVasemmalle() {
         super.setMuoto(vasenKaannos());
      }
 
+    /**
+     * Kaantaa palikkaa 90-astetta oikealle.
+     */
     public void kaannaOikealle() {
         super.setMuoto(oikeaKaannos());
     }

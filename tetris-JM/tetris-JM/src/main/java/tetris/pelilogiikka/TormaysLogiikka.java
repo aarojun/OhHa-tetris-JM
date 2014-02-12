@@ -59,7 +59,7 @@ public class TormaysLogiikka {
         boolean pudonneita = false;
         ArrayList<Palikka> putoavatPalikat = new ArrayList<>();
         for (Palikka palikka : this.pelilauta.getPalikat()) {
-            pelilauta.irrotaPalikka(palikka);
+            pelilauta.irroitaPalikka(palikka);
             if (!onkoPalikallaAlusta(palikka)) {
                 putoavatPalikat.add(palikka);
                 pudonneita = true;
@@ -67,7 +67,7 @@ public class TormaysLogiikka {
             pelilauta.liitaPalikka(palikka);
         }
         for (Palikka palikka : putoavatPalikat) {
-            pelilauta.irrotaPalikka(palikka);
+            pelilauta.irroitaPalikka(palikka);
             palikka.liiku(0, 1);
             pelilauta.liitaPalikka(palikka);
         }
@@ -116,11 +116,19 @@ public class TormaysLogiikka {
             if (onkoPalikkaSeinanSisalla(palikka)) {
                 palikka.liiku(-2, 0);                             // kokeillaan toimiiko kaannos jos siirretaan yhden vasemmalle
                 if (onkoPalikkaSeinanSisalla(palikka)) {
-                    if (palikka.getTetromino() == Tetromino.I) {  // I-tetromino voi siirtya 2 oikealle (eli voi kaantya seinaa vasten)
-                        palikka.liiku(3, 0);
-                        if (onkoPalikkaSeinanSisalla(palikka)) {
-                            return false;
+                    Tetromino tet = palikka.getTetromino();
+                    if(tet == Tetromino.I || tet == Tetromino.T) {  // kokeillaan potkaista maata
+                        palikka.liiku(1, -1);
+                        if(onkoPalikkaSeinanSisalla(palikka)) {
+                            if (tet == Tetromino.I) {               // I-tetromino voi siirtya 2 oikealle (eli voi kaantya seinaa vasten)
+                            palikka.liiku(3, 1);
+                            if (onkoPalikkaSeinanSisalla(palikka)) {
+                                return false;
                         }
+                        } else {
+                                return false;
+                            }
+                    }
                     } else {
                     return false;
                     }

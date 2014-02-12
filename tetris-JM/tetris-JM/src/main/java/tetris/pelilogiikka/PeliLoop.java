@@ -2,7 +2,7 @@ package tetris.pelilogiikka;
 
 import tetris.gui.Paivitettava;
 
-public class PeliLoop2 {
+public class PeliLoop {
 
     private long viimeLoopAika = System.nanoTime();
     final int TARGET_FPS = 60;
@@ -15,14 +15,12 @@ public class PeliLoop2 {
     private boolean paalla;
     private double painovoimaFrame;
     private int painovoimaPaivitys;
-    private double vaikeusasteFrame;
-    private int vaikeusasteenNosto;
     private double liukuFrame;
     private int liukuAika;
     private double fxFrame;
     private int fxAika;
 
-    public PeliLoop2(Peli peli, Paivitettava gui) {
+    public PeliLoop(Peli peli, Paivitettava gui) {
         
         this.peli = peli;
         this.paalla = peli.onkoPaalla();
@@ -30,13 +28,10 @@ public class PeliLoop2 {
         
         this.liukuFrame = 0;
         this.painovoimaPaivitys = peli.getAikayksikko();
-        this.liukuAika = 40;
-        
-        this.vaikeusasteFrame = 0;
-        this.vaikeusasteenNosto = 300;
+        this.liukuAika = 35;
         
         this.fxFrame = 0;
-        this.fxAika = 15;
+        this.fxAika = 12;
         
     }
 
@@ -63,7 +58,7 @@ public class PeliLoop2 {
             try {
                     Thread.sleep( (viimeLoopAika-System.nanoTime() + OPTIMAL_TIME)/1000000 );
                 } catch (Exception ex) {
-//                    Logger.getLogger(PeliLoop2.class.getName()).log(Level.SEVERE, null, ex);
+                    
                 }
 }
     }
@@ -79,29 +74,15 @@ public class PeliLoop2 {
 
     private void tarkistaAjastimet(double delta) {
         painovoimaFrame += delta;
-        vaikeusasteFrame += delta;
-
-        // liukuAika on paalla jos palikalla alusta
-        if (peli.liukuAikaPaalla()) {
-            liukuFrame += delta;
-        } else {
-            liukuFrame = 0;
-            if (painovoimaFrame >= painovoimaPaivitys) {
-                peli.pudota();
-                painovoimaFrame = 0;
-            }
-        }
-
-        // palikka lukitaan kun aika loppunut
+        liukuFrame += delta;
+        
         if (liukuFrame >= liukuAika) {
             peli.lukitse();
             painovoimaFrame = 0;
             liukuFrame = 0;
-        }
-        
-        if (vaikeusasteFrame >= vaikeusasteenNosto) {
-            peli.nostaVaikeustasoa();
-            vaikeusasteFrame = 0;
+        } else if (painovoimaFrame >= painovoimaPaivitys) {
+                peli.pudota();
+                painovoimaFrame = 0;
         }
         
         if (peli.onkoEfektitPaalla()) {
@@ -111,6 +92,7 @@ public class PeliLoop2 {
                     fxFrame = 0;
                 }
             }
+
     }
 
     private void paivitaAikarajat() {

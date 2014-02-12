@@ -36,7 +36,10 @@ public class KehysPiirto extends JPanel implements Paivitettava {
         g.setFont(menuFont);
         g.drawString("NEXT", 12 * nelionKoko, 3 * nelionKoko);
         
-        if (peli.getPaused()) {
+        if (peli.getStartMenu()) {
+            g.drawString("SELECT GAME MODE", 2 * nelionKoko, 11 * nelionKoko);
+            g.drawString("Y: Normal    N: Death", 2 * nelionKoko, 12 * nelionKoko);
+        } else if (peli.getPaused()) {
             g.drawString("PAUSE", 5 * nelionKoko, 11 * nelionKoko);
         }
 
