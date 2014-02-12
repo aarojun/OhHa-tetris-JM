@@ -3,17 +3,25 @@ package tetris.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import tetris.objects.Pelilauta;
 
 public class TaustaPiirto extends BufferoituPanel {
 
     private BufferedImage tausta;
+    private BufferedImage background = null;
     private int korkeus;
     private int leveys;
     private int nelionKoko;
     private final Color taustaVari = new Color(50, 70, 90);
-    private final Color gridVari = new Color(255, 255, 255, 70);
+    private final Color gridVari = new Color(255, 255, 255, 40);
 
     public TaustaPiirto(Pelilauta lauta, int nelionKoko) {
 //        initComponents();
@@ -21,6 +29,12 @@ public class TaustaPiirto extends BufferoituPanel {
         this.nelionKoko = nelionKoko;
         this.korkeus = lauta.getKorkeus();
         this.leveys = lauta.getLeveys();
+
+        try { background = ImageIO.read(getClass().getResource("/background0.jpg"));
+        } catch (Exception IOException) {
+            System.out.println("failed to load background image");
+        }
+
     }
 
     @Override
@@ -58,10 +72,8 @@ public class TaustaPiirto extends BufferoituPanel {
         int korkeus = this.getHeight();
         tausta = (BufferedImage) (this.createImage(leveys, korkeus));
         Graphics2D gc = tausta.createGraphics();
-        gc.setColor(taustaVari);
-        gc.fillRect(0, 0, leveys * nelionKoko, (korkeus - 3) * nelionKoko);
 
-        gc.fillRect(2 * nelionKoko, -3 * nelionKoko, 6 * nelionKoko, 2 * nelionKoko);
+        gc.drawImage(background,-20,-50, null);
 
         piirraGrid(gc);
     }
