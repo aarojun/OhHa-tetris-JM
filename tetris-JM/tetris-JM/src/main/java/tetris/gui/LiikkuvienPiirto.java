@@ -14,7 +14,7 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
     private Color varjo = new Color(0,0,0,130);
     private Font pisteFont = new Font(Font.SANS_SERIF, 1, 16);
     private Font menuFont = new Font(Font.SANS_SERIF, 0, 20);
-    private DecimalFormat nf = new DecimalFormat("0.00");
+    private DecimalFormat nf = new DecimalFormat("0.0");
     private PiirtoTyokalu tyokalu;
     
     public LiikkuvienPiirto(PeliRajapinta peli, int nelionKoko, PiirtoTyokalu piirtoKalu) {
@@ -62,7 +62,7 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
         g.drawString("TIME " + peli.getAika(), leveys, 12 * nelionKoko);
         g.drawString("COMBO " + combo, leveys, 15 * nelionKoko);
          
-        g.drawString("HI-SCORE " + Integer.toString(peli.getHighScore()), leveys, 19 * nelionKoko);
+        g.drawString("HI-SCORE: " + Integer.toString(peli.getHighScore()), leveys, 22 * nelionKoko);
         
         
         g.setFont(menuFont);

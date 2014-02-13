@@ -39,7 +39,9 @@ public class Liike {
         this.paalla = false;
     }
     
-    // toteutetaan kun nappia painettu
+    /** Toteutetaan kun nappia on painettu.
+     * 
+     */
     public void push() {
         release = false;
         if (!paalla) {
@@ -53,9 +55,10 @@ public class Liike {
         Thread.yield();
     }
     
-    // toteuttaa 6ms tarkistusajan napin irtipaastolle. jos nappia painetaan heti releasen jalkeen release perutaan.
-    // tama on toteutettu koska mm. ubuntu lahettaa pressed ja release komentoja samaan aikaan
-    // automaattisessa nappaimien toistossaan. emme halua etta tama vaikuttaa ohjelmaan
+    /** toteuttaa 6ms tarkistusajan napin irtipaastolle. jos nappia painetaan heti releasen jalkeen release perutaan.
+    * tama on toteutettu koska mm. ubuntu lahettaa pressed ja release komentoja samaan aikaan
+    * automaattisessa nappaimien toistossaan. emme halua etta tama vaikuttaa ohjelmaan
+    */
     public void release() {
         release = true;
         autorepeatFix(new TimerTask() {
@@ -67,7 +70,6 @@ public class Liike {
     }
 
     public void autorepeatFix(TimerTask timertask) {
-//        this.autorepeatFix = new Timer();
         autorepeatFix.schedule(timertask, 6);
     }
     

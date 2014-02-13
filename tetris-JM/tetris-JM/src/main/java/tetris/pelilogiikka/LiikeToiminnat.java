@@ -35,10 +35,7 @@ public class LiikeToiminnat implements SyotteenLukija {
     public LiikeToiminnat(final TetrisPeli peli) {
         this.peli = peli;
         this.autorepeatFix = new Timer();
-
-
-        // luodaan liikkeet. konstruktori: (pyoritettava koodi, 
-        // pohjassa painettuna toteutettavan toiston viive, viite toistokorjaus -ajastimeen)
+        
         this.vasen = new Liike(new Runnable() {
                 @Override
                 public void run() {
