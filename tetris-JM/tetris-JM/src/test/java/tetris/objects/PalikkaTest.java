@@ -16,7 +16,7 @@ public class PalikkaTest {
     private ArrayList<int[]> tyhjaList;
     
     public PalikkaTest() {
-        this.tyhjaList = new ArrayList<>();
+        this.tyhjaList = new ArrayList<int[]>();
     }
     
     @BeforeClass
@@ -48,7 +48,7 @@ public class PalikkaTest {
     
     @Test
     public void palikanMuodonPisteetAsettuvatOikein() {
-        ArrayList<int[]> muoto = new ArrayList<>();
+        ArrayList<int[]> muoto = new ArrayList<int[]>();
         muoto.add(new int[]{1,0});
         muoto.add(new int[]{2,0});
         muoto.add(new int[]{2,1});

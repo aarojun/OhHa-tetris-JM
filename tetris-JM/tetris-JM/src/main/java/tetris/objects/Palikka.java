@@ -33,7 +33,7 @@ public class Palikka {
         this.yPos = y;
         this.vari = vari;
 
-        this.muoto = new ArrayList<>();
+        this.muoto = new ArrayList<int[]>();
         setMuoto(pisteet);
     }
 
@@ -50,7 +50,7 @@ public class Palikka {
         this.yPos = y;
         this.vari = vari;
 
-        this.muoto = new ArrayList<>(muoto);
+        this.muoto = new ArrayList<int[]>(muoto);
     }
 
     /**
@@ -81,7 +81,7 @@ public class Palikka {
     }
 
     public void setMuoto(ArrayList<int[]> muoto) {
-        this.muoto = new ArrayList<>(muoto);
+        this.muoto = new ArrayList<int[]>(muoto);
     }
 
     public void setVari(Vari vari) {

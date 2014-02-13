@@ -28,12 +28,13 @@ public interface PeliRajapinta {
     public int getPisteet();
     public int getHighScore();
     public int getVuoro();
-    public double getFrekvenssi();
+    public double getFrekMultiplier();
     public int getCombo();
     
     public boolean getLautaPaivita();
     public boolean getPaused();
     public boolean getGameover();
+    public boolean getTimeOver();
     public boolean getStartMenu();
     public boolean onkoVaihtoAika();
 }

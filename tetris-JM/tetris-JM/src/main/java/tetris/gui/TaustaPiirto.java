@@ -18,7 +18,6 @@ public class TaustaPiirto extends BufferoituPanel {
     private final Color gridVari = new Color(255, 255, 255, 40);
 
     public TaustaPiirto(Pelilauta lauta, int nelionKoko) {
-//        initComponents();
         this.setOpaque(false);
         this.nelionKoko = nelionKoko;
         this.korkeus = lauta.getKorkeus();
@@ -38,12 +37,18 @@ public class TaustaPiirto extends BufferoituPanel {
         g.translate(nelionKoko, nelionKoko);
 
         Graphics2D g2 = (Graphics2D) g;
+         g2.drawImage(tausta, null, 0, 0);       
+    }
+    
+    public void uudelleenPiirra() {
+        int lev = this.getWidth();
+        int kor = this.getHeight();
+        tausta = new BufferedImage(lev,kor,1);
+        Graphics2D gc = tausta.createGraphics();
 
-        if (tausta == null) {
-            uudelleenPiirra();
-        } 
-        g2.drawImage(tausta, null, 0, 0);
-        
+        gc.drawImage(background,-20,-50, null);
+
+        piirraGrid(gc);
     }
 
     public void piirraGrid(Graphics g) {
@@ -58,31 +63,6 @@ public class TaustaPiirto extends BufferoituPanel {
 
     @Override
     public void paivita() {
-        super.repaint();
-    }
-
-    public void uudelleenPiirra() {
-        int leveys = this.getWidth();
-        int korkeus = this.getHeight();
-        tausta = (BufferedImage) (this.createImage(leveys, korkeus));
-        Graphics2D gc = tausta.createGraphics();
-
-        gc.drawImage(background,-20,-50, null);
-
-        piirraGrid(gc);
-    }
-
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">
-    private void initComponents() {
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 400, Short.MAX_VALUE));
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 300, Short.MAX_VALUE));
+        uudelleenPiirra();
     }
 }

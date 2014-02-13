@@ -14,6 +14,7 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
     private Color varjo = new Color(0,0,0,130);
     private Font pisteFont = new Font(Font.SANS_SERIF, 1, 16);
     private Font menuFont = new Font(Font.SANS_SERIF, 0, 20);
+    private Font timerFont = new Font(Font.SANS_SERIF,0,25);
     private DecimalFormat nf = new DecimalFormat("0.0");
     private PiirtoTyokalu tyokalu;
     
@@ -59,16 +60,17 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
             g.setColor(Color.LIGHT_GRAY);
         }
         g.drawString("PIECE " + peli.getVuoro(), leveys, 16 * nelionKoko);
-        g.drawString("TIME " + peli.getAika(), leveys, 12 * nelionKoko);
         g.drawString("COMBO " + combo, leveys, 15 * nelionKoko);
          
         g.drawString("HI-SCORE: " + Integer.toString(peli.getHighScore()), leveys, 22 * nelionKoko);
         
         
-        g.setFont(menuFont);
         g.setColor(Color.ORANGE);
+        g.setFont(timerFont);
+        g.drawString(peli.getAika(), 10, 4 * nelionKoko);
+        g.setFont(menuFont);
         g.drawString("Score : " + Integer.toString(peli.getPisteet()), leveys, 10 * nelionKoko);
-        g.drawString("Multiplier : " + nf.format((peli.getFrekvenssi()/30)*(combo+1)*(1+(int)(level/100))), leveys, 14*nelionKoko);
+        g.drawString("Multiplier : " + nf.format((peli.getFrekMultiplier())*(combo+1)*(1+(int)(level/100))), leveys, 14*nelionKoko);
         
     }
 

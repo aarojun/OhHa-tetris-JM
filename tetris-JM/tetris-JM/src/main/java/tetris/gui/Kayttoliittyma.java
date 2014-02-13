@@ -12,30 +12,43 @@ import javax.swing.WindowConstants;
 import tetris.pelilogiikka.PeliRajapinta;
 import tetris.pelilogiikka.SyotteenLukija;
 
+/**
+ * Pelin kayttoliittyman ylin taso. Sailyttaa itsessan keybindingit joilla pelin ohjaus toteutetaan.
+ * Keybindingeista lahetetaan komentoja SyotteenLukija -rajapintaan pelilogiikassa.
+ * Tuntee kayttoliittyman ikkunan JFramena. Grafiikka piirretaan luokan tuntemassa Piirtoalusta - oliossa.
+ * @author zaarock
+ */
 public class Kayttoliittyma implements Runnable {
 
     private JFrame frame;
     private PeliRajapinta peli;
     private int sivunPituus;
     private Piirtoalusta piirto;
-    private TaustaPiirto tausta;
     private SyotteenLukija lukija;
 
+    /**
+     * Tallentaa muistiin kasiteltavan pelin seka piirtamiseen kaytettavan koon perusyksikon.
+     * @param peli peli jota kayttoliittyma piirtaa
+     * @param sivunPituus yhden pelilaudan nelion sivun pituus pikseleina
+     */
     public Kayttoliittyma(PeliRajapinta peli, int sivunPituus) {
         this.peli = peli;
         this.sivunPituus = sivunPituus;
     }
 
+    /**
+     * Alustaa seka kaynnistaa kayttoliittyman.
+     */
     @Override
     public void run() {
         frame = new JFrame("TetrisJM");
         int leveys = 18 * sivunPituus + 10;
         int korkeus = 25 * sivunPituus + 10;
 
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension naytonResoluutio = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension ruutu = new Dimension(leveys, korkeus);
-        int xPos = screen.width / 2 - 250;
-        int yPos = screen.height / 2 - 350;
+        int xPos = naytonResoluutio.width / 2 - 250;
+        int yPos = naytonResoluutio.height / 2 - 350;
 
         frame.setLocation(xPos, yPos);
         frame.setPreferredSize(new Dimension(leveys, korkeus+20));

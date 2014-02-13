@@ -46,7 +46,11 @@ public class KehysPiirto extends JPanel implements Paivitettava {
         }
 
         if (peli.getGameover()) {
-            g.drawString("GAME OVER", 4 * nelionKoko, 11 * nelionKoko);
+            if(peli.getTimeOver()) {
+                g.drawString("TIME OVER", 4* nelionKoko, 11* nelionKoko);
+            } else {
+                g.drawString("GAME OVER", 4 * nelionKoko, 11 * nelionKoko);
+            }
             g.drawString("restart?  Y/N", 4 * nelionKoko, 12 * nelionKoko);
         }
     }

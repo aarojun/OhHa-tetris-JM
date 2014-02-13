@@ -5,8 +5,12 @@ import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
 import tetris.objects.Tetromino;
-import tetris.objects.Vari;
 
+/**
+ * Luokka joka kasittelee pelin tormaysoperaatioita. 
+ * Luokka vertaa pelilaudan ja palikkojen pisteiden sijaintia, seka liikuttaa palikoita.
+ * @author zaarock
+ */
 public class TormaysLogiikka {
 
     private Pelilauta pelilauta;
@@ -53,11 +57,14 @@ public class TormaysLogiikka {
         }
         return false;
     }
-
-    // pudottaa kaikkia palikoita joita voi pudottaa yhdella koordinaatilla
+    
+    /**
+     * Pudottaa kaikkia palikoita joilla ei ole alustaa yhdella koordinaatilla.
+     * @return
+     */
     public boolean pudotaPalikoitaYhdella() {
         boolean pudonneita = false;
-        ArrayList<Palikka> putoavatPalikat = new ArrayList<>();
+        ArrayList<Palikka> putoavatPalikat = new ArrayList<Palikka>();
         for (Palikka palikka : this.pelilauta.getPalikat()) {
             pelilauta.irroitaPalikka(palikka);
             if (!onkoPalikallaAlusta(palikka)) {

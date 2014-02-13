@@ -1,13 +1,8 @@
 package tetris.pelilogiikka;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
 import tetris.gui.Paivitettava;
 import tetris.objects.KaantyvaPalikka;
 import tetris.objects.Palikka;
@@ -39,12 +34,14 @@ public class TetrisPeli implements PeliRajapinta {
     private int highScore;
     private int combo;
     private double frekvenssi;
+    private double frekMultiplier;
     private boolean startMenu;
     private boolean lautaPaivita;
     private boolean vaihtoAika;
     private boolean paalla;
     private boolean paused;
     private boolean gameover;
+    private boolean timeover;
     private boolean palikallaOnAlusta;
     private boolean lukitse;
     private boolean alas;
@@ -61,8 +58,8 @@ public class TetrisPeli implements PeliRajapinta {
 
     public TetrisPeli() {
         this.pelilauta = new Pelilauta(10, 23);
-        this.seuraavatPalikat = new ArrayList<>();
-        this.palikkaHistoria = new ArrayList<>();
+        this.seuraavatPalikat = new ArrayList<KaantyvaPalikka>();
+        this.palikkaHistoria = new ArrayList<Tetromino>();
 
         this.scoreTallennus = new HighscoreKasittelija();
 
@@ -73,7 +70,7 @@ public class TetrisPeli implements PeliRajapinta {
         this.tormayslogiikka = new TormaysLogiikka(pelilauta, poistot);
 
         this.random = new Random();
-        this.kello = new Kello();
+        this.kello = new Kello(8,this);
 
         this.liikkeidenLukija = new LiikeToiminnat(this);
 
@@ -101,6 +98,7 @@ public class TetrisPeli implements PeliRajapinta {
         pisteet = 0;
         vuoro = 0;
         combo = 0;
+        frekMultiplier = 1;
     }
 
     /**
@@ -112,6 +110,7 @@ public class TetrisPeli implements PeliRajapinta {
         vaihtoAika = false;
         paused = true;
         gameover = false;
+        timeover = false;
         palikallaOnAlusta = false;
         lukitse = false;
         alas = false;
@@ -183,7 +182,7 @@ public class TetrisPeli implements PeliRajapinta {
         if (gameover) {
             toteutaOhjausGameover();
         } else if (!paused) {
-            kasvataKelloa();
+            kello.pienenna();
             if (vaihtoAika) {
                 toteutaOhjausVaihtoaika();
             } else {
@@ -201,6 +200,7 @@ public class TetrisPeli implements PeliRajapinta {
         } else {
             frekvenssi -= 0.5;
         }
+        frekMultiplier = 1+(frekvenssi / 30);
         if (tormayslogiikka.onkoPalikallaAlusta(nykyinenPalikka)) {
             palikallaOnAlusta = true;
         } else {
@@ -241,11 +241,13 @@ public class TetrisPeli implements PeliRajapinta {
             if (pudotaKokonaan) {
                 pudotaKokonaan = false;
                 pudotaJaLukitsePalikka();
+                frekvenssi += 20;
             } else {
                 if (alas) {
                     this.alas = false;
                     if (palikallaAlusta()) {
                         lukitsePalikka();
+                        frekvenssi += 20;
                     } else {
                         nykyinenPalikka.liiku(0, 1);
                         nollaaAjastimet();
@@ -303,8 +305,7 @@ public class TetrisPeli implements PeliRajapinta {
     }
 
     private void laskePisteetJaNostaVaikeustaso(int taysiaRiveja) {
-        double frekMultiplier = frekvenssi / 30;
-        vaikeustaso += taysiaRiveja * (1 + taysiaRiveja / 2) * (frekMultiplier / 2);
+        vaikeustaso += taysiaRiveja * (1 + taysiaRiveja / 2) + (1+ frekMultiplier / 3);
         if (taysiaRiveja > 1) {
             combo++;
             frekvenssi += 40;
@@ -313,9 +314,9 @@ public class TetrisPeli implements PeliRajapinta {
             combo = 0;
         }
         if (frekvenssi < 80) {
-            frekvenssi += 60;
+            frekvenssi += 40;
         } else {
-            frekvenssi = 140;
+            frekvenssi = 120;
         }
     }
 
@@ -553,10 +554,6 @@ public class TetrisPeli implements PeliRajapinta {
         this.yes = false;
     }
 
-    private void kasvataKelloa() {
-        kello.kasvata();
-    }
-
     @Override
     public String getAika() {
         return this.kello.toString();
@@ -577,6 +574,11 @@ public class TetrisPeli implements PeliRajapinta {
         paivitaHighScore();
         muutaPalikatHarmaiksi();
         lautaPaivita = true;
+    }
+    
+    public void timeover() {
+        timeover = true;
+        gameover();
     }
 
     private void muutaPalikatHarmaiksi() {
@@ -615,7 +617,6 @@ public class TetrisPeli implements PeliRajapinta {
             highScore = pisteet;
             scoreTallennus.tallennaHighscore(pisteet);
         }
-        pisteet = 0;
     }
 
     @Override
@@ -693,8 +694,8 @@ public class TetrisPeli implements PeliRajapinta {
     }
 
     @Override
-    public double getFrekvenssi() {
-        return this.frekvenssi;
+    public double getFrekMultiplier() {
+        return this.frekMultiplier;
     }
 
     public void nollaaAjastimet() {
@@ -704,5 +705,10 @@ public class TetrisPeli implements PeliRajapinta {
     @Override
     public LiikeToiminnat getLukija() {
         return this.liikkeidenLukija;
+    }
+    
+    @Override
+    public boolean getTimeOver() {
+        return this.timeover;
     }
 }

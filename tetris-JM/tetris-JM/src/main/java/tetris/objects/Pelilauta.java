@@ -23,7 +23,7 @@ public class Pelilauta {
     public Pelilauta(int leveys, int korkeus) {
         this.leveys = leveys;
         this.korkeus = korkeus;
-        this.palikat = new ArrayList<>();
+        this.palikat = new ArrayList<Palikka>();
         this.alueMatriisi = new int[leveys][korkeus];
     }
     // 2-ulotteinen matriisi joka kuvaa pelilaudalle asetettuja alueita
@@ -121,7 +121,7 @@ public class Pelilauta {
      * @return ArrayList taysien rivien y-koordinaateista
      */
     public ArrayList<Integer> taydetRivit() {
-        ArrayList<Integer> taydetRivit = new ArrayList<>();
+        ArrayList<Integer> taydetRivit = new ArrayList<Integer>();
         int k = 0;
         for (int j = 0; j < korkeus; j++) {
             boolean taysi = true;

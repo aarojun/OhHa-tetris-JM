@@ -30,19 +30,12 @@ public class LaudanPiirto extends BufferoituPanel {
     
     @Override
     public void paintComponent(Graphics g) {
-        
         super.paintComponent(g);
         
         Graphics2D g2 = (Graphics2D) g;
-        
-        if(lauta == null || peli.getLautaPaivita()) {
-            uudelleenPiirra();
-            peli.lautaPaivitetty();
-        }
         g2.drawImage(lauta, null, 0,0);       
     }
     
-    @Override
     void uudelleenPiirra() {
         if(lauta != null) {
             lauta.flush();
@@ -55,7 +48,7 @@ public class LaudanPiirto extends BufferoituPanel {
         piirraPelilauta(gc);
 
         tyokalu.piirraPalikat(gc, peli.getPelilauta().getPalikat());
-        tyokalu.piirraKaantyvatPalikat(gc, peli.getSeuraavatPalikat());
+        tyokalu.piirraSeuraavatPalikat(gc, peli.getSeuraavatPalikat());
         
         if(peli.onkoVaihtoAika()){
             piirraEfektiPalikka(gc);
@@ -95,23 +88,6 @@ public class LaudanPiirto extends BufferoituPanel {
 
     @Override
     public void paivita() {
-        super.repaint();
-    }
-    
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">
-    private void initComponents() {
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-    }
-    
+        uudelleenPiirra();
+    }    
 }

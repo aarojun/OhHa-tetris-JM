@@ -15,8 +15,8 @@ public class PoistoOperaatiot {
     public PoistoOperaatiot(Pelilauta pelilauta) {
         this.pelilauta = pelilauta;
         this.palikat = pelilauta.getPalikat();
-        this.poistettavatPalikat = new ArrayList<>();
-        this.tarkistettavatPalikat = new ArrayList<>();
+        this.poistettavatPalikat = new ArrayList<Palikka>();
+        this.tarkistettavatPalikat = new ArrayList<Palikka>();
     }
 
     public boolean onkoPoistettavia() {
@@ -43,7 +43,7 @@ public class PoistoOperaatiot {
             this.pelilauta.nollaaRivi(rivi);
         }
         for (Palikka palikka : palikat) {
-            ArrayList<Integer> poistettavatPisteet = new ArrayList<>();
+            ArrayList<Integer> poistettavatPisteet = new ArrayList<Integer>();
             ArrayList<int[]> muoto = palikka.getMuoto();
             int k = 0;
             for (int i = muoto.size() - 1; i >= 0; i--) {
@@ -79,7 +79,7 @@ public class PoistoOperaatiot {
     private void poistaPoistettavatPalikat() {
         this.palikat.removeAll(this.poistettavatPalikat);
         this.tarkistettavatPalikat.removeAll(this.poistettavatPalikat);
-        this.poistettavatPalikat = new ArrayList<>();
+        this.poistettavatPalikat = new ArrayList<Palikka>();
     }
 
     public void poistaPalikka(Palikka palikka) {
@@ -90,7 +90,7 @@ public class PoistoOperaatiot {
         for (Palikka palikka : tarkistettavatPalikat) {
             tarkistaYhtenaisyys(palikka);
         }
-        this.tarkistettavatPalikat = new ArrayList<>();
+        this.tarkistettavatPalikat = new ArrayList<Palikka>();
     }
 
     // tarkistaa palikan pisteiden viereisyyden, jos yksi piste on erillinen se siirretaan uuteen palikkaan
@@ -152,7 +152,7 @@ public class PoistoOperaatiot {
     }
 
     public void luoPistePalikka(int x, int y, Vari vari) {
-        ArrayList<int[]> muoto = new ArrayList<>();
+        ArrayList<int[]> muoto = new ArrayList<int[]>();
         muoto.add(new int[]{0, 0});
         Palikka pistePalikka = new Palikka(muoto, x, y, vari);
         palikat.add(pistePalikka);
