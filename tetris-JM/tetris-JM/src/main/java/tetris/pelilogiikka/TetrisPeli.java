@@ -276,6 +276,7 @@ public class TetrisPeli implements PeliRajapinta {
 
     /**
      * Toteuttaa pelin ohjauksen normaalitilassa.
+     * Pudotuskomennot nostavat frekvenssi-mittaria eli antavat pistebonuksia.
      */
     private void toteutaOhjaus() {
         if (!paused) {
@@ -324,8 +325,10 @@ public class TetrisPeli implements PeliRajapinta {
             kaannaVasen = false;
         }
         if (vasen) {
+            vasen = true;
             oikea = false;
         } else if (oikea) {
+            oikea = true;
             vasen = false;
         }
     }
@@ -345,7 +348,8 @@ public class TetrisPeli implements PeliRajapinta {
     }
     
     /**
-     * Lukitsee nykyisen palikkaan pelilautaan ja tarkistaa sen aiheuttamat ketjureaktiot.
+     * Lukitsee nykyisen palikkaan pelilautaan, ja tarkistaa sen aiheuttamat ketjureaktiot.
+     * Aloittaa vuorojen valisen vaihto-ajan.
      */
     private void lukitsePalikka() {
         lautaPaivita = false;
@@ -676,7 +680,7 @@ public class TetrisPeli implements PeliRajapinta {
      * Laittaa pelin pause -tilaan tai pois siita (pause mahdollisesti poistetaan myohemmin)
      */
     public void pause() {
-        if (!paused) {
+        if (!paused && !gameover) {
             paused = true;
         } else {
             if (!startMenu) {

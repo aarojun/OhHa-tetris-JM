@@ -9,7 +9,8 @@ import tetris.pelilogiikka.PeliRajapinta;
 public class KehysPiirto extends JPanel implements Paivitettava {
     private int nelionKoko;
     private PeliRajapinta peli;
-    private Font menuFont = new Font(Font.SANS_SERIF, 0, 20);
+    private Font menuFont = new Font(Font.SANS_SERIF, 0, 22);
+    private Font menuFont2 = new Font(Font.SANS_SERIF,2,28);
     
     public KehysPiirto(PeliRajapinta peli, int nelionKoko) {
         this.setOpaque(false);
@@ -36,22 +37,24 @@ public class KehysPiirto extends JPanel implements Paivitettava {
         g.setFont(menuFont);
         g.drawString("NEXT", 12 * nelionKoko, 3 * nelionKoko);
         
-        int keskileveys = (int)(2.5*nelionKoko);
+        int keskileveys = (int)(2.2*nelionKoko);
         
         if (peli.getStartMenu()) {
-            g.drawString("SELECT GAME MODE", keskileveys, 11 * nelionKoko);
-            g.drawString("Y: Normal    N: Death", keskileveys, 12 * nelionKoko);
+            g.drawString("SELECT GAME MODE", keskileveys, 12 * nelionKoko);
+            g.drawString("Y: Normal    N: Death", keskileveys, 13 * nelionKoko);
         } else if (peli.getPaused()) {
             g.drawString("PAUSE", 5 * nelionKoko, 12 * nelionKoko);
         }
 
         if (peli.getGameover()) {
+            g.setFont(menuFont2);
             if(peli.getTimeOver()) {
-                g.drawString("TIME OVER", 4* nelionKoko, 11* nelionKoko);
+                g.drawString("TIME OVER", keskileveys+nelionKoko, 13* nelionKoko);
             } else {
-                g.drawString("GAME OVER", 4 * nelionKoko, 11 * nelionKoko);
+                g.drawString("GAME OVER", keskileveys+nelionKoko, 13 * nelionKoko);
             }
-            g.drawString("restart?  Y/N", 4 * nelionKoko, 12 * nelionKoko);
+            g.setFont(menuFont);
+            g.drawString("restart?  Y/N", 4 * nelionKoko, 14 * nelionKoko);
         }
     }
 
