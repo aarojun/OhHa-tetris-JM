@@ -10,6 +10,12 @@ import tetris.objects.Pelilauta;
 import tetris.objects.Tetromino;
 import tetris.objects.Vari;
 
+/**
+ * Tetris-pelin logiikan ydin. Toteuttaa pelikohtaisen logiikan ja fysiikan paivityksen. 
+ * Pelille ja kayttoliittymalle lahetetaan paivityksia pelin luomassa peliloopissa.
+ * Luokkaa pitaa viela jakaa osiin.
+ * @author zaarock
+ */
 public class TetrisPeli implements PeliRajapinta {
 
     private PeliLoop peliloop;
@@ -24,7 +30,6 @@ public class TetrisPeli implements PeliRajapinta {
     private KaantyvaPalikka varjoPalikka;
     private TormaysLogiikka tormayslogiikka;
     private PoistoOperaatiot poistot;
-    private Paivitettava gui;
     private HighscoreKasittelija scoreTallennus;
     private int perusAikayksikko;
     private int aikayksikko;
@@ -56,6 +61,9 @@ public class TetrisPeli implements PeliRajapinta {
     private final Tetromino[] tetrominoSet = new Tetromino[]{Tetromino.I, Tetromino.J,
         Tetromino.L, Tetromino.O, Tetromino.S, Tetromino.T, Tetromino.Z};
 
+    /**
+     * Alustaa pelin tilan ennen kaynnistamista.
+     */
     public TetrisPeli() {
         this.pelilauta = new Pelilauta(10, 23);
         this.seuraavatPalikat = new ArrayList<KaantyvaPalikka>();
@@ -79,11 +87,11 @@ public class TetrisPeli implements PeliRajapinta {
         asetaSeuraavat();
         this.nykyinenPalikka = seuraavatPalikat.get(0);
         luoVarjopalikka();
-        paalla = true;
+        this.peliloop = new PeliLoop(this);
     }
 
     /**
-     * palauttaa kaikki peliin liittyvat arvot alkutilaansa
+     * Palauttaa kaikki peliin liittyvat arvot alkutilaansa.
      */
     private void initialisoiArvot() {
         try {
@@ -102,7 +110,7 @@ public class TetrisPeli implements PeliRajapinta {
     }
 
     /**
-     * palauttaa kaikki peliin liittyvat booleanit alkutilaansa
+     * Palauttaa kaikki peliin liittyvat booleanit alkutilaansa.
      */
     private void initialisoiBooleanit() {
         startMenu = true;
@@ -122,35 +130,44 @@ public class TetrisPeli implements PeliRajapinta {
         kaannaOikea = false;
         yes = false;
         no = false;
+        paalla = true;
     }
 
+    /**
+     * Asettaa pelille graafisen kayttoliittyman jota peliloop paivittaa.
+     * @param paivitettava graafinen kayttoliittyma
+     */
     public void setPaivitettava(Paivitettava paivitettava) {
-        this.gui = paivitettava;
+        peliloop.setPaivitettava(paivitettava);
     }
 
+    /**
+     * Kaynnistaa pelin.
+     */
     public void start() {
-        this.peliloop = new PeliLoop(this, gui);
         peliloop.run();
     }
 
-    public void startNormalMode() {
+    /**
+     * Aloittaa pelin perusmoodissa.
+     */
+    private void startNormalMode() {
         this.perusAikayksikko = 20;
         paused = false;
     }
 
-    public void startDeathMode() {
+    /**
+     * Aloittaa pelin 'death' moodissa.
+     */
+    private void startDeathMode() {
         this.perusAikayksikko = -20;
         this.vaikeustaso = 1000;
         paused = false;
     }
 
-    private void alustaPalikkaHistoria() {
-        palikkaHistoria.add(Tetromino.Z);
-        palikkaHistoria.add(Tetromino.S);
-        palikkaHistoria.add(Tetromino.Z);
-        palikkaHistoria.add(Tetromino.S);
-    }
-
+    /**
+     * Luo uuden palikan joka lisataan seuraaviin palikoihin.
+     */
     private void luoPalikka() {
         KaantyvaPalikka uusiPalikka = new KaantyvaPalikka(annaSatunnainenTetromino());
         uusiPalikka.setXpos(3);
@@ -158,12 +175,20 @@ public class TetrisPeli implements PeliRajapinta {
         seuraavatPalikat.add(uusiPalikka);
     }
 
+    /**
+     * Luo peliin seuraavia palikoita kunnes niita on nelja.
+     */
     private void luoPalikat() {
         while (seuraavatPalikat.size() < 4) {
             luoPalikka();
         }
     }
 
+    /**
+     * Palauttaa semi-satunnaisen tetrominon. 
+     * Tetromino - palikat joita ei ole valittu moneen vuoroon ovat todennakoisempia.
+     * @return uusi satunnainen Tetromino
+     */
     private Tetromino annaSatunnainenTetromino() {
         Tetromino kandidaatti = null;
         for (int i = 0; i < 4; i++) {
@@ -177,7 +202,21 @@ public class TetrisPeli implements PeliRajapinta {
         palikkaHistoria.add(kandidaatti);
         return kandidaatti;
     }
+    
+    /**
+     * Luo alustavan historian valituista palikoista.
+     * Vahentaa palikoiden Z ja S todennakoisyytta pelin alussa.
+     */
+    private void alustaPalikkaHistoria() {
+        palikkaHistoria.add(Tetromino.Z);
+        palikkaHistoria.add(Tetromino.S);
+        palikkaHistoria.add(Tetromino.Z);
+        palikkaHistoria.add(Tetromino.S);
+    }
 
+    /**
+     * Paivittaa pelin tilan.
+     */
     public void paivita() {
         if (gameover) {
             toteutaOhjausGameover();
@@ -194,6 +233,9 @@ public class TetrisPeli implements PeliRajapinta {
 
     }
 
+    /**
+     * Paivittaa pelin fysiikan tilan.
+     */
     private void paivitaFysiikka() {
         if (frekvenssi <= 1) {
             frekvenssi = 0;
@@ -206,19 +248,22 @@ public class TetrisPeli implements PeliRajapinta {
         } else {
             palikallaOnAlusta = false;
         }
-        if (aikayksikko < 0 && !palikallaOnAlusta) {
-            pudotaPalikkaaNegAikayksikko();
-            pudota = false;
-        }
         if (!vaihtoAika) {
             luoVarjopalikka();
         }
         toteutaFysiikka();
     }
 
+    /**
+     * Toteuttaa pelin fysiikan aiheuttamat palikkojen liikkeet.
+     */
     private void toteutaFysiikka() {
         if (lukitse && palikallaOnAlusta) {
             lukitsePalikka();
+        } else if (aikayksikko < 0 && !palikallaOnAlusta) {
+            pudotaPalikkaaNegAikayksikko();
+            pudota = false;
+            alas = false;
         } else if (pudota) {
             if (!palikallaOnAlusta) {
                 nykyinenPalikka.liiku(0, 1);
@@ -229,6 +274,9 @@ public class TetrisPeli implements PeliRajapinta {
         }
     }
 
+    /**
+     * Toteuttaa pelin ohjauksen normaalitilassa.
+     */
     private void toteutaOhjaus() {
         if (!paused) {
             if (kaannaVasen) {
@@ -264,6 +312,9 @@ public class TetrisPeli implements PeliRajapinta {
         }
     }
 
+    /**
+     * Toteuttaa pelin ohjauksen vuorojen valisena aikana.
+     */
     private void toteutaOhjausVaihtoaika() {
         if (kaannaVasen) {
             kaannaVasen = true;
@@ -279,6 +330,9 @@ public class TetrisPeli implements PeliRajapinta {
         }
     }
 
+    /**
+     * Toteuttaa pelin ohjauksen gameover -tilassa.
+     */
     private void toteutaOhjausGameover() {
         if (yes) {
             yes = false;
@@ -289,7 +343,28 @@ public class TetrisPeli implements PeliRajapinta {
             quit();
         }
     }
+    
+    /**
+     * Lukitsee nykyisen palikkaan pelilautaan ja tarkistaa sen aiheuttamat ketjureaktiot.
+     */
+    private void lukitsePalikka() {
+        lautaPaivita = false;
+        nollaaOhjaimet();
+        lukitse = false;
+        if (nykyinenPalikka.getYpos() < 2) {
+            gameover();
+        }
+        pelilauta.lisaaLiitettyPalikka(nykyinenPalikka);
+        aloitaVaihtoAika();
+        nollaaAjastimet();
+        palikallaOnAlusta = false;
+        poistaTaydetRivitKetjureaktioilla();
+        lautaPaivita = true;
+    }
 
+    /**
+     * Poistaa pelilaudalle muodostuneet taydet rivit. Jatkaa tata jatkuvasti kunnes painovoiman aiheuttamat ketjureaktiot paattyvat.
+     */
     private void poistaTaydetRivitKetjureaktioilla() {
         int taysiaRiveja = 1;
         int rivejaPoistettu = 0;
@@ -304,6 +379,10 @@ public class TetrisPeli implements PeliRajapinta {
         laskePisteetJaNostaVaikeustaso(rivejaPoistettu);
     }
 
+    /**
+     * Laskee palikan asetuksesta seuraavat pisteet ja vaikeustaseen noston
+     * @param taysiaRiveja maara riveja jota vuorolla poistettiin
+     */
     private void laskePisteetJaNostaVaikeustaso(int taysiaRiveja) {
         vaikeustaso += taysiaRiveja * (1 + taysiaRiveja / 2) + (1+ frekMultiplier / 3);
         if (taysiaRiveja > 1) {
@@ -320,112 +399,63 @@ public class TetrisPeli implements PeliRajapinta {
         }
     }
 
+    /**
+     * Pudottaa kaikkia pelilaudan palikoita kunnes niilla kaikilla on alusta.
+     */
     private void painovoima() {
         while (tormayslogiikka.pudotaPalikoitaYhdella()) {
             tormayslogiikka.pudotaPalikoitaYhdella();
         }
     }
 
+    /**
+     * Paivittaa pelin aikayksikon perustuen pelin vaikeustasoon.
+     */
     private void paivitaAikayksikko() {
         int muutos = vaikeustaso / 50;
         aikayksikko = perusAikayksikko - muutos;
     }
 
+    /**
+     * Palauttaa pelin nykyisen aikayksikon jota kaytetaan painovoiman paivittamiseen
+     * @return aikayksikko paivityksia per painovoiman toteutus.
+     */
     public int getAikayksikko() {
         return aikayksikko;
     }
 
-    public KaantyvaPalikka getNykyinenPalikka() {
-        return this.seuraavatPalikat.get(0);
-    }
-
-    public TormaysLogiikka getTormaysLogiikka() {
-        return this.tormayslogiikka;
-    }
-
+    /**
+     * Liikuttaa nykyista palikkaa vasemmalle jos se ei tormaa seinaan.
+     */
     public void liikutaVasen() {
         if (!tormayslogiikka.onkoPalikkaVasSeinaaVasten(nykyinenPalikka)) {
             nykyinenPalikka.liiku(-1, 0);
         }
     }
 
+    /**
+     * Liikuttaa nykyista palikkaa oikealle jos se ei tormaa seinaan.
+     */
     public void liikutaOikea() {
         if (!tormayslogiikka.onkoPalikkaOikSeinaaVasten(nykyinenPalikka)) {
             nykyinenPalikka.liiku(1, 0);
         }
     }
 
-    public void vasemmalle() {
-        this.vasen = true;
-    }
-
-    public void oikealle() {
-        this.oikea = true;
-    }
-
-    public void pause() {
-        if (!paused) {
-            paused = true;
-        } else {
-            if (!startMenu) {
-                paused = false;
-            }
-        }
-    }
-
-    public void yes() {
-        if (gameover) {
-            yes = true;
-        } else if (startMenu) {
-            startMenu = false;
-            startNormalMode();
-        }
-    }
-
-    public void no() {
-        if (gameover) {
-            no = true;
-        } else if (startMenu) {
-            startMenu = false;
-            startDeathMode();
-        }
-    }
-
-    @Override
-    public void lautaPaivitetty() {
-        this.lautaPaivita = false;
-    }
-
-    public void kaannaVasen() {
-        this.kaannaVasen = true;
-    }
-
-    public void kaannaOikea() {
-        this.kaannaOikea = true;
-    }
-
-    public void alas() {
-        this.alas = true;
-    }
-
-    public void pudotaKokonaan() {
-        this.pudotaKokonaan = true;
-    }
-
-    public void pudota() {
-        this.pudota = true;
-    }
-
-    public void lukitse() {
-        this.lukitse = true;
-    }
-
+    /**
+     * Pudottaa annettua palikkaa kunnes se tormaa alustaan.
+     * @param palikka
+     */
     public void pudotaPalikkaKokonaan(Palikka palikka) {
-        while (pudotaPalikkaa(palikka)) {
-            pudotaPalikkaa(palikka);
+        while (tormayslogiikka.yritaPudottaaPalikkaa(palikka)) {
+            tormayslogiikka.yritaPudottaaPalikkaa(palikka);
         }
     }
 
+    /**
+     * Toteuttaa painovoiman kun pelin aikayksikko on negatiivinen. 
+     * Talloin palikkaa pudotetaan yhden ruudun jokaista negatiivista lukua kohden.
+     */
     private void pudotaPalikkaaNegAikayksikko() {
         int i = -aikayksikko;
         while (pudotaPalikkaa() && i > 0) {
@@ -435,61 +465,77 @@ public class TetrisPeli implements PeliRajapinta {
         nollaaAjastimet();
     }
 
+    /**
+     * Pudottaa nykyista palikkaa kunnes se tormaa alustaan.
+     */
     public void pudotaPalikkaKokonaan() {
         pudotaPalikkaKokonaan(nykyinenPalikka);
     }
 
+    /**
+     * Pudottaa annettua palikkaa yhdella ruudulla jos silla ei ole alustaa.
+     * @param palikka pudotettava palikka
+     * @return palikkaa pudotettiin eika silla ollut alustaa.
+     */
     public boolean pudotaPalikkaa(Palikka palikka) {
-        return tormayslogiikka.yritaPudottaaLiikutettavaaPalikkaa(palikka);
+        return tormayslogiikka.yritaPudottaaPalikkaa(palikka);
     }
 
+    /**
+     * Pudottaa nykyista palikkaa yhdella ruudulla jos silla on alusta.
+     * @return palikkaa pudotettiin eika silla ollut alustaa.
+     */
     public boolean pudotaPalikkaa() {
         return pudotaPalikkaa(nykyinenPalikka);
     }
 
+    /**
+     * Paivittaa nykyisen palikan varjon, joka on kopio nykyisesta palikasta joka on pudotettu alas.
+     */
     private void luoVarjopalikka() {
         varjoPalikka = new KaantyvaPalikka(nykyinenPalikka);
         pudotaPalikkaKokonaan(varjoPalikka);
     }
 
-    public void pudotaJaLukitsePalikka() {
+    /**
+     * Pudottaa nykyisen palikan mahdollisimman alas ja lukitsee sen paikalleen.
+     */
+    private void pudotaJaLukitsePalikka() {
         nykyinenPalikka = varjoPalikka;
         seuraavatPalikat.set(0, varjoPalikka);
         lukitsePalikka();
     }
 
+    /**
+     * Tarkistaa onko pelin nykyisella palikalla alusta.
+     * @return onko nykyisella palikalla alusta
+     */
     private boolean palikallaAlusta() {
         return tormayslogiikka.onkoPalikallaAlusta(nykyinenPalikka);
     }
 
+    /**
+     * Lukitsee pelin nykyisen palikan jos silla on alusta pelilaudassa.
+     */
     public void lukitsePalikkaJosAlusta() {
         if (tormayslogiikka.onkoPalikallaAlusta(varjoPalikka)) {
             lukitsePalikka();
         }
     }
 
-    public void lukitsePalikka() {
-        lautaPaivita = false;
-        nollaaOhjaimet();
-        lukitse = false;
-        if (nykyinenPalikka.getYpos() < 2) {
-            gameover();
-        }
-        pelilauta.lisaaLiitettyPalikka(nykyinenPalikka);
-        aloitaVaihtoAika();
-        nollaaAjastimet();
-        palikallaOnAlusta = false;
-        poistaTaydetRivitKetjureaktioilla();
-        lautaPaivita = true;
-    }
-
+    /**
+     * Aloittaa seuraavan pelivuoron (seuraava palikka tulee ohjattavaksi).
+     */
     public void seuraavaVuoro() {
         this.vaihtoAika = false;
         vuoro++;
-        seuraavaPalikka();
+        seuraavaPalikkaOhjaus();
         lautaPaivita = true;
     }
 
+    /**
+     * Aloittaa pelin vuorojen valisen vaihtoajan.
+     */
     private void aloitaVaihtoAika() {
         this.vaihtoAika = true;
         this.fxPalikka = nykyinenPalikka;
@@ -500,11 +546,17 @@ public class TetrisPeli implements PeliRajapinta {
         asetaSeuraavat();
     }
 
+    /**
+     * Lopettaa pelin vuorojen valisen vaihtoajan.
+     */
     public void lopetaVaihtoAika() {
         this.vaihtoAika = false;
     }
 
-    private void seuraavaPalikka() {
+    /**
+     * Toteuttaa bufferoidun ohjauksen seuraavalle palikalle ennen kuin se siirretaan peliin.
+     */
+    private void seuraavaPalikkaOhjaus() {
         if (nykyinenPalikka.getTetromino() != Tetromino.O) {
             if (kaannaVasen) {
                 kaannaVasen = false;
@@ -524,6 +576,9 @@ public class TetrisPeli implements PeliRajapinta {
 
     }
 
+    /**
+     * Paivittaa seuraavien palikoiden sijainnin.
+     */
     private void asetaSeuraavat() {
         for (int i = 0; i < 4; i++) {
             KaantyvaPalikka pl = seuraavatPalikat.get(i);
@@ -541,6 +596,9 @@ public class TetrisPeli implements PeliRajapinta {
         }
     }
 
+    /**
+     * Nollaa pelin ohjaus-tiedot.
+     */
     private void nollaaOhjaimet() {
         this.vasen = false;
         this.oikea = false;
@@ -554,19 +612,9 @@ public class TetrisPeli implements PeliRajapinta {
         this.yes = false;
     }
 
-    @Override
-    public String getAika() {
-        return this.kello.toString();
-    }
-
-    public boolean onkoPaalla() {
-        return this.paalla;
-    }
-
-    public boolean liukuAikaPaalla() {
-        return this.palikallaOnAlusta;
-    }
-
+    /**
+     * Lopettaa pelin ja toteuttaa siihen liittyvat operaatiot.
+     */
     public void gameover() {
         lautaPaivita = false;
         gameover = true;
@@ -576,17 +624,26 @@ public class TetrisPeli implements PeliRajapinta {
         lautaPaivita = true;
     }
     
+    /**
+     * Lopettaa pelin koska aika on loppunut.
+     */
     public void timeover() {
         timeover = true;
         gameover();
     }
 
+    /**
+     * Muuttaa kaikki palikat harmaiksi visuaalisena efektina.
+     */
     private void muutaPalikatHarmaiksi() {
         for (Palikka pl : pelilauta.getPalikat()) {
             pl.setVari(Vari.GRAY);
         }
     }
 
+    /**
+     * Restarttaa pelin alkutilaansa ilman luokkien uudelleenluomista.
+     */
     private void restart() {
         paalla = false;
         nollaaAjastimet();
@@ -607,16 +664,142 @@ public class TetrisPeli implements PeliRajapinta {
         System.out.println("game restarted");
     }
 
+    /**
+     * Sammuttaa pelin ja ohjelman.
+     */
     private void quit() {
         System.out.println("quitting game");
         System.exit(0);
     }
 
+    /**
+     * Laittaa pelin pause -tilaan tai pois siita (pause mahdollisesti poistetaan myohemmin)
+     */
+    public void pause() {
+        if (!paused) {
+            paused = true;
+        } else {
+            if (!startMenu) {
+                paused = false;
+            }
+        }
+    }
+
+    /**
+     * Toteuttaa myonteisen valinnan pelin valikoissa.
+     */
+    public void yes() {
+        if (gameover) {
+            yes = true;
+        } else if (startMenu) {
+            startMenu = false;
+            startNormalMode();
+        }
+    }
+
+    /**
+     * Toteuttaa kielteisen valinnan pelin valikoissa.
+     */
+    public void no() {
+        if (gameover) {
+            no = true;
+        } else if (startMenu) {
+            startMenu = false;
+            startDeathMode();
+        }
+    }
+
+    @Override
+    public void lautaPaivitetty() {
+        this.lautaPaivita = false;
+    }
+    
+    /**
+     * Nykyista palikkaa yritetaan liikuttaa vasemalle seuraavalla paivityksella.
+     */
+    public void vasemmalle() {
+        this.vasen = true;
+    }
+
+    /**
+     * Nykyista palikkaa yritetaan liikuttaa oikealle seuraavalla paivityksella.
+     */
+    public void oikealle() {
+        this.oikea = true;
+    }
+
+    /**
+     * Nykyista palikkaa yritetaan kaantaa vasemmalle seuraavalla paivityksella.
+     */
+    public void kaannaVasen() {
+        this.kaannaVasen = true;
+    }
+
+    /**
+     * Nykyista palikkaa yritetaan kaantaa oikealle seuraavalla paivityksella.
+     */
+    public void kaannaOikea() {
+        this.kaannaOikea = true;
+    }
+
+    /**
+     * Nykyista palikkaa yritetaan pudottaa seuraavalla paivityksella.
+     */
+    public void alas() {
+        this.alas = true;
+    }
+
+    /**
+     * Nykyinen palikka pudotetaan ja lukitaan seuraavalla paivityksella.
+     */
+    public void pudotaKokonaan() {
+        this.pudotaKokonaan = true;
+    }
+
+    /**
+     * Nykyinen palikka yritetaan pudottaa seuraavalla paivityksella.
+     */
+    public void pudota() {
+        this.pudota = true;
+    }
+
+    /**
+     * Nykyinen palikka lukitaan seuraavalla paivityksella.
+     */
+    public void lukitse() {
+        this.lukitse = true;
+    }
+
+    /**
+     * Paivittaa parhaan pistemaaran tiedot jos pelaaja on saavuttanut uuden ennatyksen.
+     */
     private void paivitaHighScore() {
         if (pisteet > highScore) {
             highScore = pisteet;
             scoreTallennus.tallennaHighscore(pisteet);
         }
+    }
+    
+    /**
+     * Nollaa peliloopin yllapitamat painovoima-ajastimet.
+     */
+    public void nollaaAjastimet() {
+        peliloop.nollaaAjastimet();
+    }
+    
+    @Override
+    public KaantyvaPalikka getNykyinenPalikka() {
+        return this.seuraavatPalikat.get(0);
+    }
+    
+    @Override
+    public String getAika() {
+        return this.kello.toString();
+    }
+
+    @Override
+    public boolean onkoPaalla() {
+        return this.paalla;
     }
 
     @Override
@@ -698,12 +881,8 @@ public class TetrisPeli implements PeliRajapinta {
         return this.frekMultiplier;
     }
 
-    public void nollaaAjastimet() {
-        peliloop.nollaaAjastimet();
-    }
-
     @Override
-    public LiikeToiminnat getLukija() {
+    public SyotteenLukija getLukija() {
         return this.liikkeidenLukija;
     }
     

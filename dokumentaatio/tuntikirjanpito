@@ -10,5 +10,6 @@
 2013/02/10 : 4h : koodia siistitty, paljon peliominaisuuksia lisatty ja GUIa hieman muokattu
 2013/02/11 : 9h : GUI uudelleenrakentu toimimaan layereilla seka BufferedImageilla. taustat ja pelilaudalle asetetut palikat tallennetaan nyt BufferedImageina, joten ne uudelleenpiirretaan vain kun pakollista
 2013/02/12 : 6h : Objects-paketin testit ja javadoc koodattu. GUI-pakettia siistitty. peliominaisuuksia lisatty.
+2013/02/13 : 6h : Javadocia kirjoitettu paljon. Peli-luokkaa ja kayttoliittymaa siistitty. Peliominaisuuksia kehitetty.
 
 todo : paljon lisaa testeja, peliloopin tarkistus, koodin siivoamista ja crashien metsastamista

@@ -8,6 +8,7 @@
 2013/02/08 : 8h : peliLoop uudelleenrakennettu. ohjaus vaihdetty keyListenerista keyBindingiin. jatkuva liike tehty toimivaksi
 2013/02/09 : 6h : ohjauslukija korjattu(ohittaa ubuntun lahettamat automaattiset painikkeen-irrotukset). liikesuunnille lisatty poissulkevuus. Aihemaarittely paivitetty.
 2013/02/10 : 4h : koodia siistitty, paljon peliominaisuuksia lisatty ja GUIa hieman muokattu
-2013/02/11 : 8h : GUI uudelleenrakentu toimimaan layereilla seka BufferedImageilla. taustat ja pelilaudalle asetetut palikat tallennetaan nyt BufferedImageina, joten ne uudelleenpiirretaan vain kun pakollista
+2013/02/11 : 9h : GUI uudelleenrakentu toimimaan layereilla seka BufferedImageilla. taustat ja pelilaudalle asetetut palikat tallennetaan nyt BufferedImageina, joten ne uudelleenpiirretaan vain kun pakollista
+2013/02/12 : 6h : Objects-paketin testit ja javadoc koodattu. GUI-pakettia siistitty. peliominaisuuksia lisatty.
 
 todo : paljon lisaa testeja, peliloopin tarkistus, koodin siivoamista ja crashien metsastamista

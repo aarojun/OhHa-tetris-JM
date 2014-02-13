@@ -50,7 +50,7 @@ public class TormaysLogiikka {
         return onkoPalikkaVasten(palikka, 0, 0);
     }
 
-    public boolean yritaPudottaaLiikutettavaaPalikkaa(Palikka palikka) {
+    public boolean yritaPudottaaPalikkaa(Palikka palikka) {
         if (!onkoPalikallaAlusta(palikka)) {
             palikka.liiku(0, 1);
             return true;

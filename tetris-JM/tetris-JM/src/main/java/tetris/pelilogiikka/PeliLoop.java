@@ -2,6 +2,13 @@ package tetris.pelilogiikka;
 
 import tetris.gui.Paivitettava;
 
+/**
+ * Pelien kayttama paivitys-loop. Lahettaa pelille ja kayttoliittymalle paivityskaskyja 60 kertaa sekunnissa.
+ * Sisaltaa interpolaatio-toiminnallisuuden mutta siita ei vaikuta olevan hyotya tetris-pelissa.
+ * Luokka sisaltaa pelin kayttamat fysiikka-ajastimet.
+ * 
+ * @author zaarock
+ */
 public class PeliLoop {
 
     private long viimeLoopAika = System.nanoTime();
@@ -19,19 +26,30 @@ public class PeliLoop {
     private double fxFrame;
     private int fxAika;
 
-    public PeliLoop(TetrisPeli peli, Paivitettava gui) {
+    /**
+     * Alustaa peliloopin ja pelin aikayksikot.
+     * @param peli
+     */
+    public PeliLoop(TetrisPeli peli) {
 
         this.peli = peli;
         this.paalla = peli.onkoPaalla();
-        this.gui = gui;
 
         this.liukuFrame = 0;
         this.painovoimaPaivitys = peli.getAikayksikko();
-        this.liukuAika = 35;
+        this.liukuAika = 34;
 
         this.fxFrame = 0;
         this.fxAika = 12;
 
+    }
+    
+    /**
+     * Asettaa loopille graafisen kayttoliittyman jota paivittaa.
+     * @param gui graafinen kayttoliittyma
+     */
+    public void setPaivitettava(Paivitettava gui) {
+        this.gui = gui;
     }
 
     public void run() {
@@ -39,8 +57,36 @@ public class PeliLoop {
             long now = System.nanoTime();
             long updateLength = now - viimeLoopAika;
             viimeLoopAika = now;
-//            double delta = updateLength / ((double)OPTIMAL_TIME);  // interpolaatio
-            int delta = 1; // ei interpolaatiota
+            int delta = 1;
+
+            lastFpsTime += updateLength;
+            fps++;
+
+            if (lastFpsTime >= 1000000000) {
+                lastFpsTime = 0;
+                fps = 0;
+            }
+
+            paivita(delta);
+
+            gui.paivita();
+
+            try {
+                Thread.sleep((viimeLoopAika - System.nanoTime() + OPTIMAL_TIME) / 1000000);
+            } catch (Exception ex) {
+            }
+        }
+    }
+    
+    /**
+     * Run -metodin versio joka toteuttaa interpolaation (fysiikka paivitetaan suhteessa paivitysnopeuteen jotta pysyy tasaana).
+     */
+    public void runInterp() {
+        while (paalla) {
+            long now = System.nanoTime();
+            long updateLength = now - viimeLoopAika;
+            viimeLoopAika = now;
+            double delta = updateLength / ((double)OPTIMAL_TIME);
 
             lastFpsTime += updateLength;
             fps++;
@@ -69,6 +115,10 @@ public class PeliLoop {
         }
     }
 
+    /**
+     * Tarkistaa pelin ajastimet ja lahettaa pelille paivityksia jos ajastimet saavuttaa maksiminsa.
+     * @param delta yksikko jolla nostaa ajastimia.
+     */
     private void tarkistaAjastimet(double delta) {
         painovoimaFrame += delta;
         liukuFrame += delta;
