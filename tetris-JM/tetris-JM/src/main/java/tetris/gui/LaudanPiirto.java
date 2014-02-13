@@ -32,6 +32,10 @@ public class LaudanPiirto extends BufferoituPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
+        if(peli.getLautaPaivita()) {
+            uudelleenPiirra();
+            peli.lautaPaivitetty();
+        }
         Graphics2D g2 = (Graphics2D) g;
         g2.drawImage(lauta, null, 0,0);       
     }

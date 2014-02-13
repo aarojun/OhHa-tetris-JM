@@ -57,10 +57,6 @@ public class Piirtoalusta extends JLayeredPane implements Paivitettava {
 
     @Override
     public void paivita() {
-        if(peli.getLautaPaivita()) {
-            laudanPiirto.paivita();
-            peli.lautaPaivitetty();
-        }
         repaint();
     }
 }
