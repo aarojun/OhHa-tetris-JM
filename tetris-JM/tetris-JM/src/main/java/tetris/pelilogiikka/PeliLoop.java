@@ -108,7 +108,7 @@ public class PeliLoop {
     }
 
     private void paivita(double delta) {
-        peli.paivita();
+        peli.liikeToiminnat();
         if (!peli.getPaused() && !peli.getGameover()) {
             tarkistaAjastimet(delta);
             paivitaAikarajat();

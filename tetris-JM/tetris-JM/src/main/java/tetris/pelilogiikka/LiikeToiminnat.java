@@ -2,141 +2,232 @@ package tetris.pelilogiikka;
 
 import java.awt.event.ActionEvent;
 import java.util.Timer;
-import java.util.TimerTask;
+import tetris.objects.Tetromino;
 
 /**
- * pelin inputtien toteuttaja. vastaanottaa keybindingien tuottamia komentoja kayttoliittymasta.
- * liike-toimintoihin liittyvat ajastimet ja pyoritettava koodi sailytetaan omassa luokassaan
- * toiminnat joihin pohjassa painaminen ei vaikuta toteutetaan ilman Liike -oliota.
- * 
+ * pelin inputtien toteuttaja. vastaanottaa keybindingien tuottamia komentoja
+ * kayttoliittymasta. liike-toimintoihin liittyvat ajastimet ja pyoritettava
+ * koodi sailytetaan omassa luokassaan Liike. 
+ * Toiminnat joihin pohjassa painaminen ei vaikuta toteutetaan ilman Liike -oliota.
+ * peli-luokka lahettaa luokalle kaskyja toteuttaa ohjaus paivitysten yhteydessa.
+ *
  * @param msPF millisekuntteja per pelin paivitys
-*/
+ */
 public class LiikeToiminnat implements SyotteenLukija {
-    private Liike vasen;
-    private Liike oikea;
-    private Liike alas;
-    private Liike ylos;
-    private Liike vasKaannos;
-    private Liike oikKaannos;
-    private Timer autorepeatFix;
-    
-    private final int FPS = 60;
-    private final long msPF = 1000/FPS;
-    
-    private TetrisPeli peli;
 
-    
+    private Liike vasenL;
+    private Liike oikeaL;
+    private Liike alasL;
+    private Liike ylosL;
+    private Liike vasKaannosL;
+    private Liike oikKaannosL;
+    private Timer autorepeatFix;
+    private final int FPS = 60;
+    private final long msPF = 1000 / FPS;
+    private TetrisPeli peli;
+    private boolean alas;
+    private boolean vasen;
+    private boolean oikea;
+    private boolean pudotaKokonaan;
+    private boolean kaannaVasen;
+    private boolean kaannaOikea;
+
     /**
-     * Alustaa liikkeille niiden toiminnat. 
-     * liikkeiden konstruktori: 
-     * (pyoritettava koodi(runnable), pohjassa painettuna toteutettavan toiston viive, viite toistokorjaus -ajastimeen)
+     * Alustaa liikkeille niiden toiminnat. liikkeiden konstruktori:
+     * (pyoritettava koodi(runnable), pohjassa painettuna toteutettavan toiston
+     * viive, viite toistokorjaus -ajastimeen)
+     *
      * @param peli peli jota liikkeet komentavat
      */
     public LiikeToiminnat(final TetrisPeli peli) {
         this.peli = peli;
         this.autorepeatFix = new Timer();
+
+        this.vasenL = new Liike(new Runnable() {
+            @Override
+            public void run() {
+                vasen = true;
+            }
+        }, 2 * msPF, 200, autorepeatFix);
+
+        this.oikeaL = new Liike(new Runnable() {
+            @Override
+            public void run() {
+                oikea = true;
+            }
+        }, 2 * msPF, 200, autorepeatFix);
+
+        this.alasL = new Liike(new Runnable() {
+            @Override
+            public void run() {
+                alas = true;
+            }
+        }, 1 * msPF, 200, autorepeatFix);
+
+        this.ylosL = new Liike(new Runnable() {
+            @Override
+            public void run() {
+                pudotaKokonaan = true;
+            }
+        }, 200, 340, autorepeatFix);
+
+        this.vasKaannosL = new Liike(new Runnable() {
+            @Override
+            public void run() {
+                kaannaVasen = true;
+            }
+        }, 140, 300, autorepeatFix);
+
+        this.oikKaannosL = new Liike(new Runnable() {
+            @Override
+            public void run() {
+                kaannaOikea = true;
+            }
+        }, 140, 300, autorepeatFix);
+
+        this.vasenL.setPoisSuljettava(oikeaL);
+        this.oikeaL.setPoisSuljettava(vasenL);
+        this.alasL.setPoisSuljettava(ylosL);
+        this.ylosL.setPoisSuljettava(alasL);
+        this.vasKaannosL.setPoisSuljettava(oikKaannosL);
+        this.oikKaannosL.setPoisSuljettava(vasKaannosL);
         
-        this.vasen = new Liike(new Runnable() {
-                @Override
-                public void run() {
-                        peli.vasemmalle();
-                }
-            }, 2*msPF, 200, autorepeatFix);
-        
-        this.oikea = new Liike(new Runnable() {
-                @Override
-                public void run() {
-                        peli.oikealle();
-                }
-            }, 2*msPF, 200, autorepeatFix);
-        
-        this.alas = new Liike(new Runnable() {
-                @Override
-                public void run() {
-                        peli.alas();
-                }
-            }, 1*msPF, 200, autorepeatFix);
-        
-        this.ylos = new Liike(new Runnable() {
-                @Override
-                public void run() {
-                        peli.pudotaKokonaan();
-                }
-            }, 200, 340, autorepeatFix);
-        
-        this.vasKaannos = new Liike(new Runnable() {
-                @Override
-                public void run() {
-                        peli.kaannaVasen();
-                }
-            }, 140, 300, autorepeatFix);
-        
-        this.oikKaannos = new Liike(new Runnable() {
-                @Override
-                public void run() {
-                        peli.kaannaOikea();
-                }
-            }, 140, 300, autorepeatFix);
-        
-        this.vasen.setPoisSuljettava(oikea);
-        this.oikea.setPoisSuljettava(vasen);
-        this.alas.setPoisSuljettava(ylos);
-        this.ylos.setPoisSuljettava(alas);
-        this.vasKaannos.setPoisSuljettava(oikKaannos);
-        this.oikKaannos.setPoisSuljettava(vasKaannos);        
+        nollaaOhjaimet();
     }
 
-    private void autorepeatFix(TimerTask timertask) {
-        this.autorepeatFix = new Timer();
-        autorepeatFix.schedule(timertask, 4);
+    /**
+     * Nollaa luokan ohjaintiedot tyhjiksi.
+     */
+    public void nollaaOhjaimet() {
+        alas = false;
+        vasen = false;
+        oikea = false;
+        pudotaKokonaan = false;
+        kaannaVasen = false;
+        kaannaOikea = false;
+    }
+
+    /**
+     * Toteuttaa pelin ohjauksen normaalitilassa. 
+     * Huom: pudotuskomennot nostavat
+     * frekvenssi-mittaria eli antavat pistebonuksia.
+     */
+    public void toteutaOhjaus() {
+            if (kaannaVasen) {
+                kaannaVasen = false;
+                peli.kaannaVasen();
+            } else if (kaannaOikea) {
+                kaannaOikea = false;
+                peli.kaannaOikea();
+            }
+            if (pudotaKokonaan) {
+                pudotaKokonaan = false;
+                peli.pudotaJaLukitsePalikka();
+            } else {
+                if (alas) {
+                    alas = false;
+                    peli.liikutaAlas();
+                }
+                if (vasen) {
+                    vasen = false;
+                    peli.liikutaVasen();
+                } else if (oikea) {
+                    oikea = false;
+                    peli.liikutaOikea();
+                }
+            }
+    }
+    
+    /**
+     * Toteuttaa pelin ohjauksen vuorojen valisena aikana.
+     */
+    public void toteutaOhjausVaihtoaika() {
+        if (kaannaVasen) {
+            kaannaVasen = true;
+            kaannaOikea = false;
+        } else if (kaannaOikea) {
+            kaannaOikea = true;
+            kaannaVasen = false;
+        }
+        if (vasen) {
+            vasen = true;
+            oikea = false;
+        } else if (oikea) {
+            oikea = true;
+            vasen = false;
+        }
+    }
+    
+    /**
+     * Toteuttaa bufferoidun ohjauksen seuraavalle palikalle ennen kuin se
+     * siirretaan peliin.
+     */
+    public void seuraavaPalikkaOhjaus() {
+        if (peli.getNykyinenPalikka().getTetromino() != Tetromino.O) {
+            if (kaannaVasen) {
+                kaannaVasen = false;
+                peli.kaannaVasen();
+            } else if (kaannaOikea) {
+                kaannaOikea = false;
+                peli.kaannaOikea();
+            }
+        }
+        if (vasen) {
+            peli.liikutaVasen();
+            vasen = false;
+        } else if (oikea) {
+            peli.liikutaOikea();
+            oikea = false;
+        }
+
     }
 
     public void vasenPush(ActionEvent e) {
-        vasen.push();
+        vasenL.push();
     }
 
     public void vasenRelease(ActionEvent e) {
-        vasen.release();
+        vasenL.release();
     }
 
     public void oikeaPush(ActionEvent e) {
-        oikea.push();
+        oikeaL.push();
     }
 
     public void oikeaRelease(ActionEvent e) {
-        oikea.release();
+        oikeaL.release();
     }
 
     public void alasPush(ActionEvent e) {
-        alas.push();
+        alasL.push();
     }
 
     public void alasRelease(ActionEvent e) {
-        alas.release();
+        alasL.release();
     }
 
     public void ylosPush(ActionEvent e) {
-        ylos.push();
+        ylosL.push();
     }
 
     public void ylosRelease(ActionEvent e) {
-        ylos.release();
+        ylosL.release();
     }
 
     public void vasenKaannosPush(ActionEvent e) {
-        vasKaannos.push();
+        vasKaannosL.push();
     }
 
     public void vasenKaannosRelease(ActionEvent e) {
-        vasKaannos.release();
+        vasKaannosL.release();
     }
 
     public void oikeaKaannosPush(ActionEvent e) {
-        oikKaannos.push();
+        oikKaannosL.push();
     }
 
     public void oikeaKaannosRelease(ActionEvent ae) {
-        oikKaannos.release();
+        oikKaannosL.release();
     }
 
     public void pausePush(ActionEvent ae) {
