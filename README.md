@@ -7,9 +7,9 @@ Ensimmainen ohjelmoimani tietokonepeli.
 Ohjelmoitu Javalla.
 
 
-Käytetyt kirjastot:
+*Käytetyt kirjastot:*
 
 Graafinen käyttoliittyma: Swing.
-Vaihdan todennakoisesti kirjaston Slick2D:seen jos jatkan ohjelman tekemistä kurssin jalkeen.
+Vaihdan kirjaston todennakoisesti Slick2D:seen jos jatkan ohjelman tekemistä kurssin jalkeen.
 
 Inputtien käsittely: KeyBindings / Swing
