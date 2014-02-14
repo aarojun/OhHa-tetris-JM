@@ -1,29 +1,32 @@
 package tetris.gui;
 
+import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Toolkit;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
 import tetris.pelilogiikka.PeliRajapinta;
 
 // Tetris-pelin JFramen contentPane seka layereiden kasittelija 
-
 /**
- * Kayttoliittyman JFramen contentPane. Piirtaa sisaltonsa 
+ * Kayttoliittyman JFramen contentPane. Piirtaa sisaltonsa
+ *
  * @author zaarock
  */
 public class Piirtoalusta extends JLayeredPane implements Paivitettava {
-    
+
     private PeliRajapinta peli;
     private int nelionKoko;
     private int laudanKorkeus;
     private int laudanLeveys;
+    private RenderCanvas canvas;
     private PiirtoTyokalu piirtoTyokalu;
     private BufferoituPanel laudanPiirto;
     private BufferoituPanel taustanPiirto;
-    private JPanel liikkuvienPiirto;
-    private JPanel kehyksenPiirto;
+    private BufferoituPanel liikkuvienPiirto;
+    private BufferoituPanel kehyksenPiirto;
 
     public Piirtoalusta(PeliRajapinta peli, int nelionSivunPituus) {
+        this.setIgnoreRepaint(true);
         this.peli = peli;
         this.nelionKoko = nelionSivunPituus;
 
@@ -54,9 +57,18 @@ public class Piirtoalusta extends JLayeredPane implements Paivitettava {
         this.add(liikkuvienPiirto, new Integer(2));
         this.add(kehyksenPiirto, new Integer(4));
     }
+    
+    public Canvas getCanvas() {
+        return this.canvas;
+    }
+    
+    public void initialize() {
+        canvas.initialize();     
+    }
 
     @Override
     public void paivita() {
         repaint();
+        Toolkit.getDefaultToolkit().sync();
     }
 }

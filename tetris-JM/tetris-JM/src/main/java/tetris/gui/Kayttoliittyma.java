@@ -1,6 +1,8 @@
 package tetris.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -42,6 +44,7 @@ public class Kayttoliittyma implements Runnable {
     @Override
     public void run() {
         frame = new JFrame("TetrisJM");
+        frame.setIgnoreRepaint(true);
         int leveys = 18 * sivunPituus + 10;
         int korkeus = 25 * sivunPituus + 10;
 
@@ -70,6 +73,7 @@ public class Kayttoliittyma implements Runnable {
         
         luoKeyBindings(piirto);
 
+        frame.setBackground(Color.black);
         frame.setContentPane(piirto);
     }
     
@@ -192,7 +196,7 @@ public class Kayttoliittyma implements Runnable {
         });
         }
 
-    public JFrame getFrame() {
+    public Frame getFrame() {
         return frame;
     }
 

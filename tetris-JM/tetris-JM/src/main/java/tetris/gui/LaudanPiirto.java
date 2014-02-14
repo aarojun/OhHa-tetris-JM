@@ -19,6 +19,7 @@ public class LaudanPiirto extends BufferoituPanel {
     private PiirtoTyokalu tyokalu;
 
     public LaudanPiirto(PeliRajapinta peli, int nelionKoko, PiirtoTyokalu tyokalu) {
+        this.setIgnoreRepaint(true);
         this.setOpaque(false);
         this.nelionKoko = nelionKoko;
         this.varjotusEro = nelionKoko/5;
@@ -37,7 +38,17 @@ public class LaudanPiirto extends BufferoituPanel {
             peli.lautaPaivitetty();
         }
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(lauta, null, 0,0);       
+        g2.drawImage(lauta, null, 0,0);   
+        g2.dispose();
+    }
+    
+    public void render(Graphics g) {
+        if(peli.getLautaPaivita()) {
+            uudelleenPiirra();
+            peli.lautaPaivitetty();
+        }
+        Graphics2D g2 = (Graphics2D) g;
+        g2.drawImage(lauta, null, 0,0); 
     }
     
     void uudelleenPiirra() {

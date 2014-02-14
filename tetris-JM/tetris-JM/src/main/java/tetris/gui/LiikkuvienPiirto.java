@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 import javax.swing.JPanel;
 import tetris.pelilogiikka.PeliRajapinta;
 
-public class LiikkuvienPiirto extends JPanel implements Paivitettava {
+public class LiikkuvienPiirto extends BufferoituPanel {
     private PeliRajapinta peli;
     private int nelionKoko;
     private int varjotusEro;
@@ -19,6 +19,7 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
     private PiirtoTyokalu tyokalu;
     
     public LiikkuvienPiirto(PeliRajapinta peli, int nelionKoko, PiirtoTyokalu piirtoKalu) {
+        this.setIgnoreRepaint(true);
         this.setOpaque(false);
         this.peli = peli;
         this.nelionKoko = nelionKoko;
@@ -30,6 +31,15 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
+        g.translate(0,-2*nelionKoko);
+        
+        tyokalu.piirraVarjopalikka(g,peli.getVarjopalikka());
+        tyokalu.piirraPalikka(g,peli.getNykyinenPalikka());
+        
+        piirraMittarit(g);
+    }
+    
+    public void render(Graphics g) {
         g.translate(0,-2*nelionKoko);
         
         tyokalu.piirraVarjopalikka(g,peli.getVarjopalikka());
@@ -77,6 +87,11 @@ public class LiikkuvienPiirto extends JPanel implements Paivitettava {
     @Override
     public void paivita() {
         super.repaint();
+    }
+
+    @Override
+    void uudelleenPiirra() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }
