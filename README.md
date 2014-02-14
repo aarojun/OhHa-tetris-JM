@@ -9,7 +9,7 @@ Ohjelmoitu Javalla.
 
 Käytetyt kirjastot:
 
-Graafinen käyttoliittyma: Swing 
-vaihdan todennakoisesti kirjaston Slick2D:seen jos jatkan ohjelman tekemistä kurssin jalkeen.
+Graafinen käyttoliittyma: Swing.
+Vaihdan todennakoisesti kirjaston Slick2D:seen jos jatkan ohjelman tekemistä kurssin jalkeen.
 
 Inputtien käsittely: KeyBindings / Swing
