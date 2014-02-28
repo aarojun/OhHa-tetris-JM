@@ -74,7 +74,7 @@ public interface PeliRajapinta {
     public boolean onkoVaihtoAika();
     /**
      * Palauttaa tosi jos peli on paalla.
-     * @return
+     * @return onko peli paalla
      */
     public boolean onkoPaalla();
 }

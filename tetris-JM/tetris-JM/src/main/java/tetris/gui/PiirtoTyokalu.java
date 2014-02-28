@@ -100,7 +100,7 @@ public class PiirtoTyokalu {
      * @param pisteenIndeksi tarkasteltavan pisteen indeksi.
      * @param xMuutos x-koordinaatin muutos josta tarkistetaan onko vieruspiste olemassa.
      * @param yMuutos y-koordinaatin muutos josta tarkistetaan onko vieruspiste olemassa.
-     * @return
+     * @return onko piste annettujen koordinaattien paassa annetusta pisteesta
      */
     public boolean vierusPiste(ArrayList<int[]> muoto, int pisteenIndeksi, int xMuutos, int yMuutos) {
         int[] piste1 = muoto.get(pisteenIndeksi);

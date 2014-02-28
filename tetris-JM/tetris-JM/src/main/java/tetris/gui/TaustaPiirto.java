@@ -19,7 +19,7 @@ public class TaustaPiirto extends BufferoituPanel {
 
     public TaustaPiirto(Pelilauta lauta, int nelionKoko) {
         this.setIgnoreRepaint(true);
-        this.setOpaque(false);
+        this.setOpaque(true);
         this.nelionKoko = nelionKoko;
         this.korkeus = lauta.getKorkeus();
         this.leveys = lauta.getLeveys();
@@ -35,18 +35,16 @@ public class TaustaPiirto extends BufferoituPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.translate(nelionKoko, nelionKoko);
-
         Graphics2D g2 = (Graphics2D) g;
          g2.drawImage(tausta, null, 0, 0);
          g2.dispose();
     }
     
     public void render(Graphics g) {
-        g.translate(nelionKoko, nelionKoko);
 
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(tausta, null, 0, 0);    
+        g2.drawImage(tausta, null, 0, 0);
+        g2.dispose();
     }
     
     public void uudelleenPiirra() {

@@ -4,26 +4,32 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.text.DecimalFormat;
-import javax.swing.JPanel;
 import tetris.pelilogiikka.PeliRajapinta;
 
+/**
+ * Kayttoliittyman graafinen taso, piirtaa pelissa liikkuvat palikat seka mittarit.
+ * @author zaarock
+ */
 public class LiikkuvienPiirto extends BufferoituPanel {
     private PeliRajapinta peli;
     private int nelionKoko;
-    private int varjotusEro;
-    private Color varjo = new Color(0,0,0,130);
     private Font pisteFont = new Font(Font.SANS_SERIF, 1, 16);
     private Font menuFont = new Font(Font.SANS_SERIF, 0, 20);
     private Font timerFont = new Font(Font.SANS_SERIF,0,25);
     private DecimalFormat nf = new DecimalFormat("0.0");
     private PiirtoTyokalu tyokalu;
     
+    /**
+     * Alustaa piirtotasolle viitteet piirrettaviin elementteihin seka piirtotyokaluun.
+     * @param peli piirrettava peli
+     * @param nelionKoko palikan pisteen sivun pituus pikseleina, yleinen kokoyksikko
+     * @param piirtoKalu tyokalu joka tuntee metodit palikoiden piirtoon.
+     */
     public LiikkuvienPiirto(PeliRajapinta peli, int nelionKoko, PiirtoTyokalu piirtoKalu) {
         this.setIgnoreRepaint(true);
         this.setOpaque(false);
         this.peli = peli;
         this.nelionKoko = nelionKoko;
-        this.varjotusEro = nelionKoko/5;
         this.tyokalu = piirtoKalu;
     }
     

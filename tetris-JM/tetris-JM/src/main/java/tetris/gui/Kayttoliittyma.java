@@ -1,6 +1,5 @@
 package tetris.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -69,11 +68,10 @@ public class Kayttoliittyma implements Runnable {
 
     private void luoKomponentit() {
         this.lukija = peli.getLukija();
-        piirto = new Piirtoalusta(peli, sivunPituus);
         
+        piirto = new Piirtoalusta(peli, sivunPituus);
         luoKeyBindings(piirto);
 
-        frame.setBackground(Color.black);
         frame.setContentPane(piirto);
     }
     

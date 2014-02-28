@@ -2,14 +2,16 @@
 2014/01/18 : 7h : logiikan ja peliobjektien koodaamisen jatkamista
 2014/01/19 : 2h : logiikan ja peliobjektien koodaamisen jatkamista
 2014/01/23 : 3h : virheiden korjailemista ja testien tekemista
-2013/01/31 : 4h : luokkia rakennettu, pari testia tehty
-2013/02/05 : 4h : peliLoop luokka melkein valmis, peli lahestyy jo toimimista
-2013/02/07 : 8h : GUI ja ohjaus lisatty. Peli toimii jo hienosti!
-2013/02/08 : 8h : peliLoop uudelleenrakennettu. ohjaus vaihdetty keyListenerista keyBindingiin. jatkuva liike tehty toimivaksi
-2013/02/09 : 6h : ohjauslukija korjattu(ohittaa ubuntun lahettamat automaattiset painikkeen-irrotukset). liikesuunnille lisatty poissulkevuus. Aihemaarittely paivitetty.
-2013/02/10 : 4h : koodia siistitty, paljon peliominaisuuksia lisatty ja GUIa hieman muokattu
-2013/02/11 : 9h : GUI uudelleenrakentu toimimaan layereilla seka BufferedImageilla. taustat ja pelilaudalle asetetut palikat tallennetaan nyt BufferedImageina, joten ne uudelleenpiirretaan vain kun pakollista
-2013/02/12 : 6h : Objects-paketin testit ja javadoc koodattu. GUI-pakettia siistitty. peliominaisuuksia lisatty.
-2013/02/13 : 8h : Javadocia kirjoitettu paljon. Ohjaustoiminnallisuus siirretty pois peli-luokasta. Peli-luokkaa ja kayttoliittymaa siistitty. Peliominaisuuksia kehitetty.
+2014/01/31 : 4h : luokkia rakennettu, pari testia tehty
+2014/02/05 : 4h : peliLoop luokka melkein valmis, peli lahestyy jo toimimista
+2014/02/07 : 8h : GUI ja ohjaus lisatty. Peli toimii jo hienosti!
+2014/02/08 : 8h : peliLoop uudelleenrakennettu. ohjaus vaihdetty keyListenerista keyBindingiin. jatkuva liike tehty toimivaksi
+2014/02/09 : 6h : ohjauslukija korjattu(ohittaa ubuntun lahettamat automaattiset painikkeen-irrotukset). liikesuunnille lisatty poissulkevuus. Aihemaarittely paivitetty.
+2014/02/10 : 4h : koodia siistitty, paljon peliominaisuuksia lisatty ja GUIa hieman muokattu
+2014/02/11 : 9h : GUI uudelleenrakentu toimimaan layereilla seka BufferedImageilla. taustat ja pelilaudalle asetetut palikat tallennetaan nyt BufferedImageina, joten ne uudelleenpiirretaan vain kun pakollista
+2014/02/12 : 6h : Objects-paketin testit ja javadoc koodattu. GUI-pakettia siistitty. peliominaisuuksia lisatty.
+2014/02/13 : 8h : Javadocia kirjoitettu paljon. Ohjaustoiminnallisuus siirretty pois peli-luokasta. Peli-luokkaa ja kayttoliittymaa siistitty. Peliominaisuuksia kehitetty.
+2014/02/27 : 3h : Javadocia ja testeja lisailty
+2014/02/28 : 3h : testeja lisatty ja koodia siistitty, valmisteltu palautukseen
 
-todo : paljon lisaa testeja, peliloopin tarkistus, koodin siivoamista ja crashien metsastamista
+todo : lisaa testeja

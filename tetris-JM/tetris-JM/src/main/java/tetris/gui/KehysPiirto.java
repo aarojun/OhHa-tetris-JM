@@ -3,8 +3,13 @@ package tetris.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import javax.swing.JPanel;
 import tetris.pelilogiikka.PeliRajapinta;
+
+/**
+ * Kayttoliittyman graafinen taso, piirtaa pelin ymparille piirrettavat kehykset.
+ * Kehyksiin kuuluvat myos menu-tekstit.
+ * @author zaarock
+ */
 
 public class KehysPiirto extends BufferoituPanel {
     private int nelionKoko;
@@ -12,6 +17,11 @@ public class KehysPiirto extends BufferoituPanel {
     private Font menuFont = new Font(Font.SANS_SERIF, 0, 22);
     private Font menuFont2 = new Font(Font.SANS_SERIF,2,28);
     
+    /**
+     * Alustaa piirtotasolle viitteet piirrettaviin elementteihin ja piirtotyokaluun.
+     * @param peli piirrettava peli
+     * @param nelionKoko palikan pisteen sivun pituus pikseleina, yleinen kokoyksikko
+     */
     public KehysPiirto(PeliRajapinta peli, int nelionKoko) {
         this.setIgnoreRepaint(true);
         this.setOpaque(false);
@@ -22,7 +32,8 @@ public class KehysPiirto extends BufferoituPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
+        g.translate(-nelionKoko, -nelionKoko);
         g.setColor(Color.BLACK);
 
         g.fillRect(0, 0, 3 * nelionKoko, 4 * nelionKoko);

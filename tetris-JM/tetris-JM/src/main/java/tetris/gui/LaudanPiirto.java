@@ -9,20 +9,30 @@ import tetris.objects.Palikka;
 import tetris.objects.Pelilauta;
 import tetris.pelilogiikka.PeliRajapinta;
 
+/**
+ * Kayttoliittyman graafinen taso, piirtaa pelilaudalle asetetut palikat. 
+ * Taso paivitetaan vain silloin kun pelilaudalle on asetettu uusi palikka.
+ * @author zaarock
+ */
+
 public class LaudanPiirto extends BufferoituPanel {
     private BufferedImage lauta;
     private int korkeus;
     private int leveys;
     private PeliRajapinta peli;
     private int nelionKoko;
-    private int varjotusEro;
     private PiirtoTyokalu tyokalu;
 
+    /**
+     * Alustaa piirtotasolle viitteet piirrettaviin elementteihin ja piirtotyokaluun.
+     * @param peli piirrettava peli
+     * @param nelionKoko palikan pisteen sivun pituus pikseleina, yleinen kokoyksikko
+     * @param tyokalu tyokalu joka tuntee metodit palikoiden piirtoon.
+     */
     public LaudanPiirto(PeliRajapinta peli, int nelionKoko, PiirtoTyokalu tyokalu) {
         this.setIgnoreRepaint(true);
         this.setOpaque(false);
         this.nelionKoko = nelionKoko;
-        this.varjotusEro = nelionKoko/5;
         this.peli = peli;
         this.tyokalu = tyokalu;
         this.korkeus = peli.getPelilauta().getKorkeus();
@@ -48,7 +58,8 @@ public class LaudanPiirto extends BufferoituPanel {
             peli.lautaPaivitetty();
         }
         Graphics2D g2 = (Graphics2D) g;
-        g2.drawImage(lauta, null, 0,0); 
+        g2.drawImage(lauta, null, 0,0);
+        g2.dispose();
     }
     
     void uudelleenPiirra() {

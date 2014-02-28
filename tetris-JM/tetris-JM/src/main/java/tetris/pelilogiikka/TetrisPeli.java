@@ -71,7 +71,7 @@ public class TetrisPeli implements PeliRajapinta {
         initialisoiBooleanit();
 
         this.poistot = new PoistoOperaatiot(pelilauta);
-        this.tormayslogiikka = new TormaysLogiikka(pelilauta, poistot);
+        this.tormayslogiikka = new TormaysLogiikka(pelilauta);
 
         this.random = new Random();
         this.kello = new Kello(8, this);

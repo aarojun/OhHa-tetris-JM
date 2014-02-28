@@ -1,5 +1,7 @@
 package tetris.pelilogiikka;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import tetris.gui.Paivitettava;
 
 /**
@@ -25,6 +27,7 @@ public class PeliLoop {
     private int liukuAika;
     private double fxFrame;
     private int fxAika;
+    private Timer toistaja;
 
     /**
      * Alustaa peliloopin ja pelin aikayksikot.
@@ -52,6 +55,35 @@ public class PeliLoop {
         this.gui = gui;
     }
 
+    public void runTimer() {
+        TimerTask task = new TimerTask(){
+            public void run() {
+            paiv();
+                    }
+        };
+        toistaja = new Timer();
+        toistaja.scheduleAtFixedRate(task, 0, 1000/60);
+    }
+    
+    public void paiv() {
+        paivita(1);
+
+            gui.paivita();
+    }
+    
+    public void runSimple() {
+        while (paalla) {
+            paivita(1);
+
+            gui.paivita();
+
+            try {
+                Thread.sleep((OPTIMAL_TIME) / 1000000);
+            } catch (Exception ex) {
+            }
+        }
+    }
+    
     public void run() {
         while (paalla) {
             long now = System.nanoTime();
@@ -79,7 +111,7 @@ public class PeliLoop {
     }
     
     /**
-     * Run -metodin versio joka toteuttaa interpolaation (fysiikka paivitetaan suhteessa paivitysnopeuteen jotta pysyy tasaana).
+     * Run -metodin versio joka toteuttaa interpolaation (fysiikka paivitetaan suhteessa paivitysnopeuteen jotta liike pysyy tasaana).
      */
     public void runInterp() {
         while (paalla) {

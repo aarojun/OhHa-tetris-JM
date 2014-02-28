@@ -15,11 +15,9 @@ import tetris.objects.Tetromino;
 public class TormaysLogiikka {
 
     private Pelilauta pelilauta;
-    private PoistoOperaatiot poistot;
 
-    public TormaysLogiikka(Pelilauta pelilauta, PoistoOperaatiot poistot) {
+    public TormaysLogiikka(Pelilauta pelilauta) {
         this.pelilauta = pelilauta;
-        this.poistot = poistot;
     }
 
     /**

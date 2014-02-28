@@ -1,0 +1,17 @@
+Luokkia joita en testannut JUnit -testeillä mutta testasin käsin:
+
+tetris.kayttoliittyma
+
+Tätä pakettia ei ole testattu automaattisesti. Koostuu JFrameista ja JPaneleista.
+
+tetris.pelilogiikka.PeliLoop
+
+Swingin ja logiikan välisiä konflikteja ei oletestattu automaattisesti. Logiikka kuitenkin päivittyy viimeiseksi saatujen ohjaustietojen perusteella (eli ei heti kun painetaan nappia) joten konfliktien ei pitäisi olla mahdollisia. Olen testannut kolmella eri koneella (ja Windows 8, Ubuntu 13.10, Mac OSX 10.5) eikä konflikteja ole tapahtunut
+
+Aiemmissa versioissa ohjelmasta ohjaukset tapahtuivat heti (erillisella threadilla swingistä) jolloin konflikteja tapahtui ja peli kaatuili.
+
+Bugeja:
+
+tetris.kayttoliittyma
+
+LaudanPiirto piirtää valkoiset rajausviivat palikoiden ympärille vaikka palikat olisivat ylhäällä kehyksen alla, eli kehyksen ympärille piirtyy valkoista viivaa jos palikoita asetetaan yläreunaan.

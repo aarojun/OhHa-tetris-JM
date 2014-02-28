@@ -6,39 +6,42 @@ import java.awt.Toolkit;
 import javax.swing.JLayeredPane;
 import tetris.pelilogiikka.PeliRajapinta;
 
-// Tetris-pelin JFramen contentPane seka layereiden kasittelija 
 /**
- * Kayttoliittyman JFramen contentPane. Piirtaa sisaltonsa
+ * Kayttoliittyman JFramelle asetettava contentPane.
+ * Tuntee grafiikan piirtavat tasot joita kayttaa layereina, eli piirtaa ne tasoittain.
  *
  * @author zaarock
  */
 public class Piirtoalusta extends JLayeredPane implements Paivitettava {
 
-    private PeliRajapinta peli;
     private int nelionKoko;
     private int laudanKorkeus;
     private int laudanLeveys;
-    private RenderCanvas canvas;
     private PiirtoTyokalu piirtoTyokalu;
     private BufferoituPanel laudanPiirto;
     private BufferoituPanel taustanPiirto;
     private BufferoituPanel liikkuvienPiirto;
     private BufferoituPanel kehyksenPiirto;
 
+    /**
+     * 
+     * @param peli
+     * @param nelionSivunPituus 
+     */
     public Piirtoalusta(PeliRajapinta peli, int nelionSivunPituus) {
         this.setIgnoreRepaint(true);
-        this.peli = peli;
+        this.setOpaque(true);
         this.nelionKoko = nelionSivunPituus;
+        
+        this.setBackground(Color.black);
 
         this.laudanLeveys = peli.getPelilauta().getLeveys();
         this.laudanKorkeus = peli.getPelilauta().getKorkeus();
 
-        this.setBackground(Color.BLACK);
-
         this.piirtoTyokalu = new PiirtoTyokalu(nelionKoko);
 
         this.taustanPiirto = new TaustaPiirto(peli.getPelilauta(), nelionKoko);
-        taustanPiirto.setBounds(0, 0, 11 * nelionKoko, 24 * nelionKoko);
+        taustanPiirto.setBounds(nelionKoko, nelionKoko, 10 * nelionKoko, 23 * nelionKoko);
         taustanPiirto.paivita();
 
         this.laudanPiirto = new LaudanPiirto(peli, nelionKoko, piirtoTyokalu);
@@ -49,26 +52,17 @@ public class Piirtoalusta extends JLayeredPane implements Paivitettava {
         liikkuvienPiirto.setBounds(nelionKoko, 3 * nelionKoko, 30 * nelionKoko, (laudanKorkeus - 2) * nelionKoko);
 
         this.kehyksenPiirto = new KehysPiirto(peli, nelionKoko);
-        kehyksenPiirto.setBounds(0, 0, 30 * nelionKoko, 40 * nelionKoko);
-        this.setOpaque(true);
+        kehyksenPiirto.setBounds(nelionKoko, nelionKoko, 30 * nelionKoko, 40 * nelionKoko);
 
         this.add(taustanPiirto, new Integer(1));
         this.add(laudanPiirto, new Integer(3));
         this.add(liikkuvienPiirto, new Integer(2));
         this.add(kehyksenPiirto, new Integer(4));
     }
-    
-    public Canvas getCanvas() {
-        return this.canvas;
-    }
-    
-    public void initialize() {
-        canvas.initialize();     
-    }
 
     @Override
     public void paivita() {
-        repaint();
+        kehyksenPiirto.repaint();
         Toolkit.getDefaultToolkit().sync();
     }
 }
